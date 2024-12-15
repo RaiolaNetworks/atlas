@@ -30,7 +30,7 @@
         "php": "^8.2",
         "illuminate/contracts": "^10.0||^11.0",
         "laravel/framework": "11.*",
-        "laravel/prompts": "^0.1.25",
+        "laravel/prompts": "^0.3",
         "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
@@ -38,9 +38,9 @@
         "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.1.1||^7.10.0",
         "orchestra/testbench": "^9.5",
-        "pestphp/pest": "^2.34",
-        "pestphp/pest-plugin-arch": "^2.7",
-        "pestphp/pest-plugin-laravel": "^2.3"
+        "pestphp/pest": "^3.5",
+        "pestphp/pest-plugin-arch": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
     },
     "autoload": {
         "psr-4": {

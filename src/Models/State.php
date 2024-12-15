@@ -26,7 +26,7 @@ class State extends Model
     }
 
     /**
-     * @return BelongsTo<Country,State>
+     * @return BelongsTo<Country,covariant self>
      */
     public function country(): BelongsTo
     {
@@ -34,7 +34,7 @@ class State extends Model
     }
 
     /**
-     * @return HasMany<City>
+     * @return HasMany<City, covariant self>
      */
     public function cities(): HasMany
     {
