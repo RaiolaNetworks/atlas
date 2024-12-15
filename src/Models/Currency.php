@@ -25,7 +25,7 @@ class Currency extends Model
     }
 
     /**
-     * @return BelongsTo<Country,Currency>
+     * @return BelongsTo<Country,covariant self>
      */
     public function country(): BelongsTo
     {

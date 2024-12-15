@@ -25,7 +25,7 @@ class Timezone extends Model
     }
 
     /**
-     * @return BelongsTo<Country,Timezone>
+     * @return BelongsTo<Country,covariant self>
      */
     public function country(): BelongsTo
     {

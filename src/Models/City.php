@@ -25,7 +25,7 @@ class City extends Model
     }
 
     /**
-     * @return BelongsTo<Country,City>
+     * @return BelongsTo<Country,covariant self>
      */
     public function country(): BelongsTo
     {
@@ -33,7 +33,7 @@ class City extends Model
     }
 
     /**
-     * @return BelongsTo<State,City>
+     * @return BelongsTo<State,covariant self>
      */
     public function state(): BelongsTo
     {

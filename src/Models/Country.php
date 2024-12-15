@@ -26,7 +26,7 @@ class Country extends Model
     }
 
     /**
-     * @return HasMany<State>
+     * @return HasMany<State,covariant self>
      */
     public function states(): HasMany
     {
@@ -34,7 +34,7 @@ class Country extends Model
     }
 
     /**
-     * @return HasMany<City>
+     * @return HasMany<City,covariant self>
      */
     public function cities(): HasMany
     {
@@ -42,7 +42,7 @@ class Country extends Model
     }
 
     /**
-     * @return HasMany<Timezone>
+     * @return HasMany<Timezone,covariant self>
      */
     public function timezones(): HasMany
     {
@@ -50,7 +50,7 @@ class Country extends Model
     }
 
     /**
-     * @return HasOne<Currency>
+     * @return HasOne<Currency,covariant self>
      */
     public function currency(): HasOne
     {
