@@ -24,17 +24,23 @@ class TimezonesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of timezones in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/countries.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/countries.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Timezone::class;
+    protected string $model = Timezone::class;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::Timezones->value;
+
+        $projectResourcePath = resource_path('json/countries.json');
+
+        if (file_exists($projectResourcePath)) {
+            $this->dataPath = $projectResourcePath;
+        }
     }
 
     /**
@@ -43,9 +49,9 @@ class TimezonesSeeder extends BaseSeeder
      *     timezones: array<int, array{zoneName: string}>,
      * } $rawItem
      */
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function parseItem(array $rawItem): array
     {
-        $bulk[] = [
+        return [
             'country_id' => $rawItem['id'],
             'name'       => $rawItem['timezones'][0]['zoneName'],
         ];

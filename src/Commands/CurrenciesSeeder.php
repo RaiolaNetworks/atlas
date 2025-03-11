@@ -25,24 +25,30 @@ class CurrenciesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of currencies in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/currencies.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/currencies.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Currency::class;
+    protected string $model = Currency::class;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::Currencies->value;
+
+        $projectResourcePath = resource_path('json/currencies.json');
+
+        if (file_exists($projectResourcePath)) {
+            $this->dataPath = $projectResourcePath;
+        }
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function parseItem(array $rawItem): array
     {
         $country = Country::whereCurrency($rawItem['code'])->first();
 
-        $bulk[] = [
+        return [
             'country_id'     => $country ? $country->id : null,
             'name'           => $rawItem['name'],
             'code'           => $rawItem['code'],

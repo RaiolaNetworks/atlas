@@ -10,10 +10,8 @@ class CreateStatesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         if (config('atlas.modules.states') === false) {
             return;
@@ -36,10 +34,8 @@ class CreateStatesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         /** @var string $tableName */
         $tableName = config('atlas.states_tablename');

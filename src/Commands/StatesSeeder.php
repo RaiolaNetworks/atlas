@@ -24,22 +24,28 @@ class StatesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of states in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/states.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/states.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = State::class;
+    protected string $model = State::class;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::States->value;
+
+        $projectResourcePath = resource_path('json/states.json');
+
+        if (file_exists($projectResourcePath)) {
+            $this->dataPath = $projectResourcePath;
+        }
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function parseItem(array $rawItem): array
     {
-        $bulk[] = [
+        return [
             'id'           => $rawItem['id'],
             'country_id'   => $rawItem['country_id'],
             'name'         => $rawItem['name'],

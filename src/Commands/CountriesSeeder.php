@@ -24,22 +24,28 @@ class CountriesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of countries in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/countries.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/countries.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Country::class;
+    protected string $model = Country::class;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::Countries->value;
+
+        $projectResourcePath = resource_path('json/countries.json');
+
+        if (file_exists($projectResourcePath)) {
+            $this->dataPath = $projectResourcePath;
+        }
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function parseItem(array $rawItem): array
     {
-        $bulk[] = [
+        return [
             'id'         => $rawItem['id'],
             'iso2'       => $rawItem['iso2'],
             'name'       => $rawItem['name'],

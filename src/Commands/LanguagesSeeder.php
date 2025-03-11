@@ -24,22 +24,28 @@ class LanguagesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of languages in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/languages.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/languages.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Language::class;
+    protected string $model = Language::class;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::Languages->value;
+
+        $projectResourcePath = resource_path('json/languages.json');
+
+        if (file_exists($projectResourcePath)) {
+            $this->dataPath = $projectResourcePath;
+        }
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function parseItem(array $rawItem): array
     {
-        $bulk[] = [
+        return [
             'code'        => $rawItem['code'],
             'name'        => $rawItem['name'],
             'name_native' => $rawItem['name_native'],

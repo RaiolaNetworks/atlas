@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use pcrov\JsonReader\JsonReader;
 use Throwable;
 
 abstract class BaseSeeder extends Command
@@ -18,7 +20,7 @@ abstract class BaseSeeder extends Command
     /**
      * File data path
      */
-    protected ?string $dataPath = null;
+    protected string $dataPath;
 
     /**
      * Data of the data file
@@ -37,17 +39,11 @@ abstract class BaseSeeder extends Command
      *
      * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
-    protected ?string $model = null;
+    protected string $model;
 
     public function handle(): int
     {
         if (! $this->checkDataFile()) {
-            return self::FAILURE;
-        }
-
-        if ($this->model === null) {
-            $this->error('Your class should overwrite the model attribute');
-
             return self::FAILURE;
         }
 
@@ -69,29 +65,11 @@ abstract class BaseSeeder extends Command
      */
     protected function checkDataFile(): bool
     {
-        if ($this->dataPath === null) {
-            $this->error('Your class should overwrite the dataPath attribute...');
-
-            return false;
-        }
-
         if (! file_exists($this->dataPath)) {
             $this->error('The file for seeding the ' . Str::lower($this->pluralName) . ' was not found...');
 
             return false;
         }
-
-        /** @var string $jsonData */
-        $jsonData = file_get_contents($this->dataPath);
-        $data     = json_decode($jsonData, true);
-
-        if (! is_array($data)) {
-            $this->error('The json data is incorrect...');
-
-            return false;
-        }
-
-        $this->data = $data;
 
         return true;
     }
@@ -101,30 +79,44 @@ abstract class BaseSeeder extends Command
      */
     protected function seed(): bool
     {
-        $this->model::truncate(); // @phpstan-ignore-line
-
-        $bar = $this->output->createProgressBar(count($this->data));
-        $bar->start();
+        $this->model::truncate();
 
         try {
-            foreach (array_chunk($this->data, self::CHUNK_STEPS) as $chunk) {
-                $bulk = [];
+            $reader = new JsonReader;
+            $reader->open($this->dataPath);
 
-                foreach ($chunk as $value) {
-                    /** @var array<string,mixed> $value */
-                    $this->parseItem($value, $bulk);
+            $reader->read(); // Begin array
+            $reader->read(); // First element, or end of array
+
+            $bulk = [];
+
+            while ($reader->type() === JsonReader::OBJECT) {
+                /** @var array<string, mixed>|null $data */
+                $data = $reader->value();
+
+                if ($data === null) {
+                    throw new Exception('Any element has failed when read json file: ' . $this->dataPath);
                 }
 
-                $this->model::query()->insert($bulk); // @phpstan-ignore-line
+                $bulk[] = $this->parseItem($data);
 
-                $bar->advance(self::CHUNK_STEPS);
+                if (count($bulk) >= self::CHUNK_STEPS) {
+                    $this->saveBulkAndReset($bulk);
+                }
+
+                $reader->next();
             }
+
+            $this->saveBulkAndReset($bulk);
+
+            $reader->close();
         } catch (Throwable $th) {
             $this->error('Something happened when trying to save the data...');
+            $this->error($th->getMessage());
 
             return false;
         }
-        $bar->finish();
+
         $this->newLine();
 
         $this->info(Str::ucfirst($this->pluralName) . ' seeding in database correctly!');
@@ -133,10 +125,19 @@ abstract class BaseSeeder extends Command
     }
 
     /**
+     * @param array<array<string, mixed>> $bulk
+     */
+    private function saveBulkAndReset(array &$bulk): void
+    {
+        $this->model::query()->insert($bulk);
+        $bulk = [];
+    }
+
+    /**
      * Prepares the data with the actual values before storing in the database
      *
-     * @param array<string,mixed> $rawItem
-     * @param array<string,mixed> &$bulk
+     * @param  array<string,mixed> $rawItem
+     * @return array<string,mixed>
      */
-    abstract protected function parseItem(array $rawItem, array &$bulk): void;
+    abstract protected function parseItem(array $rawItem): array;
 }

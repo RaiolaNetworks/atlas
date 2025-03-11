@@ -23,22 +23,28 @@ class CitiesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of cities in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/cities.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/cities.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = City::class;
+    protected string $model = City::class;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::Cities->value;
+
+        $projectResourcePath = resource_path('json/cities.json');
+
+        if (file_exists($projectResourcePath)) {
+            $this->dataPath = $projectResourcePath;
+        }
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function parseItem(array $rawItem): array
     {
-        $bulk[] = [
+        return [
             'id'           => $rawItem['id'],
             'country_id'   => $rawItem['country_id'],
             'state_id'     => $rawItem['state_id'],
