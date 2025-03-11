@@ -24,11 +24,13 @@ class StatesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of states in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/states.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/states.json';
+
+    protected string $overridedResourcesDataPath = 'json/states.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = State::class;
+    protected string $model = State::class;
 
     public function __construct()
     {

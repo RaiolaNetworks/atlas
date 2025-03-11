@@ -24,11 +24,13 @@ class LanguagesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of languages in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/languages.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/languages.json';
+
+    protected string $overridedResourcesDataPath = 'json/languages.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Language::class;
+    protected string $model = Language::class;
 
     public function __construct()
     {

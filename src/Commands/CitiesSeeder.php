@@ -23,11 +23,13 @@ class CitiesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of cities in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/cities.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/cities.json';
+
+    protected string $overridedResourcesDataPath = 'json/cities.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = City::class;
+    protected string $model = City::class;
 
     public function __construct()
     {

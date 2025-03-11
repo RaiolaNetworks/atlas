@@ -25,11 +25,13 @@ class CurrenciesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of currencies in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/currencies.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/currencies.json';
+
+    protected string $overridedResourcesDataPath = 'json/currencies.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Currency::class;
+    protected string $model = Currency::class;
 
     public function __construct()
     {

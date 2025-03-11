@@ -24,11 +24,13 @@ class CountriesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of countries in the database';
 
-    protected ?string $dataPath = __DIR__ . '/../../resources/json/countries.json';
+    protected string $dataPath = __DIR__ . '/../../resources/json/countries.json';
+
+    protected string $overridedResourcesDataPath = 'json/countries.json';
 
     protected string $pluralName = '';
 
-    protected ?string $model = Country::class;
+    protected string $model = Country::class;
 
     public function __construct()
     {

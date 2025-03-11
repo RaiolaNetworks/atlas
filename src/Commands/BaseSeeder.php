@@ -18,7 +18,9 @@ abstract class BaseSeeder extends Command
     /**
      * File data path
      */
-    protected ?string $dataPath = null;
+    protected string $dataPath;
+
+    protected string $overridedResourcesDataPath;
 
     /**
      * Data of the data file
@@ -37,17 +39,24 @@ abstract class BaseSeeder extends Command
      *
      * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
-    protected ?string $model = null;
+    protected string $model;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $resourcePath = resource_path($this->overridedResourcesDataPath);
+
+        if (file_exists($resourcePath)) {
+            $this->dataPath = $resourcePath;
+        }
+    }
 
     public function handle(): int
     {
+        ini_set('memory_limit', '-1');
+
         if (! $this->checkDataFile()) {
-            return self::FAILURE;
-        }
-
-        if ($this->model === null) {
-            $this->error('Your class should overwrite the model attribute');
-
             return self::FAILURE;
         }
 
@@ -69,12 +78,6 @@ abstract class BaseSeeder extends Command
      */
     protected function checkDataFile(): bool
     {
-        if ($this->dataPath === null) {
-            $this->error('Your class should overwrite the dataPath attribute...');
-
-            return false;
-        }
-
         if (! file_exists($this->dataPath)) {
             $this->error('The file for seeding the ' . Str::lower($this->pluralName) . ' was not found...');
 
@@ -84,6 +87,7 @@ abstract class BaseSeeder extends Command
         /** @var string $jsonData */
         $jsonData = file_get_contents($this->dataPath);
         $data     = json_decode($jsonData, true);
+        unset($jsonData);
 
         if (! is_array($data)) {
             $this->error('The json data is incorrect...');
@@ -101,8 +105,7 @@ abstract class BaseSeeder extends Command
      */
     protected function seed(): bool
     {
-        $this->model::truncate(); // @phpstan-ignore-line
-
+        $this->model::truncate();
         $bar = $this->output->createProgressBar(count($this->data));
         $bar->start();
 
@@ -115,7 +118,7 @@ abstract class BaseSeeder extends Command
                     $this->parseItem($value, $bulk);
                 }
 
-                $this->model::query()->insert($bulk); // @phpstan-ignore-line
+                $this->model::query()->insert($bulk);
 
                 $bar->advance(self::CHUNK_STEPS);
             }
