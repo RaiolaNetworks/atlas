@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
+use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\Language;
 
@@ -24,9 +25,7 @@ class LanguagesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of languages in the database';
 
-    protected string $dataPath = __DIR__ . '/../../resources/json/languages.json';
-
-    protected string $overridedResourcesDataPath = 'json/languages.json';
+    protected string $resourceKey = 'languages';
 
     protected string $pluralName = '';
 
@@ -39,13 +38,8 @@ class LanguagesSeeder extends BaseSeeder
         $this->pluralName = EntitiesEnum::Languages->value;
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function generateElementsOfBulk(array $jsonItem): Iterator
     {
-        $bulk[] = [
-            'code'        => $rawItem['code'],
-            'name'        => $rawItem['name'],
-            'name_native' => $rawItem['name_native'],
-            'dir'         => $rawItem['dir'],
-        ];
+        yield $this->model::fromJsonToDBRecord($jsonItem);
     }
 }

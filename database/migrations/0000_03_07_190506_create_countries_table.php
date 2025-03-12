@@ -8,24 +8,26 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCountriesTable extends Migration
 {
+    private string $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config()->string('atlas.countries_tablename');
+    }
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.countries_tablename');
-
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
+            $table->string('currency', 3)->nullable();
             $table->string('iso2', 2);
             $table->string('name');
             $table->tinyInteger('status')->default(1);
             $table->string('phone_code', 5);
             $table->string('iso3', 3);
-            $table->string('currency', 3)->nullable();
             $table->string('native')->nullable();
             $table->string('region')->nullable();
             $table->string('subregion')->nullable();
@@ -36,14 +38,9 @@ class CreateCountriesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.countries_tablename');
-
-        Schema::dropIfExists($tableName);
+        Schema::dropIfExists($this->tableName);
     }
 }

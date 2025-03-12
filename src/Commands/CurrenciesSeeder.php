@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
+use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
-use Raiolanetworks\Atlas\Models\Country;
 use Raiolanetworks\Atlas\Models\Currency;
 
 class CurrenciesSeeder extends BaseSeeder
@@ -25,9 +25,7 @@ class CurrenciesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of currencies in the database';
 
-    protected string $dataPath = __DIR__ . '/../../resources/json/currencies.json';
-
-    protected string $overridedResourcesDataPath = 'json/currencies.json';
+    protected string $resourceKey = 'currencies';
 
     protected string $pluralName = '';
 
@@ -40,18 +38,8 @@ class CurrenciesSeeder extends BaseSeeder
         $this->pluralName = EntitiesEnum::Currencies->value;
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function generateElementsOfBulk(array $jsonItem): Iterator
     {
-        $country = Country::whereCurrency($rawItem['code'])->first();
-
-        $bulk[] = [
-            'country_id'     => $country ? $country->id : null,
-            'name'           => $rawItem['name'],
-            'code'           => $rawItem['code'],
-            'symbol'         => $rawItem['symbol'],
-            'symbol_native'  => $rawItem['symbol_native'],
-            'decimal_digits' => $rawItem['decimal_digits'],
-
-        ];
+        yield $this->model::fromJsonToDBRecord($jsonItem);
     }
 }

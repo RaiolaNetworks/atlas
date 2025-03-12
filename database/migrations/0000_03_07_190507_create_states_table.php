@@ -8,23 +8,25 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateStatesTable extends Migration
 {
+    private string $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config()->string('atlas.states_tablename');
+    }
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        if (config('atlas.modules.states') === false) {
+        if (! config()->boolean('atlas.entities.states')) {
             return;
         }
 
-        /** @var string $tableName */
-        $tableName = config('atlas.states_tablename');
-
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->foreignId('country_id')->index();
+            $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
             $table->string('name');
             $table->string('country_code', 3);
             $table->string('state_code', 5);
@@ -36,14 +38,9 @@ class CreateStatesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.states_tablename');
-
-        Schema::dropIfExists($tableName);
+        Schema::dropIfExists($this->tableName);
     }
 }

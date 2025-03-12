@@ -6,13 +6,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLanguagesTable extends Migration
+class CreateCountriesTimezonesTable extends Migration
 {
     private string $tableName;
 
     public function __construct()
     {
-        $this->tableName = config()->string('atlas.languages_tablename');
+        $this->tableName = config()->string('atlas.countries_timezones_pivot_tablename');
     }
 
     /**
@@ -20,15 +20,15 @@ class CreateLanguagesTable extends Migration
      */
     public function up(): void
     {
-        if (! config()->boolean('atlas.entities.languages')) {
+        if (
+            ! config()->boolean('atlas.entities.timezones')
+        ) {
             return;
         }
 
         Schema::create($this->tableName, function (Blueprint $table) {
-            $table->char('code', 2)->primary();
-            $table->string('name');
-            $table->string('name_native');
-            $table->char('dir', 3);
+            $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
+            $table->foreignId('time_zone_name')->constrained(config()->string('atlas.timezones_tablename'), 'zone_name');
         });
     }
 

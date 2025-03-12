@@ -4,23 +4,41 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Iterator;
+use Raiolanetworks\Atlas\Helpers\ResourcesManager;
+use Raiolanetworks\Atlas\Models\BaseModel;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionNamedType;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Throwable;
 
+/**
+ * @method void whenRecordInserted(BaseModel $instance) Require runtime check
+ */
 abstract class BaseSeeder extends Command
 {
+    protected const INDIVIDUAL_INSERTION_MODE = 'individual';
+
+    private const BULK_INSERTION_MODE = 'bulk';
+
     /**
      * Maximum number of parts into which the entire data set is divided for incremental storage in the database.
      */
     protected const CHUNK_STEPS = 500;
 
     /**
+     * Json resource key
+     */
+    protected string $resourceKey;
+
+    /**
      * File data path
      */
-    protected string $dataPath;
-
-    protected string $overridedResourcesDataPath;
+    private string $dataPath;
 
     /**
      * Data of the data file
@@ -37,19 +55,16 @@ abstract class BaseSeeder extends Command
     /**
      * Model name
      *
-     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     * @var class-string<BaseModel>
      */
     protected string $model;
+
+    protected string $insertionMode = self::BULK_INSERTION_MODE;
 
     public function __construct()
     {
         parent::__construct();
-
-        $resourcePath = resource_path($this->overridedResourcesDataPath);
-
-        if (file_exists($resourcePath)) {
-            $this->dataPath = $resourcePath;
-        }
+        $this->dataPath = ResourcesManager::getResourcePath($this->resourceKey);
     }
 
     public function handle(): int
@@ -105,24 +120,19 @@ abstract class BaseSeeder extends Command
      */
     protected function seed(): bool
     {
+        $existsWhenRecordInsertedMethod = $this->existsWhenRecordInsertedMethod();
         $this->model::truncate();
         $bar = $this->output->createProgressBar(count($this->data));
         $bar->start();
 
         try {
             foreach (array_chunk($this->data, self::CHUNK_STEPS) as $chunk) {
-                $bulk = [];
-
-                foreach ($chunk as $value) {
-                    /** @var array<string,mixed> $value */
-                    $this->parseItem($value, $bulk);
-                }
-
-                $this->model::query()->insert($bulk);
-
-                $bar->advance(self::CHUNK_STEPS);
+                $this->processChunk($chunk, $bar, $existsWhenRecordInsertedMethod);
             }
         } catch (Throwable $th) {
+            dump($th->getMessage());
+
+            $this->newLine();
             $this->error('Something happened when trying to save the data...');
 
             return false;
@@ -136,10 +146,103 @@ abstract class BaseSeeder extends Command
     }
 
     /**
-     * Prepares the data with the actual values before storing in the database
-     *
-     * @param array<string,mixed> $rawItem
-     * @param array<string,mixed> &$bulk
+     * @param array<mixed> $chunk
      */
-    abstract protected function parseItem(array $rawItem, array &$bulk): void;
+    private function processChunk(array &$chunk, ProgressBar $bar, bool $existsWhenRecordInsertedMethod): void
+    {
+        switch ($this->insertionMode) {
+            case self::BULK_INSERTION_MODE:
+                $this->processChunkByBulkInsertion($chunk, $existsWhenRecordInsertedMethod);
+
+                break;
+
+            case self::INDIVIDUAL_INSERTION_MODE:
+                $this->processChunkByIndividualInsertion($chunk, $existsWhenRecordInsertedMethod);
+
+                break;
+        }
+
+        $bar->advance(self::CHUNK_STEPS);
+    }
+
+    /**
+     * @param array<array<string,mixed>> $chunk
+     */
+    private function processChunkByBulkInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod): void
+    {
+        $bulk = [];
+
+        foreach ($chunk as $value) {
+            foreach (static::generateElementsOfBulk($value) as $element) {
+                $bulk[] = $element;
+            }
+        }
+
+        $this->model::query()->insert($bulk);
+
+        if ($existsWhenRecordInsertedMethod) {
+            $collect = collect($bulk)
+                ->pluck((new $this->model)->getKeyName());
+
+            if ($collect->count() === 0) {
+                throw new Exception('The primary key is not defined in the inserted row. This is mandatory when you define whenRecordInserted method. Its mandatory define the primary key in the row.');
+            }
+
+            $collect->each(fn (string|int $id) => $this->whenRecordInserted($this->model::query()->findOrFail($id)));
+        }
+    }
+
+    /**
+     * @param array<array<string,mixed>> $chunk
+     */
+    private function processChunkByIndividualInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod): void
+    {
+        foreach ($chunk as $value) {
+            foreach (static::generateElementsOfBulk($value) as $element) {
+                $instance = $this->model::query()->create($element);
+
+                if ($existsWhenRecordInsertedMethod) {
+                    $this->whenRecordInserted($instance);
+                }
+            }
+        }
+    }
+
+    private function existsWhenRecordInsertedMethod(): bool
+    {
+        if (! method_exists($this, 'whenRecordInserted')) {
+            return false;
+        }
+
+        try {
+            $reflection = ReflectionMethod::createFromMethodName(get_class($this) . '::whenRecordInserted');
+            $parameters = $reflection->getParameters();
+
+            if (count($parameters) === 0) {
+                return false;
+            }
+
+            $firstParameter = $parameters[0];
+
+            if (! $firstParameter->hasType()) {
+                return false;
+            }
+
+            $paramType = $firstParameter->getType();
+
+            if (! $paramType instanceof ReflectionNamedType) {
+                return false;
+            }
+
+            return is_a($paramType->getName(), BaseModel::class, true);
+        } catch (ReflectionException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>           $jsonItem
+     * @return Iterator<array<string, mixed>>
+     */
+    abstract protected function generateElementsOfBulk(array $jsonItem): Iterator;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
+use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\State;
 
@@ -24,9 +25,7 @@ class StatesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of states in the database';
 
-    protected string $dataPath = __DIR__ . '/../../resources/json/states.json';
-
-    protected string $overridedResourcesDataPath = 'json/states.json';
+    protected string $resourceKey = 'states';
 
     protected string $pluralName = '';
 
@@ -39,17 +38,8 @@ class StatesSeeder extends BaseSeeder
         $this->pluralName = EntitiesEnum::States->value;
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function generateElementsOfBulk(array $jsonItem): Iterator
     {
-        $bulk[] = [
-            'id'           => $rawItem['id'],
-            'country_id'   => $rawItem['country_id'],
-            'name'         => $rawItem['name'],
-            'country_code' => $rawItem['country_code'],
-            'state_code'   => $rawItem['state_code'],
-            'type'         => $rawItem['type'],
-            'latitude'     => $rawItem['latitude'],
-            'longitude'    => $rawItem['longitude'],
-        ];
+        yield $this->model::fromJsonToDBRecord($jsonItem);
     }
 }

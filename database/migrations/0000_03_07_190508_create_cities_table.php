@@ -8,24 +8,30 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCitiesTable extends Migration
 {
+    private string $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config()->string('atlas.cities_tablename');
+    }
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        if (config('atlas.modules.states') === false || config('atlas.modules.cities') === false) {
+        if (! config()->boolean('atlas.entities.cities')) {
             return;
         }
 
-        /** @var string $tableName */
-        $tableName = config('atlas.cities_tablename');
-
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->foreignId('country_id')->index();
-            $table->foreignId('state_id')->index();
+            $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
+
+            if (config()->boolean('atlas.entities.states')) {
+                $table->foreignId('state_id')->constrained(config()->string('atlas.states_tablename'));
+            }
+
             $table->string('name');
             $table->string('country_code', 3);
             $table->string('state_code', 5)->nullable();
@@ -38,14 +44,9 @@ class CreateCitiesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.cities_tablename');
-
-        Schema::dropIfExists($tableName);
+        Schema::dropIfExists($this->tableName);
     }
 }

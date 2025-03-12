@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
+use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\Country;
 
@@ -24,9 +25,7 @@ class CountriesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of countries in the database';
 
-    protected string $dataPath = __DIR__ . '/../../resources/json/countries.json';
-
-    protected string $overridedResourcesDataPath = 'json/countries.json';
+    protected string $resourceKey = 'countries';
 
     protected string $pluralName = '';
 
@@ -39,20 +38,8 @@ class CountriesSeeder extends BaseSeeder
         $this->pluralName = EntitiesEnum::Countries->value;
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function generateElementsOfBulk(array $jsonItem): Iterator
     {
-        $bulk[] = [
-            'id'         => $rawItem['id'],
-            'iso2'       => $rawItem['iso2'],
-            'name'       => $rawItem['name'],
-            'phone_code' => $rawItem['phone_code'],
-            'currency'   => $rawItem['currency'],
-            'iso3'       => $rawItem['iso3'],
-            'native'     => $rawItem['native'],
-            'region'     => $rawItem['region'],
-            'subregion'  => $rawItem['subregion'],
-            'latitude'   => $rawItem['latitude'],
-            'longitude'  => $rawItem['longitude'],
-        ];
+        yield $this->model::fromJsonToDBRecord($jsonItem);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Commands;
 
+use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\City;
 
@@ -23,9 +24,7 @@ class CitiesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of cities in the database';
 
-    protected string $dataPath = __DIR__ . '/../../resources/json/cities.json';
-
-    protected string $overridedResourcesDataPath = 'json/cities.json';
+    protected string $resourceKey = 'cities';
 
     protected string $pluralName = '';
 
@@ -38,17 +37,8 @@ class CitiesSeeder extends BaseSeeder
         $this->pluralName = EntitiesEnum::Cities->value;
     }
 
-    protected function parseItem(array $rawItem, array &$bulk): void
+    protected function generateElementsOfBulk(array $jsonItem): Iterator
     {
-        $bulk[] = [
-            'id'           => $rawItem['id'],
-            'country_id'   => $rawItem['country_id'],
-            'state_id'     => $rawItem['state_id'],
-            'name'         => $rawItem['name'],
-            'country_code' => $rawItem['country_code'],
-            'state_code'   => $rawItem['state_code'],
-            'latitude'     => $rawItem['latitude'],
-            'longitude'    => $rawItem['longitude'],
-        ];
+        yield $this->model::fromJsonToDBRecord($jsonItem);
     }
 }

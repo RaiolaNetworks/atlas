@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Country extends Model
+class Country extends BaseModel
 {
     protected $guarded = [];
 
@@ -42,11 +42,18 @@ class Country extends Model
     }
 
     /**
-     * @return HasMany<Timezone,covariant self>
+     * @return BelongsToMany<Timezone, covariant self>
      */
-    public function timezones(): HasMany
+    public function timezones(): BelongsToMany
     {
-        return $this->hasMany(Timezone::class, 'country_id', 'id');
+        return $this->belongsToMany(
+            related: Timezone::class,
+            table: config()->string('atlas.countries_timezones_pivot_tablename'),
+            foreignPivotKey: 'country_id',
+            relatedPivotKey: 'time_zone_name',
+            parentKey: 'id',
+            relatedKey: 'zone_name'
+        );
     }
 
     /**
@@ -55,5 +62,26 @@ class Country extends Model
     public function currency(): HasOne
     {
         return $this->hasOne(Currency::class, 'country_id', 'id');
+    }
+
+    /**
+     * @param  array<string,mixed> $jsonItem
+     * @return array<string,mixed>
+     */
+    public static function fromJsonToDBRecord(array $jsonItem): array
+    {
+        return [
+            'id'         => $jsonItem['id'],
+            'iso2'       => $jsonItem['iso2'],
+            'name'       => $jsonItem['name'],
+            'phone_code' => $jsonItem['phone_code'],
+            'currency'   => $jsonItem['currency'],
+            'iso3'       => $jsonItem['iso3'],
+            'native'     => $jsonItem['native'],
+            'region'     => $jsonItem['region'],
+            'subregion'  => $jsonItem['subregion'],
+            'latitude'   => $jsonItem['latitude'],
+            'longitude'  => $jsonItem['longitude'],
+        ];
     }
 }

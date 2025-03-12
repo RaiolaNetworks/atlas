@@ -8,25 +8,25 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCurrenciesTable extends Migration
 {
+    private string $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config()->string('atlas.currencies_tablename');
+    }
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        if (config('atlas.modules.currencies') === false) {
+        if (! config()->boolean('atlas.entities.currencies')) {
             return;
         }
 
-        /** @var string $tableName */
-        $tableName = config('atlas.currencies_tablename');
-
-        Schema::create($tableName, function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('country_id')->index()->nullable();
+        Schema::create($this->tableName, function (Blueprint $table) {
+            $table->string('code')->primary();
             $table->string('name');
-            $table->string('code');
             $table->string('symbol');
             $table->string('symbol_native');
             $table->string('thousands_separator', 1)->default(',');
@@ -36,14 +36,9 @@ class CreateCurrenciesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.currencies_tablename');
-
-        Schema::dropIfExists($tableName);
+        Schema::dropIfExists($this->tableName);
     }
 }

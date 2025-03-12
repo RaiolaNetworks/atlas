@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class State extends Model
+class State extends BaseModel
 {
     protected $guarded = [];
 
@@ -39,5 +38,23 @@ class State extends Model
     public function cities(): HasMany
     {
         return $this->hasMany(City::class);
+    }
+
+    /**
+     * @param  array<string,mixed> $jsonItem
+     * @return array<string,mixed>
+     */
+    public static function fromJsonToDBRecord(array $jsonItem): array
+    {
+        return [
+            'id'           => $jsonItem['id'],
+            'country_id'   => $jsonItem['country_id'],
+            'name'         => $jsonItem['name'],
+            'country_code' => $jsonItem['country_code'],
+            'state_code'   => $jsonItem['state_code'],
+            'type'         => $jsonItem['type'],
+            'latitude'     => $jsonItem['latitude'],
+            'longitude'    => $jsonItem['longitude'],
+        ];
     }
 }

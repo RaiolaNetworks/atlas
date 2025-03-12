@@ -12,6 +12,7 @@ use Raiolanetworks\Atlas\Commands\Install;
 use Raiolanetworks\Atlas\Commands\LanguagesSeeder;
 use Raiolanetworks\Atlas\Commands\StatesSeeder;
 use Raiolanetworks\Atlas\Commands\TimezonesSeeder;
+use Raiolanetworks\Atlas\Commands\Update;
 
 class AtlasServiceProvider extends ServiceProvider
 {
@@ -85,6 +86,7 @@ class AtlasServiceProvider extends ServiceProvider
             TimezonesSeeder::class,
             CurrenciesSeeder::class,
             LanguagesSeeder::class,
+            Update::class,
         ]);
     }
 }

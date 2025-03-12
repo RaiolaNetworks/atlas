@@ -11,12 +11,13 @@ return [
     | table name
     |--------------------------------------------------------------------------
     */
-    'countries_tablename'  => env('ATLAS_COUNTRIES', 'countries'),
-    'states_tablename'     => env('ATLAS_STATES', 'states'),
-    'cities_tablename'     => env('ATLAS_CITIES', 'cities'),
-    'currencies_tablename' => env('ATLAS_CURRENCIES', 'currencies'),
-    'languages_tablename'  => env('ATLAS_LANGUAGES', 'languages'),
-    'timezones_tablename'  => env('ATLAS_TIMEZONES', 'timezones'),
+    'countries_tablename'                 => env('ATLAS_COUNTRIES', 'countries'),
+    'states_tablename'                    => env('ATLAS_STATES', 'states'),
+    'cities_tablename'                    => env('ATLAS_CITIES', 'cities'),
+    'currencies_tablename'                => env('ATLAS_CURRENCIES', 'currencies'),
+    'languages_tablename'                 => env('ATLAS_LANGUAGES', 'languages'),
+    'timezones_tablename'                 => env('ATLAS_TIMEZONES', 'timezones'),
+    'countries_timezones_pivot_tablename' => env('ATLAS_COUNTRIES_TIMEZONES', 'countries_timezones'),
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +26,7 @@ return [
     | Notice: the cities depend of the states
     |--------------------------------------------------------------------------
     */
-    'entities'             => [
+    'entities'                            => [
         'states'     => true,
         'cities'     => true,
         'timezones'  => true,
