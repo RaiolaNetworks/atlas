@@ -1429,5 +1429,14 @@
 		"rounding": 0,
 		"code": "VUV",
 		"name_plural": "Vanuatu Vatus"
+	},
+	"VES": {
+		"symbol": "Bs.",
+		"name": "Venezuelan Bolívar",
+		"symbol_native": "Bs.",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "VES",
+		"name_plural": "Venezuelan Bolívares"
 	}
 }
