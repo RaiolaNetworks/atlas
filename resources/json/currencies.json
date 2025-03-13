@@ -1330,5 +1330,14 @@
 		"rounding": 0,
 		"code": "WST",
 		"name_plural": "Samoan Talas"
+	},
+	"STN": {
+		"symbol": "Db",
+		"name": "São Tomé and Príncipe Dobra",
+		"symbol_native": "Db",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "STN",
+		"name_plural": "São Tomé and Príncipe Dobras"
 	}
 }
