@@ -58,7 +58,7 @@ class Region extends BaseModel
         return [
             'id'           => $jsonItem['id'],
             'name'         => $jsonItem['name'],
-            'translations' => $jsonItem['translations'],
+            'translations' => json_encode($jsonItem['translations']),
             'wiki_data_id' => $jsonItem['wikiDataId'],
         ];
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -45,6 +46,22 @@ class Country extends BaseModel
         $tableName = config('atlas.countries_tablename');
 
         return $tableName ?: parent::getTable();
+    }
+
+    /**
+     * @return BelongsTo<Region,covariant self>
+     */
+    public function regions(): BelongsTo
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    /**
+     * @return BelongsTo<Subregion,covariant self>
+     */
+    public function subregions(): BelongsTo
+    {
+        return $this->belongsTo(Subregion::class);
     }
 
     /**
@@ -103,9 +120,9 @@ class Country extends BaseModel
             'tld'           => $jsonItem['tld'],
             'native'        => $jsonItem['native'],
             'region'        => $jsonItem['region'],
-            // 'region_id'    => $jsonItem['region_id'],
+            'region_id'     => $jsonItem['region_id'],
             'subregion'     => $jsonItem['subregion'],
-            // 'subregion_id' => $jsonItem['subregion_id'],
+            'subregion_id'  => $jsonItem['subregion_id'],
             'nationality'   => $jsonItem['nationality'],
             'translations'  => json_encode($jsonItem['translations']),
             'latitude'      => $jsonItem['latitude'],

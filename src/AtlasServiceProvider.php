@@ -10,7 +10,9 @@ use Raiolanetworks\Atlas\Commands\CountriesSeeder;
 use Raiolanetworks\Atlas\Commands\CurrenciesSeeder;
 use Raiolanetworks\Atlas\Commands\Install;
 use Raiolanetworks\Atlas\Commands\LanguagesSeeder;
+use Raiolanetworks\Atlas\Commands\RegionsSeeder;
 use Raiolanetworks\Atlas\Commands\StatesSeeder;
+use Raiolanetworks\Atlas\Commands\SubregionsSeeder;
 use Raiolanetworks\Atlas\Commands\TimezonesSeeder;
 use Raiolanetworks\Atlas\Commands\Update;
 
@@ -21,6 +23,9 @@ class AtlasServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Automatically apply the package configuration
+        $this->mergeConfigFrom(__DIR__ . '/../config/atlas.php', 'atlas');
+
         // Register the main class to use with the facade
         $this->app->singleton('atlas', fn () => $this);
     }
@@ -80,6 +85,8 @@ class AtlasServiceProvider extends ServiceProvider
 
         $this->commands([
             Install::class,
+            RegionsSeeder::class,
+            SubregionsSeeder::class,
             CountriesSeeder::class,
             StatesSeeder::class,
             CitiesSeeder::class,

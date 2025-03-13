@@ -52,7 +52,7 @@ class Subregion extends BaseModel
             'id'           => $jsonItem['id'],
             'name'         => $jsonItem['name'],
             'region_id'    => $jsonItem['region_id'],
-            'translations' => $jsonItem['translations'],
+            'translations' => json_encode($jsonItem['translations']),
             'wiki_data_id' => $jsonItem['wikiDataId'],
         ];
     }

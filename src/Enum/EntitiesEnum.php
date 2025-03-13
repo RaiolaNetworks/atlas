@@ -6,14 +6,14 @@ namespace Raiolanetworks\Atlas\Enum;
 
 enum EntitiesEnum: string
 {
+    case Languages  = 'languages';
+    case Currencies = 'currencies';
     case Regions    = 'regions';
     case Subregions = 'subregions';
     case Countries  = 'countries';
     case States     = 'states';
     case Cities     = 'cities';
     case Timezones  = 'timezones';
-    case Languages  = 'languages';
-    case Currencies = 'currencies';
 
     public function getLabel(): ?string
     {
