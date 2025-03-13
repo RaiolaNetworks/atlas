@@ -37,7 +37,7 @@ class ResourcesManager
         'languages'  => [
             'package-path'                            => __DIR__ . '/../../resources/json/languages.json',
             'overrided-client-project-resources-path' => 'json/languages.json',
-        ]
+        ],
     ];
 
     public static function getResourcePath(string $resource): string
