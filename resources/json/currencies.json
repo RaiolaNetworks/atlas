@@ -1294,5 +1294,14 @@
 		"rounding": 0,
 		"code": "MNT",
 		"name_plural": "Mongolian Tugriks"
+	},
+	"KPW": {
+		"symbol": "₩",
+		"name": "North Korean Won",
+		"symbol_native": "₩",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "KPW",
+		"name_plural": "North Korean Won"
 	}
 }
