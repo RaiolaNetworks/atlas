@@ -1321,5 +1321,14 @@
 		"rounding": 0,
 		"code": "SHP",
 		"name_plural": "Saint Helena Pounds"
+	},
+	"WST": {
+		"symbol": "T",
+		"name": "Samoan Tala",
+		"symbol_native": "T",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "WST",
+		"name_plural": "Samoan Talas"
 	}
 }
