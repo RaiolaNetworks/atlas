@@ -1348,5 +1348,14 @@
 		"rounding": 0,
 		"code": "SCR",
 		"name_plural": "Seychellois Rupees"
+	},
+	"SLL": {
+		"symbol": "Le",
+		"name": "Sierra Leonean Leone",
+		"symbol_native": "Le",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SLL",
+		"name_plural": "Sierra Leonean Leones"
 	}
 }
