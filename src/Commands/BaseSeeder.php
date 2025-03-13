@@ -162,7 +162,7 @@ abstract class BaseSeeder extends Command
                 break;
         }
 
-        $bar->advance(self::CHUNK_STEPS);
+        $bar->advance();
     }
 
     /**

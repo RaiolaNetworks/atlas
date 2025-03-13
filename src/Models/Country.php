@@ -48,7 +48,7 @@ class Country extends BaseModel
     {
         return $this->belongsToMany(
             related: Timezone::class,
-            table: config()->string('atlas.countries_timezones_pivot_tablename'),
+            table: config()->string('atlas.country_timezon_pivot_tablename'),
             foreignPivotKey: 'country_id',
             relatedPivotKey: 'time_zone_name',
             parentKey: 'id',

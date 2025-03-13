@@ -12,7 +12,7 @@ class CreateCountriesTimezonesTable extends Migration
 
     public function __construct()
     {
-        $this->tableName = config()->string('atlas.countries_timezones_pivot_tablename');
+        $this->tableName = config()->string('atlas.country_timezone_pivot_tablename');
     }
 
     /**
