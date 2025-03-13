@@ -1402,5 +1402,14 @@
 		"rounding": 0,
 		"code": "BSD",
 		"name_plural": "Bahamian Dollars"
+	},
+	"GMD": {
+		"symbol": "D",
+		"name": "Gambian Dalasi",
+		"symbol_native": "D",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "GMD",
+		"name_plural": "Gambian Dalasis"
 	}
 }
