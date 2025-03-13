@@ -1285,5 +1285,14 @@
 		"rounding": 0,
 		"code": "MRU",
 		"name_plural": "Mauritanian Ouguiyas"
+	},
+	"MNT": {
+		"symbol": "₮",
+		"name": "Mongolian Tugrik",
+		"symbol_native": "₮",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "MNT",
+		"name_plural": "Mongolian Tugriks"
 	}
 }
