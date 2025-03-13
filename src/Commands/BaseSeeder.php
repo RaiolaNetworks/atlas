@@ -146,33 +146,32 @@ abstract class BaseSeeder extends Command
     /**
      * @param array<mixed> $chunk
      */
-    private function processChunk(array &$chunk, ProgressBar $bar, bool $existsWhenRecordInsertedMethod): void
+    private function processChunk(array &$chunk, ProgressBar $progressBar, bool $existsWhenRecordInsertedMethod): void
     {
         switch ($this->insertionMode) {
             case self::BULK_INSERTION_MODE:
-                $this->processChunkByBulkInsertion($chunk, $existsWhenRecordInsertedMethod);
+                $this->processChunkByBulkInsertion($chunk, $existsWhenRecordInsertedMethod, $progressBar);
 
                 break;
 
             case self::INDIVIDUAL_INSERTION_MODE:
-                $this->processChunkByIndividualInsertion($chunk, $existsWhenRecordInsertedMethod);
+                $this->processChunkByIndividualInsertion($chunk, $existsWhenRecordInsertedMethod, $progressBar);
 
                 break;
         }
-
-        $bar->advance();
     }
 
     /**
      * @param array<array<string,mixed>> $chunk
      */
-    private function processChunkByBulkInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod): void
+    private function processChunkByBulkInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod, ProgressBar $progressBar): void
     {
         $bulk = [];
 
         foreach ($chunk as $value) {
             foreach (static::generateElementsOfBulk($value) as $element) {
                 $bulk[] = $element;
+                $progressBar->advance();
             }
         }
 
@@ -193,7 +192,7 @@ abstract class BaseSeeder extends Command
     /**
      * @param array<array<string,mixed>> $chunk
      */
-    private function processChunkByIndividualInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod): void
+    private function processChunkByIndividualInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod, ProgressBar $progressBar): void
     {
         foreach ($chunk as $value) {
             foreach (static::generateElementsOfBulk($value) as $element) {
@@ -202,6 +201,8 @@ abstract class BaseSeeder extends Command
                 if ($existsWhenRecordInsertedMethod) {
                     $this->whenRecordInserted($instance);
                 }
+
+                $progressBar->advance();
             }
         }
     }
