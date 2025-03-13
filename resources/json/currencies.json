@@ -1405,11 +1405,20 @@
 	},
 	"GMD": {
 		"symbol": "D",
-		"name": "Gambian Dalasi",
+		"name": "f",
 		"symbol_native": "D",
 		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "GMD",
 		"name_plural": "Gambian Dalasis"
+	},
+	"TMT": {
+		"symbol": "m",
+		"name": "Turkmenistani Manat",
+		"symbol_native": "m",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "TMT",
+		"name_plural": "Turkmenistani Manats"
 	}
 }
