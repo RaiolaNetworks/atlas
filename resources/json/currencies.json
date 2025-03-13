@@ -1249,5 +1249,14 @@
 		"rounding": 0,
 		"code": "LSL",
 		"name_plural": "Lesotho Maloti"
+	},
+	"LRD": {
+		"symbol": "L$",
+		"name": "Liberian Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "LRD",
+		"name_plural": "Liberian Dollars"
 	}
 }
