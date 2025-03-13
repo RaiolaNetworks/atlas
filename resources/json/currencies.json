@@ -1240,5 +1240,14 @@
 		"rounding": 0,
 		"code": "LAK",
 		"name_plural": "Lao Kips"
+	},
+	"LSL": {
+		"symbol": "L",
+		"name": "Lesotho Loti",
+		"symbol_native": "L",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "LSL",
+		"name_plural": "Lesotho Maloti"
 	}
 }
