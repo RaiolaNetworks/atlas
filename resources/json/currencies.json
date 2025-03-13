@@ -1159,5 +1159,14 @@
 		"rounding": 0,
 		"code": "ANG",
 		"name_plural": "Netherlands Antillean Guilders"
+	},
+	"SZL": {
+		"symbol": "E",
+		"name": "Swazi Lilangeni",
+		"symbol_native": "E",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SZL",
+		"name_plural": "Swazi Emalangeni"
 	}
 }
