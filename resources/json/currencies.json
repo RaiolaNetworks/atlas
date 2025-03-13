@@ -1357,5 +1357,14 @@
 		"rounding": 0,
 		"code": "SLL",
 		"name_plural": "Sierra Leonean Leones"
+	},
+	"SBD": {
+		"symbol": "SI$",
+		"name": "Solomon Islands Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SBD",
+		"name_plural": "Solomon Islands Dollars"
 	}
 }
