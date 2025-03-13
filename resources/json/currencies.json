@@ -1252,11 +1252,20 @@
 	},
 	"LRD": {
 		"symbol": "L$",
-		"name": "Liberian Dollar",
+		"name": "f",
 		"symbol_native": "$",
 		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "LRD",
 		"name_plural": "Liberian Dollars"
+	},
+	"MWK": {
+		"symbol": "MK",
+		"name": "Malawian Kwacha",
+		"symbol_native": "MK",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "MWK",
+		"name_plural": "Malawian Kwachas"
 	}
 }
