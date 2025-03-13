@@ -1312,5 +1312,14 @@
 		"rounding": 0,
 		"code": "PGK",
 		"name_plural": "Papua New Guinean Kinas"
+	},
+	"SHP": {
+		"symbol": "£",
+		"name": "Saint Helena Pound",
+		"symbol_native": "£",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SHP",
+		"name_plural": "Saint Helena Pounds"
 	}
 }
