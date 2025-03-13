@@ -1186,5 +1186,14 @@
 		"rounding": 0,
 		"code": "FJD",
 		"name_plural": "Fijian Dollars"
+	},
+	"XPF": {
+		"symbol": "₣",
+		"name": "CFP Franc",
+		"symbol_native": "₣",
+		"decimal_digits": 0,
+		"rounding": 0,
+		"code": "XPF",
+		"name_plural": "CFP Francs"
 	}
 }
