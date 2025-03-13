@@ -6,6 +6,19 @@ namespace Raiolanetworks\Atlas\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int    $id
+ * @property string $name
+ * @property int    $state_id
+ * @property string $state_code
+ * @property string $state_name
+ * @property int    $country_id
+ * @property string $country_code
+ * @property string $country_name
+ * @property string $latitude
+ * @property string $longitude
+ * @property string $wiki_data_id
+ */
 class City extends BaseModel
 {
     protected $guarded = [];
@@ -46,14 +59,18 @@ class City extends BaseModel
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
         return [
+
             'id'           => $jsonItem['id'],
-            'country_id'   => $jsonItem['country_id'],
-            'state_id'     => $jsonItem['state_id'],
             'name'         => $jsonItem['name'],
-            'country_code' => $jsonItem['country_code'],
+            'state_id'     => $jsonItem['state_id'],
             'state_code'   => $jsonItem['state_code'],
+            'state_name'   => $jsonItem['state_name'],
+            'country_id'   => $jsonItem['country_id'],
+            'country_code' => $jsonItem['country_code'],
+            'country_name' => $jsonItem['country_name'],
             'latitude'     => $jsonItem['latitude'],
             'longitude'    => $jsonItem['longitude'],
+            'wiki_data_id' => $jsonItem['wikiDataId'],
         ];
     }
 }

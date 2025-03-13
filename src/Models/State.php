@@ -7,6 +7,17 @@ namespace Raiolanetworks\Atlas\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int    $id
+ * @property string $name
+ * @property int    $country_id
+ * @property string $country_code
+ * @property string $country_name
+ * @property string $state_code
+ * @property string $type
+ * @property string $latitude
+ * @property string $longitude
+ */
 class State extends BaseModel
 {
     protected $guarded = [];
@@ -48,9 +59,10 @@ class State extends BaseModel
     {
         return [
             'id'           => $jsonItem['id'],
-            'country_id'   => $jsonItem['country_id'],
             'name'         => $jsonItem['name'],
+            'country_id'   => $jsonItem['country_id'],
             'country_code' => $jsonItem['country_code'],
+            'country_name' => $jsonItem['country_name'],
             'state_code'   => $jsonItem['state_code'],
             'type'         => $jsonItem['type'],
             'latitude'     => $jsonItem['latitude'],

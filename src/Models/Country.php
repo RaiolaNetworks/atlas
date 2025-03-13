@@ -8,6 +8,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int                   $id
+ * @property string                $name
+ * @property string                $iso2
+ * @property string                $iso3
+ * @property string                $numeric_code
+ * @property string                $phonecode
+ * @property string                $capital
+ * @property string                $currency_id
+ * @property string                $tld
+ * @property string                $native
+ * @property string                $region
+ * @property int                   $region_id
+ * @property string                $subregion
+ * @property int                   $subregion_id
+ * @property string                $nationality
+ * @property array<string, string> $translations
+ * @property string                $latitude
+ * @property string                $longitude
+ * @property string                $emoji
+ * @property string                $emojiU
+ */
 class Country extends BaseModel
 {
     protected $guarded = [];
@@ -71,17 +93,25 @@ class Country extends BaseModel
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
         return [
-            'id'         => $jsonItem['id'],
-            'iso2'       => $jsonItem['iso2'],
-            'name'       => $jsonItem['name'],
-            'phone_code' => $jsonItem['phone_code'],
-            'currency'   => $jsonItem['currency'],
-            'iso3'       => $jsonItem['iso3'],
-            'native'     => $jsonItem['native'],
-            'region'     => $jsonItem['region'],
-            'subregion'  => $jsonItem['subregion'],
-            'latitude'   => $jsonItem['latitude'],
-            'longitude'  => $jsonItem['longitude'],
+            'name'          => $jsonItem['name'],
+            'iso2'          => $jsonItem['iso2'],
+            'iso3'          => $jsonItem['iso3'],
+            'numeric_code'  => $jsonItem['numeric_code'],
+            'phonecode'     => $jsonItem['phonecode'],
+            'capital'       => $jsonItem['capital'],
+            'currency_code' => $jsonItem['currency'],
+            'tld'           => $jsonItem['tld'],
+            'native'        => $jsonItem['native'],
+            'region'        => $jsonItem['region'],
+            // 'region_id'    => $jsonItem['region_id'],
+            'subregion'     => $jsonItem['subregion'],
+            // 'subregion_id' => $jsonItem['subregion_id'],
+            'nationality'   => $jsonItem['nationality'],
+            'translations'  => json_encode($jsonItem['translations']),
+            'latitude'      => $jsonItem['latitude'],
+            'longitude'     => $jsonItem['longitude'],
+            'emoji'         => $jsonItem['emoji'],
+            'emojiU'        => $jsonItem['emojiU'],
         ];
     }
 }
