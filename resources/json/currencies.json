@@ -1375,5 +1375,14 @@
 		"rounding": 0,
 		"code": "SSP",
 		"name_plural": "South Sudanese Pounds"
+	},
+	"SRD": {
+		"symbol": "$",
+		"name": "Surinamese Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SRD",
+		"name_plural": "Surinamese Dollars"
 	}
 }
