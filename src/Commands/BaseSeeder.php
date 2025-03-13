@@ -130,8 +130,6 @@ abstract class BaseSeeder extends Command
                 $this->processChunk($chunk, $bar, $existsWhenRecordInsertedMethod);
             }
         } catch (Throwable $th) {
-            dump($th->getMessage());
-
             $this->newLine();
             $this->error('Something happened when trying to save the data...');
 
