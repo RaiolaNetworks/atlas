@@ -1231,5 +1231,14 @@
 		"rounding": 0,
 		"code": "KGS",
 		"name_plural": "Kyrgyzstani Soms"
+	},
+	"LAK": {
+		"symbol": "₭",
+		"name": "Lao Kip",
+		"symbol_native": "₭",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "LAK",
+		"name_plural": "Lao Kips"
 	}
 }
