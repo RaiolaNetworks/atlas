@@ -1384,5 +1384,14 @@
 		"rounding": 0,
 		"code": "SRD",
 		"name_plural": "Surinamese Dollars"
+	},
+	"TJS": {
+		"symbol": "ЅМ",
+		"name": "Tajikistani Somoni",
+		"symbol_native": "ЅМ",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "TJS",
+		"name_plural": "Tajikistani Somonis"
 	}
 }
