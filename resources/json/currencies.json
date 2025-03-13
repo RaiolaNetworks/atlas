@@ -1267,5 +1267,14 @@
 		"rounding": 0,
 		"code": "MWK",
 		"name_plural": "Malawian Kwachas"
+	},
+	"MVR": {
+		"symbol": "Rf",
+		"name": "Maldivian Rufiyaa",
+		"symbol_native": "ރ.",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "MVR",
+		"name_plural": "Maldivian Rufiyaas"
 	}
 }
