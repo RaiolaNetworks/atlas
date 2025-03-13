@@ -1177,5 +1177,14 @@
 		"rounding": 0,
 		"code": "FKP",
 		"name_plural": "Falkland Islands Pounds"
+	},
+	"FJD": {
+		"symbol": "FJ$",
+		"name": "Fijian Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "FJD",
+		"name_plural": "Fijian Dollars"
 	}
 }
