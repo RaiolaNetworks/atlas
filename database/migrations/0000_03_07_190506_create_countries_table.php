@@ -22,17 +22,26 @@ class CreateCountriesTable extends Migration
     {
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->string('currency', 3)->nullable();
-            $table->string('iso2', 2);
             $table->string('name');
-            $table->tinyInteger('status')->default(1);
-            $table->string('phone_code', 5);
+            $table->string('iso2', 2);
             $table->string('iso3', 3);
-            $table->string('native')->nullable();
-            $table->string('region')->nullable();
-            $table->string('subregion')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->string('numeric_code', 3);
+            $table->string('phonecode', 5);
+            $table->string('capital', 30);
+            $table->string('currency_code', 3)->nullable()->index();
+            $table->foreign('currency_code')->references('code')->on(config()->string('atlas.currencies_tablename'))->cascadeOnDelete();
+            $table->string('tld', 8);
+            $table->string('native', 30)->nullable();
+            $table->string('region', 30);
+            // $table->foreignId('region_id')->nullable()->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
+            $table->string('subregion', 30);
+            // $table->foreignId('subregion_id')->nullable()->constrained(config()->string('atlas.subregions_tablename'))->nullOnDelete();
+            $table->string('nationality', 30);
+            $table->json('translations');
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->string('emoji', 1);
+            $table->string('emojiU');
         });
     }
 
