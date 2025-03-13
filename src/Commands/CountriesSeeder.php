@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
-use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\Country;
 
@@ -36,10 +35,5 @@ class CountriesSeeder extends BaseSeeder
         parent::__construct();
 
         $this->pluralName = EntitiesEnum::Countries->value;
-    }
-
-    protected function generateElementsOfBulk(array $jsonItem): Iterator
-    {
-        yield $this->model::fromJsonToDBRecord($jsonItem);
     }
 }

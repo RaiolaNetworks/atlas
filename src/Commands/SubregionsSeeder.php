@@ -4,36 +4,35 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Commands;
 
-use Illuminate\Console\Command;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
-use Raiolanetworks\Atlas\Models\Currency;
+use Raiolanetworks\Atlas\Models\Subregion;
 
-class CurrenciesSeeder extends BaseSeeder
+class SubregionsSeeder extends BaseSeeder
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    public $signature = 'atlas:currencies';
+    public $signature = 'atlas:subregions';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    public $description = 'Seeding of currencies in the database';
+    public $description = 'Seeding of subregions in the database';
 
-    protected string $resourceKey = 'currencies';
+    protected string $resourceKey = 'subregions';
 
     protected string $pluralName = '';
 
-    protected string $model = Currency::class;
+    protected string $model = Subregion::class;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->pluralName = EntitiesEnum::Currencies->value;
+        $this->pluralName = EntitiesEnum::Subregions->value;
     }
 }

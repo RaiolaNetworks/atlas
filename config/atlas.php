@@ -12,7 +12,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'regions_tablename'                => env('ATLAS_REGIONS', 'regions'),
-    'subregions_tablename'            => env('ATLAS_SUBREGIONS', 'subregions'),
+    'subregions_tablename'             => env('ATLAS_SUBREGIONS', 'subregions'),
     'countries_tablename'              => env('ATLAS_COUNTRIES', 'countries'),
     'states_tablename'                 => env('ATLAS_STATES', 'states'),
     'cities_tablename'                 => env('ATLAS_CITIES', 'cities'),

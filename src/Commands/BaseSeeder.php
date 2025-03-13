@@ -243,5 +243,8 @@ abstract class BaseSeeder extends Command
      * @param  array<string, mixed>           $jsonItem
      * @return Iterator<array<string, mixed>>
      */
-    abstract protected function generateElementsOfBulk(array $jsonItem): Iterator;
+    protected function generateElementsOfBulk(array $jsonItem): Iterator
+    {
+        yield $this->model::fromJsonToDBRecord($jsonItem);
+    }
 }
