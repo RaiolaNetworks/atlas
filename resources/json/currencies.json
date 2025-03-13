@@ -1105,5 +1105,14 @@
 		"rounding": 0,
 		"code": "AWG",
 		"name_plural": "Aruban Florins"
+	},
+	"BBD": {
+		"symbol": "Bds$",
+		"name": "Barbadian Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "BBD",
+		"name_plural": "Barbadian Dollars"
 	}
 }
