@@ -1087,5 +1087,23 @@
 		"rounding": 0,
 		"code": "XCD",
 		"name_plural": "East Caribbean Dollars"
+	},
+	"AAD": {
+		"symbol": "A$",
+		"name": "Antarctican Dollar",
+		"symbol_native": "A$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "AAD",
+		"name_plural": "Antarctican Dollars"
+	},
+	"AWG": {
+		"symbol": "Afl.",
+		"name": "Aruban Florin",
+		"symbol_native": "Afl.",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "AWG",
+		"name_plural": "Aruban Florins"
 	}
 }
