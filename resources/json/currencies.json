@@ -1150,5 +1150,14 @@
 		"rounding": 0,
 		"code": "CUP",
 		"name_plural": "Cuban Pesos"
+	},
+	"ANG": {
+		"symbol": "ƒ",
+		"name": "Netherlands Antillean Guilder",
+		"symbol_native": "ƒ",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "ANG",
+		"name_plural": "Netherlands Antillean Guilders"
 	}
 }
