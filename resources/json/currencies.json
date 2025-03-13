@@ -1366,5 +1366,14 @@
 		"rounding": 0,
 		"code": "SBD",
 		"name_plural": "Solomon Islands Dollars"
+	},
+	"SSP": {
+		"symbol": "£",
+		"name": "South Sudanese Pound",
+		"symbol_native": "£",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SSP",
+		"name_plural": "South Sudanese Pounds"
 	}
 }
