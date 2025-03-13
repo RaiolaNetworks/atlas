@@ -1195,5 +1195,14 @@
 		"rounding": 0,
 		"code": "XPF",
 		"name_plural": "CFP Francs"
+	},
+	"GIP": {
+		"symbol": "£",
+		"name": "Gibraltar Pound",
+		"symbol_native": "£",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "GIP",
+		"name_plural": "Gibraltar Pounds"
 	}
 }
