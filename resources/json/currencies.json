@@ -1213,5 +1213,14 @@
 		"rounding": 0,
 		"code": "GYD",
 		"name_plural": "Guyanese Dollars"
+	},
+	"HTG": {
+		"symbol": "G",
+		"name": "Haitian Gourde",
+		"symbol_native": "G",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "HTG",
+		"name_plural": "Haitian Gourdes"
 	}
 }
