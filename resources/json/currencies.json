@@ -1198,11 +1198,20 @@
 	},
 	"GIP": {
 		"symbol": "£",
-		"name": "Gibraltar Pound",
+		"name": "f",
 		"symbol_native": "£",
 		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "GIP",
 		"name_plural": "Gibraltar Pounds"
+	},
+	"GYD": {
+		"symbol": "G$",
+		"name": "Guyanese Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "GYD",
+		"name_plural": "Guyanese Dollars"
 	}
 }
