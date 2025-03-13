@@ -1393,5 +1393,14 @@
 		"rounding": 0,
 		"code": "TJS",
 		"name_plural": "Tajikistani Somonis"
+	},
+	"BSD": {
+		"symbol": "B$",
+		"name": "Bahamian Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "BSD",
+		"name_plural": "Bahamian Dollars"
 	}
 }
