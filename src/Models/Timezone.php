@@ -6,6 +6,9 @@ namespace Raiolanetworks\Atlas\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property string $zone_name
+ */
 class Timezone extends BaseModel
 {
     protected $guarded = [];

@@ -34,6 +34,16 @@ class TimezonesSeeder extends BaseSeeder
 
     protected string $insertionMode = self::INDIVIDUAL_INSERTION_MODE;
 
+    /**
+     * Data of the data file
+     *
+     * @var array<int, array{
+     *      id: int,
+     *      timezones: array<int, array<string, string|int>>
+     * }>
+     */
+    protected array $data;
+
     public function __construct()
     {
         parent::__construct();
@@ -61,20 +71,12 @@ class TimezonesSeeder extends BaseSeeder
         }
     }
 
-    /**
-     * @param Timezone $instance
-     */
-    protected function whenRecordInserted(BaseModel $instance): void
+    protected function whenRecordInserted(Timezone $instance): void
     {
-        foreach ($this->data as $rawContry) {
-            /** @var array{
-             *      id: int,
-             *      timezones: array<array<string,string>>
-             *  } $rawCountry
-             * */
-            foreach ($rawContry['timezones'] as $rawTimezone) {
+        foreach ($this-> data as $rawCountry) {
+            foreach ($rawCountry['timezones'] as $rawTimezone) {
                 if ($rawTimezone['zoneName'] === $instance->zone_name) {
-                    $instance->countries()->attach($rawContry['id']);
+                    $instance->countries()->attach($rawCountry['id']);
 
                     continue 2;
                 }

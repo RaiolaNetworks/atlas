@@ -86,7 +86,7 @@ class AtlasServiceProvider extends ServiceProvider
             TimezonesSeeder::class,
             CurrenciesSeeder::class,
             LanguagesSeeder::class,
-            // Update::class,
+            Update::class,
         ]);
     }
 }

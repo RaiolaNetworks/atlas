@@ -20,9 +20,7 @@ class CreateCountriesTimezonesTable extends Migration
      */
     public function up(): void
     {
-        if (
-            ! config()->boolean('atlas.entities.timezones')
-        ) {
+        if (! config()->boolean('atlas.entities.timezones')) {
             return;
         }
 
