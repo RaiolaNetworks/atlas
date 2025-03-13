@@ -7,7 +7,6 @@ namespace Raiolanetworks\Atlas\Commands;
 use Illuminate\Console\Command;
 use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
-use Raiolanetworks\Atlas\Models\BaseModel;
 use Raiolanetworks\Atlas\Models\Timezone;
 
 class TimezonesSeeder extends BaseSeeder
@@ -73,7 +72,7 @@ class TimezonesSeeder extends BaseSeeder
 
     protected function whenRecordInserted(Timezone $instance): void
     {
-        foreach ($this-> data as $rawCountry) {
+        foreach ($this->data as $rawCountry) {
             foreach ($rawCountry['timezones'] as $rawTimezone) {
                 if ($rawTimezone['zoneName'] === $instance->zone_name) {
                     $instance->countries()->attach($rawCountry['id']);
