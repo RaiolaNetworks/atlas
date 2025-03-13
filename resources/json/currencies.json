@@ -1114,5 +1114,14 @@
 		"rounding": 0,
 		"code": "BBD",
 		"name_plural": "Barbadian Dollars"
+	},
+	"BMD": {
+		"symbol": "BD$",
+		"name": "Bermudian Dollar",
+		"symbol_native": "$",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "BMD",
+		"name_plural": "Bermudian Dollars"
 	}
 }
