@@ -132,6 +132,7 @@ abstract class BaseSeeder extends Command
         } catch (Throwable $th) {
             $this->newLine();
             $this->error('Something happened when trying to save the data...');
+            $this->error('Error: ' . $th->getMessage());
 
             return false;
         }

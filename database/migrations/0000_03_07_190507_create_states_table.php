@@ -26,10 +26,11 @@ class CreateStatesTable extends Migration
 
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
             $table->string('name');
+            $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
             $table->string('country_code', 3);
-            $table->string('state_code', 5);
+            $table->string('country_name');
+            $table->string('state_code', 5)->nullable();
             $table->string('type')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
