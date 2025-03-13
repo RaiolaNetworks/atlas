@@ -1420,5 +1420,14 @@
 		"rounding": 0,
 		"code": "TMT",
 		"name_plural": "Turkmenistani Manats"
+	},
+	"VUV": {
+		"symbol": "VT",
+		"name": "Vanuatu Vatu",
+		"symbol_native": "VT",
+		"decimal_digits": 0,
+		"rounding": 0,
+		"code": "VUV",
+		"name_plural": "Vanuatu Vatus"
 	}
 }
