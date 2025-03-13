@@ -1222,5 +1222,14 @@
 		"rounding": 0,
 		"code": "HTG",
 		"name_plural": "Haitian Gourdes"
+	},
+	"KGS": {
+		"symbol": "сом",
+		"name": "Kyrgyzstani Som",
+		"symbol_native": "сом",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "KGS",
+		"name_plural": "Kyrgyzstani Soms"
 	}
 }
