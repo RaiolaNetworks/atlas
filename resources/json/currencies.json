@@ -1276,5 +1276,14 @@
 		"rounding": 0,
 		"code": "MVR",
 		"name_plural": "Maldivian Rufiyaas"
+	},
+	"MRU": {
+		"symbol": "UM",
+		"name": "Mauritanian Ouguiya",
+		"symbol_native": "UM",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "MRU",
+		"name_plural": "Mauritanian Ouguiyas"
 	}
 }
