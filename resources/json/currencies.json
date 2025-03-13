@@ -1303,5 +1303,14 @@
 		"rounding": 0,
 		"code": "KPW",
 		"name_plural": "North Korean Won"
+	},
+	"PGK": {
+		"symbol": "K",
+		"name": "Papua New Guinean Kina",
+		"symbol_native": "K",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "PGK",
+		"name_plural": "Papua New Guinean Kinas"
 	}
 }
