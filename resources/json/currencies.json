@@ -1339,5 +1339,14 @@
 		"rounding": 0,
 		"code": "STN",
 		"name_plural": "São Tomé and Príncipe Dobras"
+	},
+	"SCR": {
+		"symbol": "SR",
+		"name": "Seychellois Rupee",
+		"symbol_native": "SR",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "SCR",
+		"name_plural": "Seychellois Rupees"
 	}
 }
