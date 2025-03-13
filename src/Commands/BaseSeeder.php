@@ -133,6 +133,7 @@ abstract class BaseSeeder extends Command
             $this->newLine();
             $this->error('Something happened when trying to save the data...');
             $this->error('Error: ' . $th->getMessage());
+
             return false;
         }
         $bar->finish();
