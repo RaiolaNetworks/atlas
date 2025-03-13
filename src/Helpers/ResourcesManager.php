@@ -9,13 +9,26 @@ use Exception;
 class ResourcesManager
 {
     public const DATA_RESOURCES = [
-        'cities'     => [
-            'package-path'                            => __DIR__ . '/../../resources/json/cities.json',
-            'overrided-client-project-resources-path' => 'json/cities.json',
+        'regions'    => [
+            'package-path'                            => __DIR__ . '/../../resources/json/regions.json',
+            'overrided-client-project-resources-path' => 'json/regions.json',
         ],
+        'subregions' => [
+            'package-path'                            => __DIR__ . '/../../resources/json/subregions.json',
+            'overrided-client-project-resources-path' => 'json/subregions.json',
+        ],
+
         'countries'  => [
             'package-path'                            => __DIR__ . '/../../resources/json/countries.json',
             'overrided-client-project-resources-path' => 'json/countries.json',
+        ],
+        'states'     => [
+            'package-path'                            => __DIR__ . '/../../resources/json/states.json',
+            'overrided-client-project-resources-path' => 'json/states.json',
+        ],
+        'cities'     => [
+            'package-path'                            => __DIR__ . '/../../resources/json/cities.json',
+            'overrided-client-project-resources-path' => 'json/cities.json',
         ],
         'currencies' => [
             'package-path'                            => __DIR__ . '/../../resources/json/currencies.json',
@@ -24,11 +37,7 @@ class ResourcesManager
         'languages'  => [
             'package-path'                            => __DIR__ . '/../../resources/json/languages.json',
             'overrided-client-project-resources-path' => 'json/languages.json',
-        ],
-        'states'     => [
-            'package-path'                            => __DIR__ . '/../../resources/json/states.json',
-            'overrided-client-project-resources-path' => 'json/states.json',
-        ],
+        ]
     ];
 
     public static function getResourcePath(string $resource): string
