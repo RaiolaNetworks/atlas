@@ -1168,5 +1168,14 @@
 		"rounding": 0,
 		"code": "SZL",
 		"name_plural": "Swazi Emalangeni"
+	},
+	"FKP": {
+		"symbol": "£",
+		"name": "Falkland Islands Pound",
+		"symbol_native": "£",
+		"decimal_digits": 2,
+		"rounding": 0,
+		"code": "FKP",
+		"name_plural": "Falkland Islands Pounds"
 	}
 }
