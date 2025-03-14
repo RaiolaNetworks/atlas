@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raiolanetworks\Atlas\Commands;
+namespace Raiolanetworks\Atlas\Commands\Seeders;
 
 use Exception;
 use Illuminate\Console\Command;

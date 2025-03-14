@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas;
 
 use Illuminate\Support\ServiceProvider;
-use Raiolanetworks\Atlas\Commands\CitiesSeeder;
-use Raiolanetworks\Atlas\Commands\CountriesSeeder;
-use Raiolanetworks\Atlas\Commands\CurrenciesSeeder;
 use Raiolanetworks\Atlas\Commands\Install;
-use Raiolanetworks\Atlas\Commands\LanguagesSeeder;
-use Raiolanetworks\Atlas\Commands\RegionsSeeder;
-use Raiolanetworks\Atlas\Commands\StatesSeeder;
-use Raiolanetworks\Atlas\Commands\SubregionsSeeder;
-use Raiolanetworks\Atlas\Commands\TimezonesSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\CitiesSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\CountriesSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\CurrenciesSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\LanguagesSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\RegionsSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\StatesSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\SubregionsSeeder;
+use Raiolanetworks\Atlas\Commands\Seeders\TimezonesSeeder;
 use Raiolanetworks\Atlas\Commands\Update;
 
 class AtlasServiceProvider extends ServiceProvider

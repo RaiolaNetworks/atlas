@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raiolanetworks\Atlas\Commands;
+namespace Raiolanetworks\Atlas\Commands\Seeders;
 
 use Illuminate\Console\Command;
 use Iterator;
