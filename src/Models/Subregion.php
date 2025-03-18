@@ -48,12 +48,17 @@ class Subregion extends BaseModel
      */
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
-        return [
+        $parser = [
             'id'           => $jsonItem['id'],
             'name'         => $jsonItem['name'],
-            'region_id'    => $jsonItem['region_id'],
             'translations' => json_encode($jsonItem['translations']),
             'wiki_data_id' => $jsonItem['wikiDataId'],
         ];
+
+        if (config()->boolean('atlas.entities.regions')) {
+            $parser['region_id'] = $jsonItem['region_id'];
+        }
+
+        return $parser;
     }
 }

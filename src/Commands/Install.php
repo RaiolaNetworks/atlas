@@ -42,14 +42,6 @@ class Install extends Command
      */
     public function handle(): int
     {
-        /*
-        // Publish the config file
-        $this->call('vendor:publish', [
-            '--tag' => 'atlas-config',
-            '--force',
-        ]);
-        */
-
         // Load migrations in migrations queue and run
         app()->make('atlas')->loadMigrations();
         $this->call('migrate');

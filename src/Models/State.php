@@ -57,10 +57,9 @@ class State extends BaseModel
      */
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
-        return [
+        $parser = [
             'id'           => $jsonItem['id'],
             'name'         => $jsonItem['name'],
-            'country_id'   => $jsonItem['country_id'],
             'country_code' => $jsonItem['country_code'],
             'country_name' => $jsonItem['country_name'],
             'state_code'   => $jsonItem['state_code'],
@@ -68,5 +67,11 @@ class State extends BaseModel
             'latitude'     => $jsonItem['latitude'],
             'longitude'    => $jsonItem['longitude'],
         ];
+
+        if (config()->boolean('atlas.entities.countries')) {
+            $parser['country_id'] = $jsonItem['country_id'];
+        }
+
+        return $parser;
     }
 }

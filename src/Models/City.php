@@ -58,11 +58,9 @@ class City extends BaseModel
      */
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
-        return [
-
+        $parser = [
             'id'           => $jsonItem['id'],
             'name'         => $jsonItem['name'],
-            'state_id'     => $jsonItem['state_id'],
             'state_code'   => $jsonItem['state_code'],
             'state_name'   => $jsonItem['state_name'],
             'country_id'   => $jsonItem['country_id'],
@@ -72,5 +70,15 @@ class City extends BaseModel
             'longitude'    => $jsonItem['longitude'],
             'wiki_data_id' => $jsonItem['wikiDataId'],
         ];
+
+        if (config()->boolean('atlas.entities.states')) {
+            $parser['state_id'] = $jsonItem['state_id'];
+        }
+
+        if (config()->boolean('atlas.entities.countries')) {
+            $parser['country_id'] = $jsonItem['country_id'];
+        }
+
+        return $parser;
     }
 }

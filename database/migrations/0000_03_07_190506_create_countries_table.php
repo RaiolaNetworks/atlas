@@ -33,12 +33,12 @@ class CreateCountriesTable extends Migration
             $table->string('native', 30)->nullable();
             $table->string('region', 30);
 
-            if (! config()->boolean('atlas.entities.regions')) {
+            if (config()->boolean('atlas.entities.regions')) {
                 $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
             }
             $table->string('subregion', 30)->nullable();
 
-            if (! config()->boolean('atlas.entities.subregions')) {
+            if (config()->boolean('atlas.entities.subregions')) {
                 $table->foreignId('subregion_id')->nullable()->constrained(config()->string('atlas.subregions_tablename'))->nullOnDelete();
             }
             $table->string('nationality', 30);

@@ -109,7 +109,7 @@ class Country extends BaseModel
      */
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
-        return [
+        $parser = [
             'name'          => $jsonItem['name'],
             'iso2'          => $jsonItem['iso2'],
             'iso3'          => $jsonItem['iso3'],
@@ -120,9 +120,7 @@ class Country extends BaseModel
             'tld'           => $jsonItem['tld'],
             'native'        => $jsonItem['native'],
             'region'        => $jsonItem['region'],
-            'region_id'     => $jsonItem['region_id'],
             'subregion'     => $jsonItem['subregion'],
-            'subregion_id'  => $jsonItem['subregion_id'],
             'nationality'   => $jsonItem['nationality'],
             'translations'  => json_encode($jsonItem['translations']),
             'latitude'      => $jsonItem['latitude'],
@@ -130,5 +128,15 @@ class Country extends BaseModel
             'emoji'         => $jsonItem['emoji'],
             'emojiU'        => $jsonItem['emojiU'],
         ];
+
+        if (config()->boolean('atlas.entities.regions')) {
+            $parser['region_id'] = $jsonItem['region_id'];
+        }
+
+        if (config()->boolean('atlas.entities.subregions')) {
+            $parser['subregion_id'] = $jsonItem['subregion_id'];
+        }
+
+        return $parser;
     }
 }

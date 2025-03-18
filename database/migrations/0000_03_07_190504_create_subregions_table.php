@@ -28,7 +28,7 @@ class CreateSubregionsTable extends Migration
             $table->id();
             $table->string('name');
 
-            if (! config()->boolean('atlas.entities.regions')) {
+            if (config()->boolean('atlas.entities.regions')) {
                 $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'));
             }
 
