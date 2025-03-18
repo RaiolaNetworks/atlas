@@ -55,8 +55,9 @@ class Install extends Command
         $this->call('migrate');
 
         // Select the seeders to be executed
-        $options = array_column(EntitiesEnum::cases(), 'name');
-        $choice  = multiselect(
+        $entities = array_filter(EntitiesEnum::cases(), fn (EntitiesEnum $entity) => $entity->isEnabled());
+        $options  = array_column($entities, 'name');
+        $choice   = multiselect(
             label: 'Which seeders do you want to run? (default: all)',
             options: $options,
             default: $options,
