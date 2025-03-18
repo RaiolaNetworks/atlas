@@ -27,6 +27,7 @@ class CreateStatesTable extends Migration
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
             $table->string('name');
+
             if (! config()->boolean('atlas.entities.countries')) {
                 $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
             }
