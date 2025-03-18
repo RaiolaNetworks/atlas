@@ -31,10 +31,11 @@ return [
     'entities'                         => [
         'regions'    => true,
         'subregions' => true,
+        'countries'  => true,
         'states'     => true,
         'cities'     => true,
-        'timezones'  => true,
         'currencies' => true,
         'languages'  => true,
+        'timezones'  => true,
     ],
 ];

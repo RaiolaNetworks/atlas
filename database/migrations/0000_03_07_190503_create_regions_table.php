@@ -20,6 +20,10 @@ class CreateRegionsTable extends Migration
      */
     public function up(): void
     {
+        if (! config()->boolean('atlas.entities.regions')) {
+            return;
+        }
+
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
             $table->string('name');

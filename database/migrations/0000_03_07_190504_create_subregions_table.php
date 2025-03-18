@@ -20,10 +20,18 @@ class CreateSubregionsTable extends Migration
      */
     public function up(): void
     {
+        if (! config()->boolean('atlas.entities.subregions')) {
+            return;
+        }
+
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'));
+
+            if (! config()->boolean('atlas.entities.regions')) {
+                $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'));
+            }
+
             $table->json('translations');
             $table->string('wiki_data_id', 16);
         });
