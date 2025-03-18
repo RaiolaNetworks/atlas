@@ -8,42 +8,53 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCountriesTable extends Migration
 {
+    private string $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config()->string('atlas.countries_tablename');
+    }
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.countries_tablename');
-
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
-            $table->string('iso2', 2);
             $table->string('name');
-            $table->tinyInteger('status')->default(1);
-            $table->string('phone_code', 5);
+            $table->string('iso2', 2);
             $table->string('iso3', 3);
-            $table->string('currency', 3)->nullable();
-            $table->string('native')->nullable();
-            $table->string('region')->nullable();
-            $table->string('subregion')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->string('numeric_code', 3);
+            $table->string('phonecode', 5);
+            $table->string('capital', 30)->nullable();
+            $table->foreignId('currency_code')->constrained(config()->string('atlas.currencies_tablename'), 'code')->cascadeOnDelete();
+            $table->string('tld', 8);
+            $table->string('native', 30)->nullable();
+            $table->string('region', 30);
+
+            if (config()->boolean('atlas.entities.regions')) {
+                $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
+            }
+            $table->string('subregion', 30)->nullable();
+
+            if (config()->boolean('atlas.entities.subregions')) {
+                $table->foreignId('subregion_id')->nullable()->constrained(config()->string('atlas.subregions_tablename'))->nullOnDelete();
+            }
+            $table->string('nationality', 30);
+            $table->json('translations');
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->string('emoji', 1);
+            $table->string('emojiU');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.countries_tablename');
-
-        Schema::dropIfExists($tableName);
+        Schema::dropIfExists($this->tableName);
     }
 }

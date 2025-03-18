@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Language extends Model
+class Language extends BaseModel
 {
     protected $guarded = [];
 
@@ -21,5 +19,19 @@ class Language extends Model
         $tableName = config('atlas.languages_tablename');
 
         return $tableName ?: parent::getTable();
+    }
+
+    /**
+     * @param  array<string,mixed> $jsonItem
+     * @return array<string,mixed>
+     */
+    public static function fromJsonToDBRecord(array $jsonItem): array
+    {
+        return [
+            'code'        => $jsonItem['code'],
+            'name'        => $jsonItem['name'],
+            'name_native' => $jsonItem['name_native'],
+            'dir'         => $jsonItem['dir'],
+        ];
     }
 }

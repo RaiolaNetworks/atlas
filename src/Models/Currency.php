@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Currency extends Model
+class Currency extends BaseModel
 {
+    protected $primaryKey = 'code';
+
     protected $guarded = [];
 
     public $timestamps = false;
@@ -30,5 +31,20 @@ class Currency extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * @param  array<string,mixed> $jsonItem
+     * @return array<string,mixed>
+     */
+    public static function fromJsonToDBRecord(array $jsonItem): array
+    {
+        return [
+            'code'           => $jsonItem['code'],
+            'name'           => $jsonItem['name'],
+            'symbol'         => $jsonItem['symbol'],
+            'symbol_native'  => $jsonItem['symbol_native'],
+            'decimal_digits' => $jsonItem['decimal_digits'],
+        ];
     }
 }

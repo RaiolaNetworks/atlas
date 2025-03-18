@@ -42,19 +42,14 @@ class Install extends Command
      */
     public function handle(): int
     {
-        // Publish the config file
-        $this->call('vendor:publish', [
-            '--tag' => 'atlas-config',
-            '--force',
-        ]);
-
         // Load migrations in migrations queue and run
         app()->make('atlas')->loadMigrations();
         $this->call('migrate');
 
         // Select the seeders to be executed
-        $options = array_column(EntitiesEnum::cases(), 'name');
-        $choice  = multiselect(
+        $entities = array_filter(EntitiesEnum::cases(), fn (EntitiesEnum $entity) => $entity->isEnabled());
+        $options  = array_column($entities, 'name');
+        $choice   = multiselect(
             label: 'Which seeders do you want to run? (default: all)',
             options: $options,
             default: $options,

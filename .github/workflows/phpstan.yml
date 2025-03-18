@@ -6,23 +6,45 @@ on:
       - '**.php'
       - 'phpstan.neon.dist'
       - '.github/workflows/phpstan.yml'
+      - 'composer.json'
+      - 'composer.lock'
+
+  workflow_dispatch:
 
 jobs:
   phpstan:
-    name: phpstan
+    name: Run PHPStan
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
 
+    steps:
+      # 1. Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configuración de PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: 8.4
+          tools: composer
           coverage: none
 
-      - name: Install composer dependencies
-        uses: ramsey/composer-install@v3
+      # 3. Configuración de caché de Composer
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
+      # 4. Instalar dependencias de Composer
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: --no-scripts --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      # 5. Ejecutar PHPStan
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan --memory-limit=1G --error-format=github
+        run: ./vendor/bin/phpstan analyse --error-format=github

@@ -8,37 +8,35 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTimezonesTable extends Migration
 {
+    private string $tableName;
+
+    public function __construct()
+    {
+        $this->tableName = config()->string('atlas.timezones_tablename');
+    }
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        if (config('atlas.modules.timezones') === false) {
+        if (! config()->boolean('atlas.entities.timezones')) {
             return;
         }
 
-        /** @var string $tableName */
-        $tableName = config('atlas.timezones_tablename');
-
-        Schema::create($tableName, function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('country_id');
-            $table->string('name');
+        Schema::create($this->tableName, function (Blueprint $table) {
+            $table->string('zone_name')->primary();
+            $table->integer('gmt_offset');
+            $table->string('gmt_offset_name');
+            $table->string('tz_name');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.timezones_tablename');
-
-        Schema::dropIfExists($tableName);
+        Schema::dropIfExists($this->tableName);
     }
 }
