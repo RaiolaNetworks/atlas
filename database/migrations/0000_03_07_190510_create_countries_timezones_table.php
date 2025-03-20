@@ -26,7 +26,7 @@ class CreateCountriesTimezonesTable extends Migration
 
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->foreignId('country_id')->constrained(config()->string('atlas.countries_tablename'));
-            $table->foreignId('time_zone_name')->constrained(config()->string('atlas.timezones_tablename'), 'zone_name');
+            $table->foreignId('timezone_name')->constrained(config()->string('atlas.timezones_tablename'), 'zone_name');
         });
     }
 
