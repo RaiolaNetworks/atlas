@@ -25,7 +25,7 @@ class CreateCurrenciesTable extends Migration
         }
 
         Schema::create($this->tableName, function (Blueprint $table) {
-            $table->string('code')->primary();
+            $table->string('code', 3)->primary();
             $table->string('name');
             $table->string('symbol');
             $table->string('symbol_native');
