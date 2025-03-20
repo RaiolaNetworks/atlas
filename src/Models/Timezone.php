@@ -13,6 +13,8 @@ class Timezone extends BaseModel
 {
     protected $guarded = [];
 
+    protected $primaryKey = 'zone_name';
+
     public $timestamps = false;
 
     /**
