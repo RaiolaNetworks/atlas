@@ -28,7 +28,12 @@ class CreateCountriesTable extends Migration
             $table->string('numeric_code', 3);
             $table->string('phonecode', 5);
             $table->string('capital', 30)->nullable();
-            $table->foreignId('currency_code')->constrained(config()->string('atlas.currencies_tablename'), 'code')->cascadeOnDelete();
+
+            if (config()->boolean('atlas.entities.currencies')) {
+                $table->string('currency_code');
+                $table->foreign('currency_code')->references('code')->on(config()->string('atlas.currencies_tablename'))->cascadeOnDelete();
+            }
+
             $table->string('tld', 8);
             $table->string('native', 30)->nullable();
             $table->string('region', 30);

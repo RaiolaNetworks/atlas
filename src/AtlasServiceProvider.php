@@ -66,7 +66,7 @@ class AtlasServiceProvider extends ServiceProvider
         ], 'atlas-migrations');
 
         $this->publishes([
-            __DIR__ . '/../resources/json' => resource_path('json'),
+            __DIR__ . '/../resources/json' => resource_path('vendor/atlas/json'),
         ], 'atlas-jsons');
 
         // $this->publishes([
