@@ -110,23 +110,22 @@ class Country extends BaseModel
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
         $parser = [
-            'name'          => $jsonItem['name'],
-            'iso2'          => $jsonItem['iso2'],
-            'iso3'          => $jsonItem['iso3'],
-            'numeric_code'  => $jsonItem['numeric_code'],
-            'phonecode'     => $jsonItem['phonecode'],
-            'capital'       => $jsonItem['capital'],
-            'currency_code' => $jsonItem['currency'],
-            'tld'           => $jsonItem['tld'],
-            'native'        => $jsonItem['native'],
-            'region'        => $jsonItem['region'],
-            'subregion'     => $jsonItem['subregion'],
-            'nationality'   => $jsonItem['nationality'],
-            'translations'  => json_encode($jsonItem['translations']),
-            'latitude'      => $jsonItem['latitude'],
-            'longitude'     => $jsonItem['longitude'],
-            'emoji'         => $jsonItem['emoji'],
-            'emojiU'        => $jsonItem['emojiU'],
+            'name'         => $jsonItem['name'],
+            'iso2'         => $jsonItem['iso2'],
+            'iso3'         => $jsonItem['iso3'],
+            'numeric_code' => $jsonItem['numeric_code'],
+            'phonecode'    => $jsonItem['phonecode'],
+            'capital'      => $jsonItem['capital'],
+            'tld'          => $jsonItem['tld'],
+            'native'       => $jsonItem['native'],
+            'region'       => $jsonItem['region'],
+            'subregion'    => $jsonItem['subregion'],
+            'nationality'  => $jsonItem['nationality'],
+            'translations' => json_encode($jsonItem['translations']),
+            'latitude'     => $jsonItem['latitude'],
+            'longitude'    => $jsonItem['longitude'],
+            'emoji'        => $jsonItem['emoji'],
+            'emojiU'       => $jsonItem['emojiU'],
         ];
 
         if (config()->boolean('atlas.entities.regions')) {
@@ -135,6 +134,10 @@ class Country extends BaseModel
 
         if (config()->boolean('atlas.entities.subregions')) {
             $parser['subregion_id'] = $jsonItem['subregion_id'];
+        }
+
+        if (config()->boolean('atlas.entities.currencies')) {
+            $parser['currency_code'] = $jsonItem['currency'];
         }
 
         return $parser;
