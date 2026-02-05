@@ -10,6 +10,11 @@
 
 With 'Atlas' you will be able to create new tables in the database and fill them with information about countries, states, cities, timezones and more.
 
+## Requirements
+
+- PHP 8.3+
+- Laravel 11+
+
 
 ## Get to know us
 
@@ -35,6 +40,11 @@ Also, you can publish the config file with:
 php artisan vendor:publish --tag="atlas-config"
 ```
 
+You can publish the translations with:
+```bash
+php artisan vendor:publish --tag="atlas-translations"
+```
+
 Finally, you can publish the data jsons file with:
 ```bash
 php artisan vendor:publish --tag="atlas-jsons"
@@ -51,6 +61,11 @@ When the command is executed, it will give the option to select which seeders to
 
 The process may take a few minutes as the number of cities is very large.
 
+To update the data after a package upgrade:
+```bash
+php artisan atlas:update
+```
+
 
 ## Usage
 
@@ -65,14 +80,18 @@ class MyClass
 {
 	public function getAllAfricaCountries(): Collection
 	{
-		Country::whereRegion('Africa')
+		return Country::where('region_name', 'Africa')
 			->orderBy('name')
 			->get();
-		}
+	}
 }
 
 ```
 
+
+## Upgrading
+
+If you are upgrading from 1.x, please see [UPGRADE.md](./UPGRADE.md) for a list of breaking changes and migration steps.
 
 ## Changelog
 
