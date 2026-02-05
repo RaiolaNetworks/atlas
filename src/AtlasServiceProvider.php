@@ -28,6 +28,13 @@ class AtlasServiceProvider extends ServiceProvider
 
         // Register the main class to use with the facade
         $this->app->singleton('atlas', fn () => $this);
+
+        // Backwards compatibility: support old config key with typo (country_timezon → country_timezone)
+        $oldPivotName = config('atlas.country_timezon_pivot_tablename');
+
+        if (is_string($oldPivotName)) {
+            config()->set('atlas.country_timezone_pivot_tablename', $oldPivotName);
+        }
     }
 
     /**
