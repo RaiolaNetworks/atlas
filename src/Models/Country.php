@@ -7,7 +7,7 @@ namespace Raiolanetworks\Atlas\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 /**
  * @property int                   $id
@@ -96,11 +96,11 @@ class Country extends BaseModel
     }
 
     /**
-     * @return HasOne<Currency,covariant self>
+     * @return BelongsTo<Currency,covariant self>
      */
-    public function currency(): HasOne
+    public function currency(): BelongsTo
     {
-        return $this->hasOne(Currency::class, 'country_id', 'id');
+        return $this->belongsTo(Currency::class, 'currency_code', 'code');
     }
 
     /**
