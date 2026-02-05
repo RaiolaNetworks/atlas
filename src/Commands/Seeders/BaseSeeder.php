@@ -111,11 +111,15 @@ abstract class BaseSeeder extends Command
         $bar->start();
 
         try {
-            DB::transaction(function () use ($bar, $existsWhenRecordInsertedMethod): void {
-                Schema::disableForeignKeyConstraints();
-                $this->model::query()->delete();
-                Schema::enableForeignKeyConstraints();
+            Schema::disableForeignKeyConstraints();
 
+            try {
+                $this->model::truncate();
+            } finally {
+                Schema::enableForeignKeyConstraints();
+            }
+
+            DB::transaction(function () use ($bar, $existsWhenRecordInsertedMethod): void {
                 $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
                 $chunk = [];
 
@@ -140,6 +144,7 @@ abstract class BaseSeeder extends Command
 
             return false;
         }
+
         $bar->finish();
         $this->newLine();
 

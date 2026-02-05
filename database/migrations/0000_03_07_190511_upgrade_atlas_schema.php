@@ -14,6 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->renamePivotColumn();
+        $this->fixRegionIdNullability();
         $this->addMissingIndexes();
     }
 
@@ -48,6 +49,24 @@ return new class extends Migration
 
         Schema::table($pivotTable, function (Blueprint $table) use ($timezonesTable): void {
             $table->foreign('timezone_name')->references('zone_name')->on($timezonesTable);
+        });
+    }
+
+    /**
+     * Make region_id nullable so that nullOnDelete() can work correctly.
+     *
+     * Only applies to databases where region_id was created as NOT NULL.
+     */
+    private function fixRegionIdNullability(): void
+    {
+        $countriesTable = config()->string('atlas.countries_tablename');
+
+        if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'region_id')) {
+            return;
+        }
+
+        Schema::table($countriesTable, function (Blueprint $table): void {
+            $table->unsignedBigInteger('region_id')->nullable()->change();
         });
     }
 
