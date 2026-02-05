@@ -4,15 +4,25 @@ on:
   push:
     paths:
       - '**.php'
+      - 'pint.json'
       - '.github/workflows/pint.yml'
 
-permissions:
-  contents: write
+  pull_request:
+    paths:
+      - '**.php'
+      - 'pint.json'
+      - '.github/workflows/pint.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pint:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -23,9 +33,11 @@ jobs:
       - name: Fix PHP code style issues
         uses: aglipanci/laravel-pint-action@2.3.1
         with:
+          testMode: ${{ github.event_name == 'pull_request' }}
           verboseMode: true
 
       - name: Commit changes
+        if: github.event_name == 'push'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "::Github Actions:: Pint"
