@@ -7,7 +7,7 @@ namespace Raiolanetworks\Atlas\Tests;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Raiolanetworks\Atlas\AtlasServiceProvider;
 
-class TestCase extends Orchestra
+class DisabledEntitiesTestCase extends Orchestra
 {
     protected function getPackageProviders($app)
     {
@@ -20,11 +20,11 @@ class TestCase extends Orchestra
     {
         $app['config']->set('atlas.entities.languages', true);
         $app['config']->set('atlas.entities.currencies', true);
-        $app['config']->set('atlas.entities.regions', true);
-        $app['config']->set('atlas.entities.subregions', true);
+        $app['config']->set('atlas.entities.regions', false);
+        $app['config']->set('atlas.entities.subregions', false);
         $app['config']->set('atlas.entities.countries', true);
-        $app['config']->set('atlas.entities.states', true);
-        $app['config']->set('atlas.entities.cities', true);
+        $app['config']->set('atlas.entities.states', false);
+        $app['config']->set('atlas.entities.cities', false);
         $app['config']->set('atlas.entities.timezones', true);
 
         $app['config']->set('atlas.languages_tablename', 'languages');
