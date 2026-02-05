@@ -30,6 +30,7 @@ return [
     |   - countries  → regions, subregions, currencies
     |   - states     → countries
     |   - cities     → states, countries
+    |   - timezones  → countries
     |--------------------------------------------------------------------------
     */
     'entities'                         => [

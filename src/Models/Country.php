@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string                $numeric_code
  * @property string                $phonecode
  * @property string                $capital
- * @property string                $currency_id
+ * @property string                $currency_code
  * @property string                $tld
  * @property string                $native
  * @property string                $region
@@ -129,6 +129,7 @@ class Country extends BaseModel
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
         $parser = [
+            'id'           => $jsonItem['id'],
             'name'         => $jsonItem['name'],
             'iso2'         => $jsonItem['iso2'],
             'iso3'         => $jsonItem['iso3'],

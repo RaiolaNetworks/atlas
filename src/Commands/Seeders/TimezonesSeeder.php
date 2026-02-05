@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands\Seeders;
 
 use Iterator;
+use JsonMachine\Items;
+use JsonMachine\JsonDecoder\ExtJsonDecoder;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\BaseModel;
 use Raiolanetworks\Atlas\Models\Timezone;
@@ -34,16 +36,6 @@ class TimezonesSeeder extends BaseSeeder
     protected string $insertionMode = self::INDIVIDUAL_INSERTION_MODE;
 
     /**
-     * Data of the data file
-     *
-     * @var array<int, array{
-     *      id: int,
-     *      timezones: array<int, array<string, string|int>>
-     * }>
-     */
-    protected array $data;
-
-    /**
      * @var array<string, list<int>>
      */
     private array $timezoneCountries = [];
@@ -60,23 +52,14 @@ class TimezonesSeeder extends BaseSeeder
             return false;
         }
 
-        /** @var string $jsonData */
-        $jsonData = file_get_contents($this->dataPath);
-        $data     = json_decode($jsonData, true);
-        unset($jsonData);
+        $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
 
-        if (! is_array($data)) {
-            $this->error('The json data is incorrect...');
+        foreach ($items as $item) {
+            /** @var array{id: int, timezones: array<int, array{zoneName: string}>} $item */
+            $countryId = $item['id'];
 
-            return false;
-        }
-
-        /** @var array<int, array{id: int, timezones: array<int, array<string, string|int>>}> $data */
-        $this->data = $data;
-
-        foreach ($this->data as $rawCountry) {
-            foreach ($rawCountry['timezones'] as $rawTimezone) {
-                $this->timezoneCountries[(string) $rawTimezone['zoneName']][] = $rawCountry['id'];
+            foreach ($item['timezones'] as $rawTimezone) {
+                $this->timezoneCountries[$rawTimezone['zoneName']][] = $countryId;
             }
         }
 

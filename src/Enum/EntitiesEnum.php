@@ -58,6 +58,7 @@ enum EntitiesEnum: string
             self::Countries  => [self::Regions, self::Subregions, self::Currencies],
             self::States     => [self::Countries],
             self::Cities     => [self::States, self::Countries],
+            self::Timezones  => [self::Countries],
             default          => [],
         };
     }

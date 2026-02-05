@@ -74,6 +74,7 @@ describe('Country::fromJsonToDBRecord', function () {
 
     it('maps all fields correctly when all entities enabled', function () {
         $json = [
+            'id'           => 1,
             'name'         => 'Afghanistan',
             'iso2'         => 'AF',
             'iso3'         => 'AFG',
@@ -109,6 +110,7 @@ describe('Country::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.regions', false);
 
         $json = [
+            'id'           => 1,
             'name'         => 'Afghanistan',
             'iso2'         => 'AF',
             'iso3'         => 'AFG',
@@ -139,6 +141,7 @@ describe('Country::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.subregions', false);
 
         $json = [
+            'id'           => 1,
             'name'         => 'Afghanistan',
             'iso2'         => 'AF',
             'iso3'         => 'AFG',
@@ -169,6 +172,7 @@ describe('Country::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.currencies', false);
 
         $json = [
+            'id'           => 1,
             'name'         => 'Afghanistan',
             'iso2'         => 'AF',
             'iso3'         => 'AFG',

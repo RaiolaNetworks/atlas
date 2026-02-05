@@ -113,7 +113,7 @@ abstract class BaseSeeder extends Command
         try {
             DB::transaction(function () use ($bar, $existsWhenRecordInsertedMethod): void {
                 Schema::disableForeignKeyConstraints();
-                $this->model::truncate();
+                $this->model::query()->delete();
                 Schema::enableForeignKeyConstraints();
 
                 $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
