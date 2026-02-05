@@ -25,6 +25,9 @@ class AtlasServiceProvider extends ServiceProvider
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__ . '/../config/atlas.php', 'atlas');
+
+        // Register the main class to use with the facade
+        $this->app->singleton('atlas', fn () => $this);
     }
 
     /**
