@@ -7,12 +7,12 @@ namespace Raiolanetworks\Atlas\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Raiolanetworks\Atlas\Atlas
+ * @see \Raiolanetworks\Atlas\AtlasServiceProvider
  */
 class Atlas extends Facade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
-        return \Raiolanetworks\Atlas\Atlas::class;
+        return 'atlas';
     }
 }
