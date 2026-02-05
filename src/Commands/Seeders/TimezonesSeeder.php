@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Commands\Seeders;
 
-use Illuminate\Console\Command;
 use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\Timezone;
@@ -47,6 +46,28 @@ class TimezonesSeeder extends BaseSeeder
     {
         parent::__construct();
         $this->pluralName = EntitiesEnum::Timezones->value;
+    }
+
+    protected function checkDataFile(): bool
+    {
+        if (! parent::checkDataFile()) {
+            return false;
+        }
+
+        /** @var string $jsonData */
+        $jsonData = file_get_contents($this->dataPath);
+        $data     = json_decode($jsonData, true);
+        unset($jsonData);
+
+        if (! is_array($data)) {
+            $this->error('The json data is incorrect...');
+
+            return false;
+        }
+
+        $this->data = $data;
+
+        return true;
     }
 
     /**

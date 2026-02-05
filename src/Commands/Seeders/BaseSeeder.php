@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Iterator;
+use JsonMachine\Items;
+use JsonMachine\JsonDecoder\ExtJsonDecoder;
 use Raiolanetworks\Atlas\Helpers\ResourcesManager;
 use Raiolanetworks\Atlas\Models\BaseModel;
 use ReflectionException;
@@ -40,7 +42,7 @@ abstract class BaseSeeder extends Command
     /**
      * File data path
      */
-    private string $dataPath;
+    protected string $dataPath;
 
     /**
      * Data of the data file
@@ -71,8 +73,6 @@ abstract class BaseSeeder extends Command
 
     public function handle(): int
     {
-        ini_set('memory_limit', '-1');
-
         if (! $this->checkDataFile()) {
             return self::FAILURE;
         }
@@ -101,19 +101,6 @@ abstract class BaseSeeder extends Command
             return false;
         }
 
-        /** @var string $jsonData */
-        $jsonData = file_get_contents($this->dataPath);
-        $data     = json_decode($jsonData, true);
-        unset($jsonData);
-
-        if (! is_array($data)) {
-            $this->error('The json data is incorrect...');
-
-            return false;
-        }
-
-        $this->data = $data;
-
         return true;
     }
 
@@ -123,7 +110,7 @@ abstract class BaseSeeder extends Command
     protected function seed(): bool
     {
         $existsWhenRecordInsertedMethod = $this->existsWhenRecordInsertedMethod();
-        $bar                            = $this->output->createProgressBar(count($this->data));
+        $bar = $this->output->createProgressBar();
         $bar->start();
 
         try {
@@ -132,7 +119,20 @@ abstract class BaseSeeder extends Command
                 $this->model::truncate();
                 Schema::enableForeignKeyConstraints();
 
-                foreach (array_chunk($this->data, self::CHUNK_STEPS) as $chunk) {
+                $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
+                $chunk = [];
+
+                foreach ($items as $item) {
+                    /** @var array<string, mixed> $item */
+                    $chunk[] = $item;
+
+                    if (count($chunk) >= self::CHUNK_STEPS) {
+                        $this->processChunk($chunk, $bar, $existsWhenRecordInsertedMethod);
+                        $chunk = [];
+                    }
+                }
+
+                if (! empty($chunk)) {
                     $this->processChunk($chunk, $bar, $existsWhenRecordInsertedMethod);
                 }
             });
