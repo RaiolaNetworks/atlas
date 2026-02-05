@@ -25,7 +25,11 @@ return [
     |--------------------------------------------------------------------------
     | Enable or disable the entities you want to have in your database.
     |
-    | Notice: the cities depend of the states
+    | Dependencies:
+    |   - subregions → regions
+    |   - countries  → regions, subregions, currencies
+    |   - states     → countries
+    |   - cities     → states, countries
     |--------------------------------------------------------------------------
     */
     'entities'                         => [

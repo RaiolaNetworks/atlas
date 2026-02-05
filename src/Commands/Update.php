@@ -29,6 +29,11 @@ class Update extends Command
      */
     public function handle(): int
     {
+        // Validate entity dependencies
+        foreach (EntitiesEnum::validateDependencies() as $warning) {
+            $this->warn($warning);
+        }
+
         $enabledEntities = array_filter(EntitiesEnum::cases(), fn (EntitiesEnum $entity) => $entity->isEnabled());
 
         if (! $this->checkRequiredTables($enabledEntities)) {
