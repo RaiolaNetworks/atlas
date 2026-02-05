@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Currency extends BaseModel
 {
@@ -26,11 +26,11 @@ class Currency extends BaseModel
     }
 
     /**
-     * @return BelongsTo<Country,covariant self>
+     * @return HasMany<Country,covariant self>
      */
-    public function country(): BelongsTo
+    public function countries(): HasMany
     {
-        return $this->belongsTo(Country::class);
+        return $this->hasMany(Country::class, 'currency_code', 'code');
     }
 
     /**
