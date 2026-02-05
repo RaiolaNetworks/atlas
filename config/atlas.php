@@ -25,12 +25,14 @@ return [
     |--------------------------------------------------------------------------
     | Enable or disable the entities you want to have in your database.
     |
-    | Dependencies:
-    |   - subregions → regions
-    |   - countries  → regions, subregions, currencies
+    | Required dependencies (entity will not work without these):
     |   - states     → countries
     |   - cities     → states, countries
     |   - timezones  → countries
+    |
+    | Optional dependencies (FK columns added only when enabled):
+    |   - subregions → regions
+    |   - countries  → regions, subregions, currencies
     |--------------------------------------------------------------------------
     */
     'entities'                         => [

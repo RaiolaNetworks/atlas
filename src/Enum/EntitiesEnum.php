@@ -49,16 +49,30 @@ enum EntitiesEnum: string
     }
 
     /**
+     * Hard dependencies — the entity cannot function without these.
+     *
      * @return list<self>
      */
-    public function dependencies(): array
+    public function requiredDependencies(): array
+    {
+        return match ($this) {
+            self::States    => [self::Countries],
+            self::Cities    => [self::States, self::Countries],
+            self::Timezones => [self::Countries],
+            default         => [],
+        };
+    }
+
+    /**
+     * Optional dependencies — FK columns are added only when these are enabled.
+     *
+     * @return list<self>
+     */
+    public function optionalDependencies(): array
     {
         return match ($this) {
             self::Subregions => [self::Regions],
             self::Countries  => [self::Regions, self::Subregions, self::Currencies],
-            self::States     => [self::Countries],
-            self::Cities     => [self::States, self::Countries],
-            self::Timezones  => [self::Countries],
             default          => [],
         };
     }
@@ -75,9 +89,9 @@ enum EntitiesEnum: string
                 continue;
             }
 
-            foreach ($entity->dependencies() as $dependency) {
+            foreach ($entity->requiredDependencies() as $dependency) {
                 if (! $dependency->isEnabled()) {
-                    $warnings[] = "'{$entity->value}' is enabled but its dependency '{$dependency->value}' is disabled.";
+                    $warnings[] = "'{$entity->value}' is enabled but its required dependency '{$dependency->value}' is disabled.";
                 }
             }
         }

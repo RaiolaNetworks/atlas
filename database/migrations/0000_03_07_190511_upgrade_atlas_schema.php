@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -98,6 +99,40 @@ return new class extends Migration
     }
 
     /**
+     * Remove duplicate rows from the pivot table so the unique index can be added safely.
+     *
+     * Databases upgraded from v1.x may contain duplicates because the old
+     * TimezonesSeeder had no DB-level uniqueness guarantee. Uses a
+     * database-agnostic approach (temp table + reinsert) since the pivot
+     * has no primary key column.
+     */
+    private function deduplicatePivotRows(string $pivotTable): void
+    {
+        $duplicates = DB::table($pivotTable)
+            ->select('country_id', 'timezone_name')
+            ->groupBy('country_id', 'timezone_name')
+            ->havingRaw('COUNT(*) > 1')
+            ->get();
+
+        if ($duplicates->isEmpty()) {
+            return;
+        }
+
+        // For each duplicate group, delete all rows then re-insert one.
+        foreach ($duplicates as $row) {
+            DB::table($pivotTable)
+                ->where('country_id', $row->country_id)
+                ->where('timezone_name', $row->timezone_name)
+                ->delete();
+
+            DB::table($pivotTable)->insert([
+                'country_id'    => $row->country_id,
+                'timezone_name' => $row->timezone_name,
+            ]);
+        }
+    }
+
+    /**
      * Add indexes that were added to CREATE TABLE migrations after initial release.
      *
      * Only applies to databases created before the indexes were added (commit 7716529).
@@ -139,6 +174,8 @@ return new class extends Migration
         $pivotTable = config()->string('atlas.country_timezone_pivot_tablename');
 
         if (Schema::hasTable($pivotTable) && ! Schema::hasIndex($pivotTable, "{$pivotTable}_country_id_timezone_name_unique")) {
+            $this->deduplicatePivotRows($pivotTable);
+
             Schema::table($pivotTable, function (Blueprint $table): void {
                 $table->unique(['country_id', 'timezone_name']);
             });
