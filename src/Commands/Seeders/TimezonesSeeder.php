@@ -42,6 +42,11 @@ class TimezonesSeeder extends BaseSeeder
      */
     protected array $data;
 
+    /**
+     * @var array<string, list<int>>
+     */
+    private array $timezoneCountries = [];
+
     public function __construct()
     {
         parent::__construct();
@@ -66,6 +71,12 @@ class TimezonesSeeder extends BaseSeeder
         }
 
         $this->data = $data;
+
+        foreach ($this->data as $rawCountry) {
+            foreach ($rawCountry['timezones'] as $rawTimezone) {
+                $this->timezoneCountries[$rawTimezone['zoneName']][] = $rawCountry['id'];
+            }
+        }
 
         return true;
     }
@@ -93,14 +104,8 @@ class TimezonesSeeder extends BaseSeeder
 
     protected function whenRecordInserted(Timezone $instance): void
     {
-        foreach ($this->data as $rawCountry) {
-            foreach ($rawCountry['timezones'] as $rawTimezone) {
-                if ($rawTimezone['zoneName'] === $instance->zone_name) {
-                    $instance->countries()->attach($rawCountry['id']);
-
-                    continue 2;
-                }
-            }
+        if (isset($this->timezoneCountries[$instance->zone_name])) {
+            $instance->countries()->attach($this->timezoneCountries[$instance->zone_name]);
         }
     }
 }
