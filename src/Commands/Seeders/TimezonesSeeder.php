@@ -24,7 +24,7 @@ class TimezonesSeeder extends BaseSeeder
      */
     public $description = 'Seeding of timezones in the database';
 
-    protected string $resourceKey = 'countries';
+    protected string $resourceKey = 'timezones';
 
     protected string $pluralName = '';
 
