@@ -20,6 +20,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! config()->boolean('atlas.entities.countries')) {
+            return;
+        }
+
         Schema::create($this->tableName, function (Blueprint $table) {
             $table->id();
             $table->string('name', 80);
@@ -36,12 +40,12 @@ return new class extends Migration
 
             $table->string('tld', 8);
             $table->string('native', 80)->nullable();
-            $table->string('region', 80);
+            $table->string('region_name', 80);
 
             if (config()->boolean('atlas.entities.regions')) {
                 $table->foreignId('region_id')->nullable()->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
             }
-            $table->string('subregion', 80)->nullable();
+            $table->string('subregion_name', 80)->nullable();
 
             if (config()->boolean('atlas.entities.subregions')) {
                 $table->foreignId('subregion_id')->nullable()->constrained(config()->string('atlas.subregions_tablename'))->nullOnDelete();

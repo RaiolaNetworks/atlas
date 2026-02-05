@@ -68,7 +68,14 @@ class Install extends Command
 
             $this->newLine();
             $this->line('Seeding ' . $lower . '...');
-            $this->call($command);
+
+            $exitCode = $this->call($command);
+
+            if ($exitCode !== self::SUCCESS) {
+                $this->error("Seeder for {$lower} failed.");
+
+                return self::FAILURE;
+            }
         }
 
         $this->newLine();

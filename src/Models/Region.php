@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Region extends BaseModel
 {
     protected $fillable = [
+        'id',
         'name',
         'translations',
         'wiki_data_id',

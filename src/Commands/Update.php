@@ -43,7 +43,14 @@ class Update extends Command
         foreach ($enabledEntities as $entity) {
             $this->newLine();
             $this->line('Seeding ' . $entity->value . '...');
-            $this->call('atlas:' . $entity->value);
+
+            $exitCode = $this->call('atlas:' . $entity->value);
+
+            if ($exitCode !== self::SUCCESS) {
+                $this->error("Seeder for {$entity->value} failed.");
+
+                return self::FAILURE;
+            }
         }
 
         $this->newLine();
@@ -66,6 +73,14 @@ class Update extends Command
 
             if (! Schema::hasTable($table)) {
                 $missingTables[] = $table;
+            }
+        }
+
+        if (config()->boolean('atlas.entities.timezones') && config()->boolean('atlas.entities.countries')) {
+            $pivotTable = config()->string('atlas.country_timezone_pivot_tablename');
+
+            if (! Schema::hasTable($pivotTable)) {
+                $missingTables[] = $pivotTable;
             }
         }
 

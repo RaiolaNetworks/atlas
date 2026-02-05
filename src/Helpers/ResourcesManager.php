@@ -11,36 +11,36 @@ class ResourcesManager
     public const DATA_RESOURCES = [
         'regions'    => [
             'package-path'                            => __DIR__ . '/../../resources/json/regions.json',
-            'overrided-client-project-resources-path' => 'json/regions.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/regions.json',
         ],
         'subregions' => [
             'package-path'                            => __DIR__ . '/../../resources/json/subregions.json',
-            'overrided-client-project-resources-path' => 'json/subregions.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/subregions.json',
         ],
 
         'countries'  => [
             'package-path'                            => __DIR__ . '/../../resources/json/countries.json',
-            'overrided-client-project-resources-path' => 'json/countries.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/countries.json',
         ],
         'states'     => [
             'package-path'                            => __DIR__ . '/../../resources/json/states.json',
-            'overrided-client-project-resources-path' => 'json/states.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/states.json',
         ],
         'cities'     => [
             'package-path'                            => __DIR__ . '/../../resources/json/cities.json',
-            'overrided-client-project-resources-path' => 'json/cities.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/cities.json',
         ],
         'currencies' => [
             'package-path'                            => __DIR__ . '/../../resources/json/currencies.json',
-            'overrided-client-project-resources-path' => 'json/currencies.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/currencies.json',
         ],
         'languages'  => [
             'package-path'                            => __DIR__ . '/../../resources/json/languages.json',
-            'overrided-client-project-resources-path' => 'json/languages.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/languages.json',
         ],
         'timezones'  => [
             'package-path'                            => __DIR__ . '/../../resources/json/countries.json',
-            'overrided-client-project-resources-path' => 'json/countries.json',
+            'overrided-client-project-resources-path' => 'vendor/atlas/json/countries.json',
         ],
     ];
 

@@ -46,11 +46,18 @@ class TimezonesSeeder extends BaseSeeder
         $this->pluralName = EntitiesEnum::Timezones->value;
     }
 
+    protected function pivotTables(): array
+    {
+        return [config()->string('atlas.country_timezone_pivot_tablename')];
+    }
+
     protected function checkDataFile(): bool
     {
         if (! parent::checkDataFile()) {
             return false;
         }
+
+        $this->timezoneCountries = [];
 
         $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
 

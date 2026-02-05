@@ -19,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string                $currency_code
  * @property string                $tld
  * @property string                $native
- * @property string                $region
+ * @property string                $region_name
  * @property int                   $region_id
- * @property string                $subregion
+ * @property string                $subregion_name
  * @property int                   $subregion_id
  * @property string                $nationality
  * @property array<string, string> $translations
@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Country extends BaseModel
 {
     protected $fillable = [
+        'id',
         'name',
         'iso2',
         'iso3',
@@ -42,9 +43,9 @@ class Country extends BaseModel
         'currency_code',
         'tld',
         'native',
-        'region',
+        'region_name',
         'region_id',
-        'subregion',
+        'subregion_name',
         'subregion_id',
         'nationality',
         'translations',
@@ -52,6 +53,10 @@ class Country extends BaseModel
         'longitude',
         'emoji',
         'emojiU',
+    ];
+
+    protected $casts = [
+        'translations' => 'array',
     ];
 
     public $timestamps = false;
@@ -138,8 +143,8 @@ class Country extends BaseModel
             'capital'      => $jsonItem['capital'],
             'tld'          => $jsonItem['tld'],
             'native'       => $jsonItem['native'],
-            'region'       => $jsonItem['region'],
-            'subregion'    => $jsonItem['subregion'],
+            'region_name'  => $jsonItem['region'],
+            'subregion_name' => $jsonItem['subregion'],
             'nationality'  => $jsonItem['nationality'],
             'translations' => json_encode($jsonItem['translations']),
             'latitude'     => $jsonItem['latitude'],

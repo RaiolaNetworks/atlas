@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class City extends BaseModel
 {
     protected $fillable = [
+        'id',
         'name',
         'state_id',
         'state_code',

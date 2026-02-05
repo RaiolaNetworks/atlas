@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class State extends BaseModel
 {
     protected $fillable = [
+        'id',
         'name',
         'country_id',
         'country_code',

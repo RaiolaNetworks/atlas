@@ -99,7 +99,9 @@ describe('Country::fromJsonToDBRecord', function () {
         $result = Country::fromJsonToDBRecord($json);
 
         expect($result)
+            ->toHaveKey('region_name', 'Asia')
             ->toHaveKey('region_id', 3)
+            ->toHaveKey('subregion_name', 'Southern Asia')
             ->toHaveKey('subregion_id', 14)
             ->toHaveKey('currency_code', 'AFN')
             ->toHaveKey('name', 'Afghanistan')

@@ -29,6 +29,8 @@ return new class extends Migration
 
             $table->string('timezone_name');
             $table->foreign('timezone_name')->references('zone_name')->on(config()->string('atlas.timezones_tablename'));
+
+            $table->unique(['country_id', 'timezone_name']);
         });
     }
 

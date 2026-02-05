@@ -114,6 +114,10 @@ abstract class BaseSeeder extends Command
             Schema::disableForeignKeyConstraints();
 
             try {
+                foreach ($this->pivotTables() as $pivotTable) {
+                    DB::table($pivotTable)->truncate();
+                }
+
                 $this->model::truncate();
             } finally {
                 Schema::enableForeignKeyConstraints();
@@ -219,6 +223,16 @@ abstract class BaseSeeder extends Command
                 $progressBar->advance();
             }
         }
+    }
+
+    /**
+     * Return pivot table names to truncate before seeding.
+     *
+     * @return list<string>
+     */
+    protected function pivotTables(): array
+    {
+        return [];
     }
 
     protected function whenRecordInserted(BaseModel $instance): void

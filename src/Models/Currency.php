@@ -19,7 +19,6 @@ class Currency extends BaseModel
         'name',
         'symbol',
         'symbol_native',
-        'thousands_separator',
         'decimal_digits',
     ];
 

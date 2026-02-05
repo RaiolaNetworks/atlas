@@ -14,6 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->renamePivotColumn();
+        $this->renameCountryStringColumns();
         $this->fixRegionIdNullability();
         $this->addMissingIndexes();
     }
@@ -50,6 +51,32 @@ return new class extends Migration
         Schema::table($pivotTable, function (Blueprint $table) use ($timezonesTable): void {
             $table->foreign('timezone_name')->references('zone_name')->on($timezonesTable);
         });
+    }
+
+    /**
+     * Rename region → region_name and subregion → subregion_name on the countries table.
+     *
+     * Only applies to databases created before the columns were renamed.
+     */
+    private function renameCountryStringColumns(): void
+    {
+        $countriesTable = config()->string('atlas.countries_tablename');
+
+        if (! Schema::hasTable($countriesTable)) {
+            return;
+        }
+
+        if (Schema::hasColumn($countriesTable, 'region')) {
+            Schema::table($countriesTable, function (Blueprint $table): void {
+                $table->renameColumn('region', 'region_name');
+            });
+        }
+
+        if (Schema::hasColumn($countriesTable, 'subregion')) {
+            Schema::table($countriesTable, function (Blueprint $table): void {
+                $table->renameColumn('subregion', 'subregion_name');
+            });
+        }
     }
 
     /**
@@ -106,6 +133,14 @@ return new class extends Migration
         if (Schema::hasTable($citiesTable) && ! Schema::hasIndex($citiesTable, "{$citiesTable}_name_index")) {
             Schema::table($citiesTable, function (Blueprint $table): void {
                 $table->index('name');
+            });
+        }
+
+        $pivotTable = config()->string('atlas.country_timezone_pivot_tablename');
+
+        if (Schema::hasTable($pivotTable) && ! Schema::hasIndex($pivotTable, "{$pivotTable}_country_id_timezone_name_unique")) {
+            Schema::table($pivotTable, function (Blueprint $table): void {
+                $table->unique(['country_id', 'timezone_name']);
             });
         }
     }

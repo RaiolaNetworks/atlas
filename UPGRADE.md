@@ -80,6 +80,22 @@ DB::table('country_timezone')->where('time_zone_name', $tz);
 DB::table('country_timezone')->where('timezone_name', $tz);
 ```
 
+### Country columns renamed: `region` → `region_name`, `subregion` → `subregion_name`
+
+The `region` and `subregion` string columns on the `countries` table were renamed to `region_name` and `subregion_name` to avoid conflicts with the `region()` and `subregion()` relationship methods. An upgrade migration handles this automatically.
+
+```php
+// Before
+$country->getAttributes()['region'];    // string column
+$country->getAttributes()['subregion']; // string column
+
+// After
+$country->region_name;    // string column
+$country->subregion_name; // string column
+```
+
+**Action:** If you query these columns directly (e.g., `where('region', ...)` or `$country->region` expecting the string value), update to use `region_name` / `subregion_name`.
+
 ## Medium impact changes
 
 ### `Raiolanetworks\Atlas\Atlas` class removed
@@ -108,6 +124,22 @@ Both models now correctly set `$incrementing = false` and `$keyType = 'string'` 
 
 The `region_id` column on the `countries` table is now `NULLABLE` to match the `ON DELETE SET NULL` foreign key constraint. An upgrade migration handles this automatically.
 
+### `Language` model now declares string primary key
+
+The `Language` model now correctly sets `$primaryKey = 'code'`, `$incrementing = false`, and `$keyType = 'string'`. This allows `Language::find('en')` to work correctly.
+
+### `Country::$translations` now cast to array
+
+The `translations` attribute on the `Country` model is now cast to `array` (matching the existing behavior on `Region` and `Subregion`). If you were manually calling `json_decode()` on `$country->translations`, you can remove that call.
+
+### `id` added to `$fillable` on all ID-based models
+
+The `id` field was added to `$fillable` on `Country`, `City`, `State`, `Region`, and `Subregion` so that `fromJsonToDBRecord()` can mass-assign the JSON-sourced IDs during seeding.
+
+### `Currency::$thousands_separator` removed from `$fillable`
+
+The `thousands_separator` field was removed from `Currency::$fillable` since it is not present in the JSON source data. The migration column default (`,`) still applies.
+
 ## Low impact changes
 
 ### New `Subregion::region()` relationship
@@ -134,7 +166,7 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
 
 1. Update your `composer.json` to require `"raiolanetworks/atlas": "^2.0"`.
 2. Run `composer update raiolanetworks/atlas`.
-3. Run `php artisan migrate` to apply the upgrade migration (renames pivot column, adds indexes, fixes `region_id` nullability).
+3. Run `php artisan migrate` to apply the upgrade migration (renames pivot column, renames `region`/`subregion` columns, adds indexes, fixes `region_id` nullability).
 4. If you published the config, update the `country_timezon_pivot_tablename` key to `country_timezone_pivot_tablename`.
 5. Search for the renamed relationships and update your code:
    - `$country->regions` → `$country->region`
@@ -142,3 +174,4 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
    - `$currency->country` → `$currency->countries`
 6. Replace any imports of `Raiolanetworks\Atlas\Atlas` with `Raiolanetworks\Atlas\Facades\Atlas`.
 7. If you query the pivot table directly, update `time_zone_name` references to `timezone_name`.
+8. Update any direct references to `region`/`subregion` columns on countries to `region_name`/`subregion_name`.
