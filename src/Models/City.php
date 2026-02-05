@@ -63,7 +63,6 @@ class City extends BaseModel
             'name'         => $jsonItem['name'],
             'state_code'   => $jsonItem['state_code'],
             'state_name'   => $jsonItem['state_name'],
-            'country_id'   => $jsonItem['country_id'],
             'country_code' => $jsonItem['country_code'],
             'country_name' => $jsonItem['country_name'],
             'latitude'     => $jsonItem['latitude'],
