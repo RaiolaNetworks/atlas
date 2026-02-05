@@ -89,7 +89,7 @@ class Country extends BaseModel
             related: Timezone::class,
             table: config()->string('atlas.country_timezone_pivot_tablename'),
             foreignPivotKey: 'country_id',
-            relatedPivotKey: 'time_zone_name',
+            relatedPivotKey: 'timezone_name',
             parentKey: 'id',
             relatedKey: 'zone_name'
         );
