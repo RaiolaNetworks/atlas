@@ -1,0 +1,37 @@
+[changelog]
+header = """# Changelog
+
+All notable changes to `atlas` will be documented in this file.\n
+"""
+body = """
+{% if version %}\
+    ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+    ## [Unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | striptags | trim | upper_first }}
+    {% for commit in commits %}
+        - {{ commit.message | split(pat="\n") | first | upper_first | trim }}\
+    {% endfor %}
+{% endfor %}\n
+"""
+trim = true
+
+[git]
+conventional_commits = false
+filter_unconventional = false
+split_commits = false
+filter_commits = true
+tag_pattern = "v?[0-9]*"
+sort_commits = "oldest"
+
+commit_parsers = [
+    { message = "Changelog: added", group = "Added" },
+    { message = "Changelog: fixed", group = "Fixed" },
+    { message = "Changelog: changed", group = "Changed" },
+    { message = "Changelog: removed", group = "Removed" },
+    { message = "Changelog: deprecated", group = "Deprecated" },
+    { message = "Changelog: security", group = "Security" },
+    { message = ".*", skip = true },
+]
