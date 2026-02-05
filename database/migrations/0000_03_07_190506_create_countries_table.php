@@ -40,12 +40,12 @@ return new class extends Migration
 
             $table->string('tld', 8);
             $table->string('native', 80)->nullable();
-            $table->string('region_name', 80);
+            $table->string('region', 80);
 
             if (config()->boolean('atlas.entities.regions')) {
-                $table->foreignId('region_id')->nullable()->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
+                $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
             }
-            $table->string('subregion_name', 80)->nullable();
+            $table->string('subregion', 80)->nullable();
 
             if (config()->boolean('atlas.entities.subregions')) {
                 $table->foreignId('subregion_id')->nullable()->constrained(config()->string('atlas.subregions_tablename'))->nullOnDelete();
@@ -56,9 +56,6 @@ return new class extends Migration
             $table->string('longitude', 15);
             $table->string('emoji', 40);
             $table->string('emojiU', 40);
-
-            $table->index('iso2');
-            $table->index('iso3');
         });
     }
 

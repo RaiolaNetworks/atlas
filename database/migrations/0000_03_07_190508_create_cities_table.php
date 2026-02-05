@@ -44,8 +44,6 @@ return new class extends Migration
             $table->string('latitude');
             $table->string('longitude');
             $table->string('wiki_data_id')->nullable();
-
-            $table->index('name');
         });
     }
 

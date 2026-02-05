@@ -11,10 +11,14 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Applies all v2 schema changes. Every operation is guarded for
+     * idempotency so this migration is safe on both fresh installs
+     * (where the tables were just created by the original migrations)
+     * and upgrades from v1.x.
      */
     public function up(): void
     {
-        $this->renamePivotColumn();
         $this->renameCountryStringColumns();
         $this->fixRegionIdNullability();
         $this->addMissingIndexes();
@@ -29,35 +33,7 @@ return new class extends Migration
     }
 
     /**
-     * Rename time_zone_name → timezone_name in the country-timezone pivot table.
-     *
-     * Only applies to databases created before the column was renamed in the
-     * original migration file (commit 0258d50).
-     */
-    private function renamePivotColumn(): void
-    {
-        $pivotTable = config()->string('atlas.country_timezone_pivot_tablename');
-
-        if (! Schema::hasTable($pivotTable) || ! Schema::hasColumn($pivotTable, 'time_zone_name')) {
-            return;
-        }
-
-        $timezonesTable = config()->string('atlas.timezones_tablename');
-
-        Schema::table($pivotTable, function (Blueprint $table): void {
-            $table->dropForeign(['time_zone_name']);
-            $table->renameColumn('time_zone_name', 'timezone_name');
-        });
-
-        Schema::table($pivotTable, function (Blueprint $table) use ($timezonesTable): void {
-            $table->foreign('timezone_name')->references('zone_name')->on($timezonesTable);
-        });
-    }
-
-    /**
      * Rename region → region_name and subregion → subregion_name on the countries table.
-     *
-     * Only applies to databases created before the columns were renamed.
      */
     private function renameCountryStringColumns(): void
     {
@@ -82,8 +58,6 @@ return new class extends Migration
 
     /**
      * Make region_id nullable so that nullOnDelete() can work correctly.
-     *
-     * Only applies to databases where region_id was created as NOT NULL.
      */
     private function fixRegionIdNullability(): void
     {
@@ -99,43 +73,7 @@ return new class extends Migration
     }
 
     /**
-     * Remove duplicate rows from the pivot table so the unique index can be added safely.
-     *
-     * Databases upgraded from v1.x may contain duplicates because the old
-     * TimezonesSeeder had no DB-level uniqueness guarantee. Uses a
-     * database-agnostic approach (temp table + reinsert) since the pivot
-     * has no primary key column.
-     */
-    private function deduplicatePivotRows(string $pivotTable): void
-    {
-        $duplicates = DB::table($pivotTable)
-            ->select('country_id', 'timezone_name')
-            ->groupBy('country_id', 'timezone_name')
-            ->havingRaw('COUNT(*) > 1')
-            ->get();
-
-        if ($duplicates->isEmpty()) {
-            return;
-        }
-
-        // For each duplicate group, delete all rows then re-insert one.
-        foreach ($duplicates as $row) {
-            DB::table($pivotTable)
-                ->where('country_id', $row->country_id)
-                ->where('timezone_name', $row->timezone_name)
-                ->delete();
-
-            DB::table($pivotTable)->insert([
-                'country_id'    => $row->country_id,
-                'timezone_name' => $row->timezone_name,
-            ]);
-        }
-    }
-
-    /**
-     * Add indexes that were added to CREATE TABLE migrations after initial release.
-     *
-     * Only applies to databases created before the indexes were added (commit 7716529).
+     * Add indexes introduced in v2.
      */
     private function addMissingIndexes(): void
     {
@@ -179,6 +117,34 @@ return new class extends Migration
             Schema::table($pivotTable, function (Blueprint $table): void {
                 $table->unique(['country_id', 'timezone_name']);
             });
+        }
+    }
+
+    /**
+     * Remove duplicate rows from the pivot table so the unique index can be added safely.
+     */
+    private function deduplicatePivotRows(string $pivotTable): void
+    {
+        $duplicates = DB::table($pivotTable)
+            ->select('country_id', 'timezone_name')
+            ->groupBy('country_id', 'timezone_name')
+            ->havingRaw('COUNT(*) > 1')
+            ->get();
+
+        if ($duplicates->isEmpty()) {
+            return;
+        }
+
+        foreach ($duplicates as $row) {
+            DB::table($pivotTable)
+                ->where('country_id', $row->country_id)
+                ->where('timezone_name', $row->timezone_name)
+                ->delete();
+
+            DB::table($pivotTable)->insert([
+                'country_id'    => $row->country_id,
+                'timezone_name' => $row->timezone_name,
+            ]);
         }
     }
 };
