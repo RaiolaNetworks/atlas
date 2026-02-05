@@ -30,8 +30,6 @@ class CountriesSeeder extends BaseSeeder
 
     protected string $model = Country::class;
 
-    protected string $insertionMode = self::INDIVIDUAL_INSERTION_MODE;
-
     public function __construct()
     {
         parent::__construct();
