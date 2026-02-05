@@ -15,6 +15,10 @@ class Timezone extends BaseModel
 
     protected $primaryKey = 'zone_name';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     public $timestamps = false;
 
     /**

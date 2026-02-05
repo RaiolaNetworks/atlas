@@ -10,6 +10,10 @@ class Currency extends BaseModel
 {
     protected $primaryKey = 'code';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $guarded = [];
 
     public $timestamps = false;
