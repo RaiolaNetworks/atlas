@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -45,6 +46,14 @@ class Subregion extends BaseModel
     public function countries(): HasMany
     {
         return $this->hasMany(Country::class);
+    }
+
+    /**
+     * @return BelongsTo<Region,covariant self>
+     */
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(Region::class);
     }
 
     /**

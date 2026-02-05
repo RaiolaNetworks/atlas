@@ -70,7 +70,7 @@ class Country extends BaseModel
     /**
      * @return BelongsTo<Region,covariant self>
      */
-    public function regions(): BelongsTo
+    public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);
     }
@@ -78,7 +78,7 @@ class Country extends BaseModel
     /**
      * @return BelongsTo<Subregion,covariant self>
      */
-    public function subregions(): BelongsTo
+    public function subregion(): BelongsTo
     {
         return $this->belongsTo(Subregion::class);
     }

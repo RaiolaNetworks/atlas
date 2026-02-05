@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Raiolanetworks\Atlas\Models\City;
 use Raiolanetworks\Atlas\Models\Country;
 use Raiolanetworks\Atlas\Models\Currency;
 use Raiolanetworks\Atlas\Models\Region;
@@ -16,13 +17,13 @@ describe('Country relationships', function () {
     it('has belongsTo relationship with Region', function () {
         $country = new Country;
 
-        expect($country->regions())->toBeInstanceOf(BelongsTo::class);
+        expect($country->region())->toBeInstanceOf(BelongsTo::class);
     });
 
     it('has belongsTo relationship with Subregion', function () {
         $country = new Country;
 
-        expect($country->subregions())->toBeInstanceOf(BelongsTo::class);
+        expect($country->subregion())->toBeInstanceOf(BelongsTo::class);
     });
 
     it('has belongsTo relationship with Currency', function () {
@@ -55,6 +56,14 @@ describe('Timezone relationships', function () {
         $timezone = new Timezone;
 
         expect($timezone->countries())->toBeInstanceOf(BelongsToMany::class);
+    });
+
+    it('uses string as primary key', function () {
+        $timezone = new Timezone;
+
+        expect($timezone->getKeyName())->toBe('zone_name')
+            ->and($timezone->getKeyType())->toBe('string')
+            ->and($timezone->getIncrementing())->toBeFalse();
     });
 });
 
@@ -94,6 +103,12 @@ describe('Subregion relationships', function () {
 
         expect($subregion->countries())->toBeInstanceOf(HasMany::class);
     });
+
+    it('has belongsTo relationship with Region', function () {
+        $subregion = new Subregion;
+
+        expect($subregion->region())->toBeInstanceOf(BelongsTo::class);
+    });
 });
 
 describe('State relationships', function () {
@@ -107,5 +122,19 @@ describe('State relationships', function () {
         $state = new State;
 
         expect($state->cities())->toBeInstanceOf(HasMany::class);
+    });
+});
+
+describe('City relationships', function () {
+    it('has belongsTo relationship with Country', function () {
+        $city = new City;
+
+        expect($city->country())->toBeInstanceOf(BelongsTo::class);
+    });
+
+    it('has belongsTo relationship with State', function () {
+        $city = new City;
+
+        expect($city->state())->toBeInstanceOf(BelongsTo::class);
     });
 });

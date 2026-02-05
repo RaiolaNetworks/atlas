@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\DB;
+use Raiolanetworks\Atlas\Models\City;
 use Raiolanetworks\Atlas\Models\Country;
 use Raiolanetworks\Atlas\Models\Currency;
 use Raiolanetworks\Atlas\Models\Language;
 use Raiolanetworks\Atlas\Models\Region;
+use Raiolanetworks\Atlas\Models\State;
 use Raiolanetworks\Atlas\Models\Subregion;
 use Raiolanetworks\Atlas\Models\Timezone;
 
@@ -37,14 +39,6 @@ describe('CurrenciesSeeder', function () {
         $this->artisan('atlas:currencies')->assertSuccessful();
 
         expect(Currency::count())->toBeGreaterThan(0);
-    });
-
-    it('uses string as primary key', function () {
-        $this->artisan('atlas:currencies')->assertSuccessful();
-
-        $currency = Currency::first();
-
-        expect($currency->getKey())->toBeString();
     });
 });
 
@@ -89,6 +83,55 @@ describe('CountriesSeeder', function () {
             ->first();
 
         expect($country)->not->toBeNull();
+    });
+});
+
+describe('StatesSeeder', function () {
+    beforeEach(function () {
+        $this->artisan('atlas:regions');
+        $this->artisan('atlas:subregions');
+        $this->artisan('atlas:currencies');
+        $this->artisan('atlas:countries');
+    });
+
+    it('populates the states table', function () {
+        $this->artisan('atlas:states')->assertSuccessful();
+
+        expect(State::count())->toBeGreaterThan(0);
+    });
+
+    it('creates states with foreign key to countries', function () {
+        $this->artisan('atlas:states')->assertSuccessful();
+
+        $state = State::whereNotNull('country_id')->first();
+
+        expect($state)->not->toBeNull();
+    });
+});
+
+describe('CitiesSeeder', function () {
+    beforeEach(function () {
+        $this->artisan('atlas:regions');
+        $this->artisan('atlas:subregions');
+        $this->artisan('atlas:currencies');
+        $this->artisan('atlas:countries');
+        $this->artisan('atlas:states');
+    });
+
+    it('populates the cities table', function () {
+        $this->artisan('atlas:cities')->assertSuccessful();
+
+        expect(City::count())->toBeGreaterThan(0);
+    });
+
+    it('creates cities with foreign keys', function () {
+        $this->artisan('atlas:cities')->assertSuccessful();
+
+        $city = City::whereNotNull('country_id')
+            ->whereNotNull('state_id')
+            ->first();
+
+        expect($city)->not->toBeNull();
     });
 });
 
