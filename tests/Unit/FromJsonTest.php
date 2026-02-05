@@ -14,10 +14,10 @@ use Raiolanetworks\Atlas\Models\Timezone;
 describe('Region::fromJsonToDBRecord', function () {
     it('maps fields correctly', function () {
         $json = [
-            'id' => 1,
-            'name' => 'Africa',
+            'id'           => 1,
+            'name'         => 'Africa',
             'translations' => ['ko' => '아프리카', 'es' => 'África'],
-            'wikiDataId' => 'Q15',
+            'wikiDataId'   => 'Q15',
         ];
 
         $result = Region::fromJsonToDBRecord($json);
@@ -35,11 +35,11 @@ describe('Subregion::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.regions', true);
 
         $json = [
-            'id' => 19,
-            'name' => 'Australia and New Zealand',
-            'region_id' => 5,
+            'id'           => 19,
+            'name'         => 'Australia and New Zealand',
+            'region_id'    => 5,
             'translations' => ['ko' => '오스트랄라시아'],
-            'wikiDataId' => 'Q45256',
+            'wikiDataId'   => 'Q45256',
         ];
 
         $result = Subregion::fromJsonToDBRecord($json);
@@ -52,11 +52,11 @@ describe('Subregion::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.regions', false);
 
         $json = [
-            'id' => 19,
-            'name' => 'Australia and New Zealand',
-            'region_id' => 5,
+            'id'           => 19,
+            'name'         => 'Australia and New Zealand',
+            'region_id'    => 5,
             'translations' => ['ko' => '오스트랄라시아'],
-            'wikiDataId' => 'Q45256',
+            'wikiDataId'   => 'Q45256',
         ];
 
         $result = Subregion::fromJsonToDBRecord($json);
@@ -74,25 +74,25 @@ describe('Country::fromJsonToDBRecord', function () {
 
     it('maps all fields correctly when all entities enabled', function () {
         $json = [
-            'name' => 'Afghanistan',
-            'iso2' => 'AF',
-            'iso3' => 'AFG',
+            'name'         => 'Afghanistan',
+            'iso2'         => 'AF',
+            'iso3'         => 'AFG',
             'numeric_code' => '004',
-            'phonecode' => '93',
-            'capital' => 'Kabul',
-            'currency' => 'AFN',
-            'tld' => '.af',
-            'native' => 'افغانستان',
-            'region' => 'Asia',
-            'region_id' => 3,
-            'subregion' => 'Southern Asia',
+            'phonecode'    => '93',
+            'capital'      => 'Kabul',
+            'currency'     => 'AFN',
+            'tld'          => '.af',
+            'native'       => 'افغانستان',
+            'region'       => 'Asia',
+            'region_id'    => 3,
+            'subregion'    => 'Southern Asia',
             'subregion_id' => 14,
-            'nationality' => 'Afghan',
+            'nationality'  => 'Afghan',
             'translations' => ['ko' => '아프가니스탄'],
-            'latitude' => '33.00000000',
-            'longitude' => '65.00000000',
-            'emoji' => '🇦🇫',
-            'emojiU' => 'U+1F1E6 U+1F1EB',
+            'latitude'     => '33.00000000',
+            'longitude'    => '65.00000000',
+            'emoji'        => '🇦🇫',
+            'emojiU'       => 'U+1F1E6 U+1F1EB',
         ];
 
         $result = Country::fromJsonToDBRecord($json);
@@ -109,25 +109,25 @@ describe('Country::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.regions', false);
 
         $json = [
-            'name' => 'Afghanistan',
-            'iso2' => 'AF',
-            'iso3' => 'AFG',
+            'name'         => 'Afghanistan',
+            'iso2'         => 'AF',
+            'iso3'         => 'AFG',
             'numeric_code' => '004',
-            'phonecode' => '93',
-            'capital' => 'Kabul',
-            'currency' => 'AFN',
-            'tld' => '.af',
-            'native' => 'افغانستان',
-            'region' => 'Asia',
-            'region_id' => 3,
-            'subregion' => 'Southern Asia',
+            'phonecode'    => '93',
+            'capital'      => 'Kabul',
+            'currency'     => 'AFN',
+            'tld'          => '.af',
+            'native'       => 'افغانستان',
+            'region'       => 'Asia',
+            'region_id'    => 3,
+            'subregion'    => 'Southern Asia',
             'subregion_id' => 14,
-            'nationality' => 'Afghan',
+            'nationality'  => 'Afghan',
             'translations' => ['ko' => '아프가니스탄'],
-            'latitude' => '33.00000000',
-            'longitude' => '65.00000000',
-            'emoji' => '🇦🇫',
-            'emojiU' => 'U+1F1E6 U+1F1EB',
+            'latitude'     => '33.00000000',
+            'longitude'    => '65.00000000',
+            'emoji'        => '🇦🇫',
+            'emojiU'       => 'U+1F1E6 U+1F1EB',
         ];
 
         $result = Country::fromJsonToDBRecord($json);
@@ -139,25 +139,25 @@ describe('Country::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.subregions', false);
 
         $json = [
-            'name' => 'Afghanistan',
-            'iso2' => 'AF',
-            'iso3' => 'AFG',
+            'name'         => 'Afghanistan',
+            'iso2'         => 'AF',
+            'iso3'         => 'AFG',
             'numeric_code' => '004',
-            'phonecode' => '93',
-            'capital' => 'Kabul',
-            'currency' => 'AFN',
-            'tld' => '.af',
-            'native' => 'افغانستان',
-            'region' => 'Asia',
-            'region_id' => 3,
-            'subregion' => 'Southern Asia',
+            'phonecode'    => '93',
+            'capital'      => 'Kabul',
+            'currency'     => 'AFN',
+            'tld'          => '.af',
+            'native'       => 'افغانستان',
+            'region'       => 'Asia',
+            'region_id'    => 3,
+            'subregion'    => 'Southern Asia',
             'subregion_id' => 14,
-            'nationality' => 'Afghan',
+            'nationality'  => 'Afghan',
             'translations' => ['ko' => '아프가니스탄'],
-            'latitude' => '33.00000000',
-            'longitude' => '65.00000000',
-            'emoji' => '🇦🇫',
-            'emojiU' => 'U+1F1E6 U+1F1EB',
+            'latitude'     => '33.00000000',
+            'longitude'    => '65.00000000',
+            'emoji'        => '🇦🇫',
+            'emojiU'       => 'U+1F1E6 U+1F1EB',
         ];
 
         $result = Country::fromJsonToDBRecord($json);
@@ -169,25 +169,25 @@ describe('Country::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.currencies', false);
 
         $json = [
-            'name' => 'Afghanistan',
-            'iso2' => 'AF',
-            'iso3' => 'AFG',
+            'name'         => 'Afghanistan',
+            'iso2'         => 'AF',
+            'iso3'         => 'AFG',
             'numeric_code' => '004',
-            'phonecode' => '93',
-            'capital' => 'Kabul',
-            'currency' => 'AFN',
-            'tld' => '.af',
-            'native' => 'افغانستان',
-            'region' => 'Asia',
-            'region_id' => 3,
-            'subregion' => 'Southern Asia',
+            'phonecode'    => '93',
+            'capital'      => 'Kabul',
+            'currency'     => 'AFN',
+            'tld'          => '.af',
+            'native'       => 'افغانستان',
+            'region'       => 'Asia',
+            'region_id'    => 3,
+            'subregion'    => 'Southern Asia',
             'subregion_id' => 14,
-            'nationality' => 'Afghan',
+            'nationality'  => 'Afghan',
             'translations' => ['ko' => '아프가니스탄'],
-            'latitude' => '33.00000000',
-            'longitude' => '65.00000000',
-            'emoji' => '🇦🇫',
-            'emojiU' => 'U+1F1E6 U+1F1EB',
+            'latitude'     => '33.00000000',
+            'longitude'    => '65.00000000',
+            'emoji'        => '🇦🇫',
+            'emojiU'       => 'U+1F1E6 U+1F1EB',
         ];
 
         $result = Country::fromJsonToDBRecord($json);
@@ -201,15 +201,15 @@ describe('State::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.countries', true);
 
         $json = [
-            'id' => 1,
-            'name' => 'Badakhshan',
-            'country_id' => 1,
+            'id'           => 1,
+            'name'         => 'Badakhshan',
+            'country_id'   => 1,
             'country_code' => 'AF',
             'country_name' => 'Afghanistan',
-            'state_code' => 'BDS',
-            'type' => 'province',
-            'latitude' => '36.73477250',
-            'longitude' => '70.81199530',
+            'state_code'   => 'BDS',
+            'type'         => 'province',
+            'latitude'     => '36.73477250',
+            'longitude'    => '70.81199530',
         ];
 
         $result = State::fromJsonToDBRecord($json);
@@ -223,15 +223,15 @@ describe('State::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.countries', false);
 
         $json = [
-            'id' => 1,
-            'name' => 'Badakhshan',
-            'country_id' => 1,
+            'id'           => 1,
+            'name'         => 'Badakhshan',
+            'country_id'   => 1,
             'country_code' => 'AF',
             'country_name' => 'Afghanistan',
-            'state_code' => 'BDS',
-            'type' => 'province',
-            'latitude' => '36.73477250',
-            'longitude' => '70.81199530',
+            'state_code'   => 'BDS',
+            'type'         => 'province',
+            'latitude'     => '36.73477250',
+            'longitude'    => '70.81199530',
         ];
 
         $result = State::fromJsonToDBRecord($json);
@@ -248,17 +248,17 @@ describe('City::fromJsonToDBRecord', function () {
 
     it('maps fields correctly with all entities enabled', function () {
         $json = [
-            'id' => 1,
-            'name' => 'Kabul',
-            'state_id' => 1,
-            'state_code' => 'KBL',
-            'state_name' => 'Kabul',
-            'country_id' => 1,
+            'id'           => 1,
+            'name'         => 'Kabul',
+            'state_id'     => 1,
+            'state_code'   => 'KBL',
+            'state_name'   => 'Kabul',
+            'country_id'   => 1,
             'country_code' => 'AF',
             'country_name' => 'Afghanistan',
-            'latitude' => '34.52813000',
-            'longitude' => '69.17233000',
-            'wikiDataId' => 'Q5838',
+            'latitude'     => '34.52813000',
+            'longitude'    => '69.17233000',
+            'wikiDataId'   => 'Q5838',
         ];
 
         $result = City::fromJsonToDBRecord($json);
@@ -273,17 +273,17 @@ describe('City::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.states', false);
 
         $json = [
-            'id' => 1,
-            'name' => 'Kabul',
-            'state_id' => 1,
-            'state_code' => 'KBL',
-            'state_name' => 'Kabul',
-            'country_id' => 1,
+            'id'           => 1,
+            'name'         => 'Kabul',
+            'state_id'     => 1,
+            'state_code'   => 'KBL',
+            'state_name'   => 'Kabul',
+            'country_id'   => 1,
             'country_code' => 'AF',
             'country_name' => 'Afghanistan',
-            'latitude' => '34.52813000',
-            'longitude' => '69.17233000',
-            'wikiDataId' => 'Q5838',
+            'latitude'     => '34.52813000',
+            'longitude'    => '69.17233000',
+            'wikiDataId'   => 'Q5838',
         ];
 
         $result = City::fromJsonToDBRecord($json);
@@ -295,17 +295,17 @@ describe('City::fromJsonToDBRecord', function () {
         config()->set('atlas.entities.countries', false);
 
         $json = [
-            'id' => 1,
-            'name' => 'Kabul',
-            'state_id' => 1,
-            'state_code' => 'KBL',
-            'state_name' => 'Kabul',
-            'country_id' => 1,
+            'id'           => 1,
+            'name'         => 'Kabul',
+            'state_id'     => 1,
+            'state_code'   => 'KBL',
+            'state_name'   => 'Kabul',
+            'country_id'   => 1,
             'country_code' => 'AF',
             'country_name' => 'Afghanistan',
-            'latitude' => '34.52813000',
-            'longitude' => '69.17233000',
-            'wikiDataId' => 'Q5838',
+            'latitude'     => '34.52813000',
+            'longitude'    => '69.17233000',
+            'wikiDataId'   => 'Q5838',
         ];
 
         $result = City::fromJsonToDBRecord($json);
@@ -317,19 +317,19 @@ describe('City::fromJsonToDBRecord', function () {
 describe('Timezone::fromJsonToDBRecord', function () {
     it('maps zoneName to zone_name', function () {
         $json = [
-            'zoneName' => 'Asia/Kabul',
-            'gmtOffset' => 16200,
+            'zoneName'      => 'Asia/Kabul',
+            'gmtOffset'     => 16200,
             'gmtOffsetName' => 'UTC+04:30',
-            'tzName' => 'Afghanistan Time',
+            'tzName'        => 'Afghanistan Time',
         ];
 
         $result = Timezone::fromJsonToDBRecord($json);
 
         expect($result)->toBe([
-            'zone_name' => 'Asia/Kabul',
-            'gmt_offset' => 16200,
+            'zone_name'       => 'Asia/Kabul',
+            'gmt_offset'      => 16200,
             'gmt_offset_name' => 'UTC+04:30',
-            'tz_name' => 'Afghanistan Time',
+            'tz_name'         => 'Afghanistan Time',
         ]);
     });
 });
@@ -337,20 +337,20 @@ describe('Timezone::fromJsonToDBRecord', function () {
 describe('Currency::fromJsonToDBRecord', function () {
     it('maps fields directly', function () {
         $json = [
-            'code' => 'USD',
-            'name' => 'US Dollar',
-            'symbol' => '$',
-            'symbol_native' => '$',
+            'code'           => 'USD',
+            'name'           => 'US Dollar',
+            'symbol'         => '$',
+            'symbol_native'  => '$',
             'decimal_digits' => 2,
         ];
 
         $result = Currency::fromJsonToDBRecord($json);
 
         expect($result)->toBe([
-            'code' => 'USD',
-            'name' => 'US Dollar',
-            'symbol' => '$',
-            'symbol_native' => '$',
+            'code'           => 'USD',
+            'name'           => 'US Dollar',
+            'symbol'         => '$',
+            'symbol_native'  => '$',
             'decimal_digits' => 2,
         ]);
     });
@@ -359,19 +359,19 @@ describe('Currency::fromJsonToDBRecord', function () {
 describe('Language::fromJsonToDBRecord', function () {
     it('maps fields directly', function () {
         $json = [
-            'code' => 'en',
-            'name' => 'English',
+            'code'        => 'en',
+            'name'        => 'English',
             'name_native' => 'English',
-            'dir' => 'ltr',
+            'dir'         => 'ltr',
         ];
 
         $result = Language::fromJsonToDBRecord($json);
 
         expect($result)->toBe([
-            'code' => 'en',
-            'name' => 'English',
+            'code'        => 'en',
+            'name'        => 'English',
             'name_native' => 'English',
-            'dir' => 'ltr',
+            'dir'         => 'ltr',
         ]);
     });
 });
