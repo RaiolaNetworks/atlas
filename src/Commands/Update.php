@@ -38,8 +38,6 @@ class Update extends Command
      */
     public function handle(): int
     {
-        ini_set('memory_limit', '-1');
-
         $this->info('Updating data of countries, cities, currencies, languages, states and timezones');
 
         if (! $this->checkRequiredTables()) {
