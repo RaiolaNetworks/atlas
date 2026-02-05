@@ -47,4 +47,40 @@ enum EntitiesEnum: string
             self::Timezones  => config()->boolean('atlas.entities.timezones')
         };
     }
+
+    /**
+     * @return list<self>
+     */
+    public function dependencies(): array
+    {
+        return match ($this) {
+            self::Subregions => [self::Regions],
+            self::Countries  => [self::Regions, self::Subregions, self::Currencies],
+            self::States     => [self::Countries],
+            self::Cities     => [self::States, self::Countries],
+            default          => [],
+        };
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function validateDependencies(): array
+    {
+        $warnings = [];
+
+        foreach (self::cases() as $entity) {
+            if (! $entity->isEnabled()) {
+                continue;
+            }
+
+            foreach ($entity->dependencies() as $dependency) {
+                if (! $dependency->isEnabled()) {
+                    $warnings[] = "'{$entity->value}' is enabled but its dependency '{$dependency->value}' is disabled.";
+                }
+            }
+        }
+
+        return $warnings;
+    }
 }

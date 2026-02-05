@@ -42,6 +42,11 @@ class Install extends Command
      */
     public function handle(): int
     {
+        // Validate entity dependencies
+        foreach (EntitiesEnum::validateDependencies() as $warning) {
+            $this->warn($warning);
+        }
+
         // Load migrations in migrations queue and run
         app()->make('atlas')->loadMigrations();
         $this->call('migrate');
