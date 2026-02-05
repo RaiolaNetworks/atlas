@@ -123,7 +123,7 @@ abstract class BaseSeeder extends Command
     protected function seed(): bool
     {
         $existsWhenRecordInsertedMethod = $this->existsWhenRecordInsertedMethod();
-        $bar = $this->output->createProgressBar(count($this->data));
+        $bar                            = $this->output->createProgressBar(count($this->data));
         $bar->start();
 
         try {
