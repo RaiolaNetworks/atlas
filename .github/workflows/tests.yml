@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.php'
+      - 'phpunit.xml.dist'
       - 'composer.json'
       - 'composer.lock'
       - '.github/workflows/tests.yml'
@@ -11,6 +12,7 @@ on:
   pull_request:
     paths:
       - '**.php'
+      - 'phpunit.xml.dist'
       - 'composer.json'
       - 'composer.lock'
       - '.github/workflows/tests.yml'
@@ -33,12 +35,6 @@ jobs:
         laravel: ['11.*']
         testbench: ['9.*']
         include:
-          - php: '8.2'
-            laravel: '10.*'
-            testbench: '8.*'
-          - php: '8.3'
-            laravel: '10.*'
-            testbench: '8.*'
           - php: '8.2'
             laravel: '12.*'
             testbench: '10.*'
@@ -64,6 +60,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          composer remove larastan/larastan --dev --no-interaction --no-update
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-progress
 
