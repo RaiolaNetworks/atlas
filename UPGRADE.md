@@ -68,18 +68,6 @@ A backwards-compatibility shim is included: if the old key is present in your pu
 'country_timezone_pivot_tablename' => env('ATLAS_COUNTRY_TIMEZONE', 'country_timezone'),
 ```
 
-### Pivot column renamed: `time_zone_name` → `timezone_name`
-
-The `country_timezone` pivot table column was renamed. An upgrade migration handles this automatically for existing databases. No action needed unless you query the pivot table directly:
-
-```php
-// Before
-DB::table('country_timezone')->where('time_zone_name', $tz);
-
-// After
-DB::table('country_timezone')->where('timezone_name', $tz);
-```
-
 ### Country columns renamed: `region` → `region_name`, `subregion` → `subregion_name`
 
 The `region` and `subregion` string columns on the `countries` table were renamed to `region_name` and `subregion_name` to avoid conflicts with the `region()` and `subregion()` relationship methods. An upgrade migration handles this automatically.
@@ -166,12 +154,11 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
 
 1. Update your `composer.json` to require `"raiolanetworks/atlas": "^2.0"`.
 2. Run `composer update raiolanetworks/atlas`.
-3. Run `php artisan migrate` to apply the upgrade migration (renames pivot column, renames `region`/`subregion` columns, adds indexes, fixes `region_id` nullability).
+3. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, fixes `region_id` nullability).
 4. If you published the config, update the `country_timezon_pivot_tablename` key to `country_timezone_pivot_tablename`.
 5. Search for the renamed relationships and update your code:
    - `$country->regions` → `$country->region`
    - `$country->subregions` → `$country->subregion`
    - `$currency->country` → `$currency->countries`
 6. Replace any imports of `Raiolanetworks\Atlas\Atlas` with `Raiolanetworks\Atlas\Facades\Atlas`.
-7. If you query the pivot table directly, update `time_zone_name` references to `timezone_name`.
-8. Update any direct references to `region`/`subregion` columns on countries to `region_name`/`subregion_name`.
+7. Update any direct references to `region`/`subregion` columns on countries to `region_name`/`subregion_name`.
