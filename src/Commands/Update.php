@@ -6,6 +6,7 @@ namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
+use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 
 class Update extends Command
 {
@@ -21,49 +22,43 @@ class Update extends Command
      *
      * @var string
      */
-    public $description = 'Update all the data comparing with the current data in your database';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    public $description = 'Re-seed all enabled entities with the latest data from JSON files';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $this->info('Updating data of countries, cities, currencies, languages, states and timezones');
+        $enabledEntities = array_filter(EntitiesEnum::cases(), fn (EntitiesEnum $entity) => $entity->isEnabled());
 
-        if (! $this->checkRequiredTables()) {
+        if (! $this->checkRequiredTables($enabledEntities)) {
             return self::FAILURE;
         }
+
+        foreach ($enabledEntities as $entity) {
+            $this->newLine();
+            $this->line('Seeding ' . $entity->value . '...');
+            $this->call('atlas:' . $entity->value);
+        }
+
+        $this->newLine();
+        $this->info('All enabled entities have been updated successfully.');
 
         return self::SUCCESS;
     }
 
-    private function checkRequiredTables(): bool
+    /**
+     * @param EntitiesEnum[] $entities
+     */
+    private function checkRequiredTables(array $entities): bool
     {
-        $this->newLine();
         $this->info('Checking if required tables exist...');
-
-        $requiredTables = [
-            config()->string('atlas.countries_tablename'),
-            config()->string('atlas.states_tablename'),
-            config()->string('atlas.cities_tablename'),
-            config()->string('atlas.currencies_tablename'),
-            config()->string('atlas.languages_tablename'),
-            config()->string('atlas.timezones_tablename'),
-        ];
 
         $missingTables = [];
 
-        foreach ($requiredTables as $table) {
+        foreach ($entities as $entity) {
+            $table = config()->string('atlas.' . $entity->value . '_tablename');
+
             if (! Schema::hasTable($table)) {
                 $missingTables[] = $table;
             }
@@ -77,7 +72,6 @@ class Update extends Command
         }
 
         $this->info('All required tables exist.');
-
         $this->newLine();
 
         return true;
