@@ -37,6 +37,8 @@ class CreateStatesTable extends Migration
             $table->string('type')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+
+            $table->index('state_code');
         });
     }
 

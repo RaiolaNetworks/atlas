@@ -52,6 +52,9 @@ class CreateCountriesTable extends Migration
             $table->string('longitude', 15);
             $table->string('emoji', 40);
             $table->string('emojiU', 40);
+
+            $table->index('iso2');
+            $table->index('iso3');
         });
     }
 
