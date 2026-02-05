@@ -6,6 +6,7 @@ namespace Raiolanetworks\Atlas\Commands\Seeders;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Iterator;
@@ -122,16 +123,19 @@ abstract class BaseSeeder extends Command
     protected function seed(): bool
     {
         $existsWhenRecordInsertedMethod = $this->existsWhenRecordInsertedMethod();
-        Schema::disableForeignKeyConstraints();
-        $this->model::truncate();
-        Schema::enableForeignKeyConstraints();
-        $bar = $this->output->createProgressBar(count($this->data));
+        $bar                            = $this->output->createProgressBar(count($this->data));
         $bar->start();
 
         try {
-            foreach (array_chunk($this->data, self::CHUNK_STEPS) as $chunk) {
-                $this->processChunk($chunk, $bar, $existsWhenRecordInsertedMethod);
-            }
+            DB::transaction(function () use ($bar, $existsWhenRecordInsertedMethod): void {
+                Schema::disableForeignKeyConstraints();
+                $this->model::truncate();
+                Schema::enableForeignKeyConstraints();
+
+                foreach (array_chunk($this->data, self::CHUNK_STEPS) as $chunk) {
+                    $this->processChunk($chunk, $bar, $existsWhenRecordInsertedMethod);
+                }
+            });
         } catch (Throwable $th) {
             $this->newLine();
             $this->error('Something happened when trying to save the data...');
