@@ -22,16 +22,15 @@ enum EntitiesEnum: string
 
     public function getSingular(): ?string
     {
-        return match ($this->getLabel()) {
-            self::Languages->value  => 'language',
-            self::Currencies->value => 'currency',
-            self::Regions->value    => 'region',
-            self::Subregions->value => 'subregion',
-            self::Countries->value  => 'country',
-            self::States->value     => 'state',
-            self::Cities->value     => 'city',
-            self::Timezones->value  => 'timezone',
-            default                 => $this->value
+        return match ($this) {
+            self::Languages  => 'language',
+            self::Currencies => 'currency',
+            self::Regions    => 'region',
+            self::Subregions => 'subregion',
+            self::Countries  => 'country',
+            self::States     => 'state',
+            self::Cities     => 'city',
+            self::Timezones  => 'timezone',
         };
     }
 

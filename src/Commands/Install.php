@@ -59,7 +59,7 @@ class Install extends Command
         // Call necessary seeders
         foreach ($choice as $value) {
             $lower   = Str::lower(strval($value));
-            $command = 'atlas:' . EntitiesEnum::from($lower)->getSingular();
+            $command = 'atlas:' . EntitiesEnum::from($lower)->value;
 
             $this->newLine();
             $this->line('Seeding ' . $lower . '...');
