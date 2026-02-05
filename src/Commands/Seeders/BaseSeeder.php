@@ -20,9 +20,6 @@ use ReflectionNamedType;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Throwable;
 
-/**
- * @method void whenRecordInserted(BaseModel $instance) Require runtime check
- */
 abstract class BaseSeeder extends Command
 {
     protected const INDIVIDUAL_INSERTION_MODE = 'individual';
@@ -152,7 +149,7 @@ abstract class BaseSeeder extends Command
     }
 
     /**
-     * @param array<mixed> $chunk
+     * @param array<array<string, mixed>> $chunk
      */
     private function processChunk(array &$chunk, ProgressBar $progressBar, bool $existsWhenRecordInsertedMethod): void
     {
@@ -193,7 +190,11 @@ abstract class BaseSeeder extends Command
                 throw new Exception('The primary key is not defined in the inserted row. This is mandatory when you define whenRecordInserted method. Its mandatory define the primary key in the row.');
             }
 
-            $collect->each(fn (string|int $id) => $this->whenRecordInserted($this->model::query()->findOrFail($id)));
+            $collect->each(function (mixed $id): void {
+                /** @var BaseModel $instance */
+                $instance = $this->model::query()->findOrFail($id);
+                $this->whenRecordInserted($instance);
+            });
         }
     }
 
@@ -215,14 +216,20 @@ abstract class BaseSeeder extends Command
         }
     }
 
+    protected function whenRecordInserted(BaseModel $instance): void
+    {
+        // Override in child classes to react to record insertion
+    }
+
     private function existsWhenRecordInsertedMethod(): bool
     {
-        if (! method_exists($this, 'whenRecordInserted')) {
-            return false;
-        }
-
         try {
-            $reflection = ReflectionMethod::createFromMethodName(get_class($this) . '::whenRecordInserted');
+            $reflection = new ReflectionMethod($this, 'whenRecordInserted');
+
+            if ($reflection->getDeclaringClass()->getName() === self::class) {
+                return false;
+            }
+
             $parameters = $reflection->getParameters();
 
             if (count($parameters) === 0) {

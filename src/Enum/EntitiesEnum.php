@@ -15,12 +15,12 @@ enum EntitiesEnum: string
     case Cities     = 'cities';
     case Timezones  = 'timezones';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return $this->name;
     }
 
-    public function getSingular(): ?string
+    public function getSingular(): string
     {
         return match ($this) {
             self::Languages  => 'language',

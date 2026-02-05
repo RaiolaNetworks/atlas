@@ -6,6 +6,7 @@ namespace Raiolanetworks\Atlas\Commands\Seeders;
 
 use Iterator;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
+use Raiolanetworks\Atlas\Models\BaseModel;
 use Raiolanetworks\Atlas\Models\Timezone;
 
 class TimezonesSeeder extends BaseSeeder
@@ -70,11 +71,12 @@ class TimezonesSeeder extends BaseSeeder
             return false;
         }
 
+        /** @var array<int, array{id: int, timezones: array<int, array<string, string|int>>}> $data */
         $this->data = $data;
 
         foreach ($this->data as $rawCountry) {
             foreach ($rawCountry['timezones'] as $rawTimezone) {
-                $this->timezoneCountries[$rawTimezone['zoneName']][] = $rawCountry['id'];
+                $this->timezoneCountries[(string) $rawTimezone['zoneName']][] = $rawCountry['id'];
             }
         }
 
@@ -102,8 +104,10 @@ class TimezonesSeeder extends BaseSeeder
         }
     }
 
-    protected function whenRecordInserted(Timezone $instance): void
+    protected function whenRecordInserted(BaseModel $instance): void
     {
+        assert($instance instanceof Timezone);
+
         if (isset($this->timezoneCountries[$instance->zone_name])) {
             $instance->countries()->attach($this->timezoneCountries[$instance->zone_name]);
         }
