@@ -6,6 +6,7 @@ namespace Raiolanetworks\Atlas\Commands\Seeders;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Iterator;
 use Raiolanetworks\Atlas\Helpers\ResourcesManager;
@@ -121,7 +122,9 @@ abstract class BaseSeeder extends Command
     protected function seed(): bool
     {
         $existsWhenRecordInsertedMethod = $this->existsWhenRecordInsertedMethod();
+        Schema::disableForeignKeyConstraints();
         $this->model::truncate();
+        Schema::enableForeignKeyConstraints();
         $bar = $this->output->createProgressBar(count($this->data));
         $bar->start();
 
