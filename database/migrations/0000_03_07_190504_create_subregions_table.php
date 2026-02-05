@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubregionsTable extends Migration
+return new class extends Migration
 {
     private string $tableName;
 
@@ -44,4 +44,4 @@ class CreateSubregionsTable extends Migration
     {
         Schema::dropIfExists($this->tableName);
     }
-}
+};
