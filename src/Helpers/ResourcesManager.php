@@ -38,6 +38,10 @@ class ResourcesManager
             'package-path'                            => __DIR__ . '/../../resources/json/languages.json',
             'overrided-client-project-resources-path' => 'json/languages.json',
         ],
+        'timezones'  => [
+            'package-path'                            => __DIR__ . '/../../resources/json/countries.json',
+            'overrided-client-project-resources-path' => 'json/countries.json',
+        ],
     ];
 
     public static function getResourcePath(string $resource): string
