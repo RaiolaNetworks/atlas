@@ -33,7 +33,7 @@ class AtlasServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Load translations
-        // $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'atlas');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'atlas');
 
         if ($this->app->runningInConsole()) {
             $this->publishResources();
@@ -66,9 +66,9 @@ class AtlasServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/json' => resource_path('vendor/atlas/json'),
         ], 'atlas-jsons');
 
-        // $this->publishes([
-        //     __DIR__ . '/../resources/lang' => resource_path('lang/vendor/atlas'),
-        // ], 'atlas');
+        $this->publishes([
+            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/atlas'),
+        ], 'atlas-translations');
     }
 
     /**
