@@ -20,7 +20,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class State extends BaseModel
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'country_id',
+        'country_code',
+        'country_name',
+        'state_code',
+        'type',
+        'latitude',
+        'longitude',
+    ];
 
     public $timestamps = false;
 

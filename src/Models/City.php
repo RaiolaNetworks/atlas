@@ -21,7 +21,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class City extends BaseModel
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'state_id',
+        'state_code',
+        'state_name',
+        'country_id',
+        'country_code',
+        'country_name',
+        'latitude',
+        'longitude',
+        'wiki_data_id',
+    ];
 
     public $timestamps = false;
 

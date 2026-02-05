@@ -11,7 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Timezone extends BaseModel
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'zone_name',
+        'gmt_offset',
+        'gmt_offset_name',
+        'tz_name',
+    ];
 
     protected $primaryKey = 'zone_name';
 
