@@ -32,7 +32,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Country extends BaseModel
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'iso2',
+        'iso3',
+        'numeric_code',
+        'phonecode',
+        'capital',
+        'currency_code',
+        'tld',
+        'native',
+        'region',
+        'region_id',
+        'subregion',
+        'subregion_id',
+        'nationality',
+        'translations',
+        'latitude',
+        'longitude',
+        'emoji',
+        'emojiU',
+    ];
 
     public $timestamps = false;
 

@@ -14,7 +14,14 @@ class Currency extends BaseModel
 
     protected $keyType = 'string';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'code',
+        'name',
+        'symbol',
+        'symbol_native',
+        'thousands_separator',
+        'decimal_digits',
+    ];
 
     public $timestamps = false;
 

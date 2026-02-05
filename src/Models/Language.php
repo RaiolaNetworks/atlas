@@ -6,7 +6,12 @@ namespace Raiolanetworks\Atlas\Models;
 
 class Language extends BaseModel
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'code',
+        'name',
+        'name_native',
+        'dir',
+    ];
 
     public $timestamps = false;
 

@@ -15,7 +15,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Subregion extends BaseModel
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'region_id',
+        'translations',
+        'wiki_data_id',
+    ];
 
     protected $casts = [
         'translations' => 'array',
