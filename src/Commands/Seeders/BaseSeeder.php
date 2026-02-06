@@ -186,15 +186,13 @@ abstract class BaseSeeder extends Command
 
         if ($existsWhenRecordInsertedMethod) {
             $keyName = (new $this->model)->getKeyName();
-            $collect = collect($bulk)->pluck($keyName);
+            $keys    = collect($bulk)->pluck($keyName)->filter();
 
-            if ($collect->count() === 0) {
+            if ($keys->isEmpty()) {
                 throw new Exception('The primary key is not defined in the inserted row. This is mandatory when you define whenRecordInserted method. Its mandatory define the primary key in the row.');
             }
 
-            $collect->each(function (mixed $id): void {
-                /** @var BaseModel $instance */
-                $instance = $this->model::query()->findOrFail($id);
+            $this->model::query()->whereIn($keyName, $keys)->each(function (BaseModel $instance): void {
                 $this->whenRecordInserted($instance);
             });
         }

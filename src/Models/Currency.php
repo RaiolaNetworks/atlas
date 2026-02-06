@@ -28,7 +28,6 @@ class Currency extends BaseModel
         'symbol',
         'symbol_native',
         'decimal_digits',
-        'thousands_separator',
     ];
 
     public $timestamps = false;

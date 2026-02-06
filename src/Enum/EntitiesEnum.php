@@ -45,6 +45,22 @@ enum EntitiesEnum: string
     }
 
     /**
+     * Config-conditional dependencies — the seeder populates these FK
+     * columns only when the dependency entity is enabled in config.
+     * If the dependency is enabled but not seeded, dangling FKs result.
+     *
+     * @return list<self>
+     */
+    public function optionalDependencies(): array
+    {
+        return match ($this) {
+            self::Countries  => [self::Regions, self::Subregions, self::Currencies],
+            self::Subregions => [self::Regions],
+            default          => [],
+        };
+    }
+
+    /**
      * @return list<string>
      */
     public static function validateDependencies(): array

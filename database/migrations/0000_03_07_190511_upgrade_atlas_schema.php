@@ -60,14 +60,14 @@ return new class extends Migration
     }
 
     /**
-     * Fix currency_code FK: make column nullable, use nullOnDelete instead of cascadeOnDelete.
+     * Fix currency_code FK: make column nullable and re-create FK with nullOnDelete.
      */
     private function fixCurrencyCodeForeignKey(): void
     {
         $countriesTable   = config()->string('atlas.countries_tablename');
         $currenciesTable  = config()->string('atlas.currencies_tablename');
 
-        if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'currency_code')) {
+        if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'currency_code') || ! Schema::hasTable($currenciesTable)) {
             return;
         }
 
@@ -93,7 +93,7 @@ return new class extends Migration
         $countriesTable = config()->string('atlas.countries_tablename');
         $regionsTable   = config()->string('atlas.regions_tablename');
 
-        if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'region_id')) {
+        if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'region_id') || ! Schema::hasTable($regionsTable)) {
             return;
         }
 

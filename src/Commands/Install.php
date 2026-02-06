@@ -50,6 +50,14 @@ class Install extends Command
                     return self::FAILURE;
                 }
             }
+
+            foreach ($entity->optionalDependencies() as $dependency) {
+                if ($dependency->isEnabled() && ! in_array($dependency, $selected)) {
+                    $this->error("'{$entity->value}' populates '{$dependency->value}' foreign keys (enabled in config) — you must also select '{$dependency->value}' or disable it in config.");
+
+                    return self::FAILURE;
+                }
+            }
         }
 
         foreach ($selected as $entity) {
