@@ -24,3 +24,24 @@ it('returns package path when client override does not exist', function () {
 it('throws exception for invalid resource in getResourcePath', function () {
     ResourcesManager::getResourcePath('invalid-resource');
 })->throws(Exception::class, 'Resource invalid-resource not found');
+
+it('returns override path containing vendor/atlas/json/', function (string $resource) {
+    $path = ResourcesManager::getOverriddenClientProjectResourcesPath($resource);
+
+    expect($path)->toContain('vendor/atlas/json/');
+})->with(['regions', 'subregions', 'countries', 'states', 'cities', 'currencies', 'languages', 'timezones']);
+
+it('returns override path ending with the correct resource file', function (string $resource, string $expectedFile) {
+    $path = ResourcesManager::getOverriddenClientProjectResourcesPath($resource);
+
+    expect($path)->toEndWith("vendor/atlas/json/{$expectedFile}");
+})->with([
+    ['regions', 'regions.json'],
+    ['subregions', 'subregions.json'],
+    ['countries', 'countries.json'],
+    ['states', 'states.json'],
+    ['cities', 'cities.json'],
+    ['currencies', 'currencies.json'],
+    ['languages', 'languages.json'],
+    ['timezones', 'countries.json'],
+]);

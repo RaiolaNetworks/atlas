@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Raiolanetworks\Atlas\Models\City;
 use Raiolanetworks\Atlas\Models\Country;
 use Raiolanetworks\Atlas\Models\Currency;
+use Raiolanetworks\Atlas\Models\Language;
 use Raiolanetworks\Atlas\Models\Region;
 use Raiolanetworks\Atlas\Models\State;
 use Raiolanetworks\Atlas\Models\Subregion;
@@ -49,6 +50,33 @@ describe('Country relationships', function () {
 
         expect($country->timezones())->toBeInstanceOf(BelongsToMany::class);
     });
+
+    it('uses correct FK config for currency()', function () {
+        $relation = (new Country)->currency();
+
+        expect($relation->getForeignKeyName())->toBe('currency_code')
+            ->and($relation->getOwnerKeyName())->toBe('code');
+    });
+
+    it('uses correct FK config for timezones()', function () {
+        $relation = (new Country)->timezones();
+
+        expect($relation->getForeignPivotKeyName())->toBe('country_id')
+            ->and($relation->getRelatedPivotKeyName())->toBe('timezone_name')
+            ->and($relation->getTable())->toBe(config('atlas.country_timezone_pivot_tablename'));
+    });
+
+    it('uses correct FK config for region()', function () {
+        $relation = (new Country)->region();
+
+        expect($relation->getForeignKeyName())->toBe('region_id');
+    });
+
+    it('uses correct FK config for subregion()', function () {
+        $relation = (new Country)->subregion();
+
+        expect($relation->getForeignKeyName())->toBe('subregion_id');
+    });
 });
 
 describe('Timezone relationships', function () {
@@ -81,6 +109,23 @@ describe('Currency relationships', function () {
             ->and($currency->getKeyType())->toBe('string')
             ->and($currency->getIncrementing())->toBeFalse();
     });
+
+    it('uses correct FK config for countries()', function () {
+        $relation = (new Currency)->countries();
+
+        expect($relation->getForeignKeyName())->toBe('currency_code')
+            ->and($relation->getLocalKeyName())->toBe('code');
+    });
+});
+
+describe('Language model', function () {
+    it('uses string as primary key', function () {
+        $language = new Language;
+
+        expect($language->getKeyName())->toBe('code')
+            ->and($language->getKeyType())->toBe('string')
+            ->and($language->getIncrementing())->toBeFalse();
+    });
 });
 
 describe('Region relationships', function () {
@@ -109,6 +154,12 @@ describe('Subregion relationships', function () {
 
         expect($subregion->region())->toBeInstanceOf(BelongsTo::class);
     });
+
+    it('uses correct FK config for region()', function () {
+        $relation = (new Subregion)->region();
+
+        expect($relation->getForeignKeyName())->toBe('region_id');
+    });
 });
 
 describe('State relationships', function () {
@@ -123,6 +174,12 @@ describe('State relationships', function () {
 
         expect($state->cities())->toBeInstanceOf(HasMany::class);
     });
+
+    it('uses correct FK config for country()', function () {
+        $relation = (new State)->country();
+
+        expect($relation->getForeignKeyName())->toBe('country_id');
+    });
 });
 
 describe('City relationships', function () {
@@ -136,5 +193,31 @@ describe('City relationships', function () {
         $city = new City;
 
         expect($city->state())->toBeInstanceOf(BelongsTo::class);
+    });
+
+    it('uses correct FK config for country()', function () {
+        $relation = (new City)->country();
+
+        expect($relation->getForeignKeyName())->toBe('country_id');
+    });
+
+    it('uses correct FK config for state()', function () {
+        $relation = (new City)->state();
+
+        expect($relation->getForeignKeyName())->toBe('state_id');
+    });
+});
+
+describe('Removed v1 methods', function () {
+    it('Country does not have regions() plural method', function () {
+        expect(method_exists(Country::class, 'regions'))->toBeFalse();
+    });
+
+    it('Country does not have subregions() plural method', function () {
+        expect(method_exists(Country::class, 'subregions'))->toBeFalse();
+    });
+
+    it('Currency does not have country() singular method', function () {
+        expect(method_exists(Currency::class, 'country'))->toBeFalse();
     });
 });
