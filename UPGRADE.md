@@ -5,6 +5,7 @@
 - **PHP 8.3+** (was 8.2+)
 - **Laravel 11+** (Laravel 10 is no longer supported)
 - New dependency `halaxa/json-machine` is installed automatically via Composer.
+- The explicit `illuminate/contracts` Composer dependency was removed (it is already provided by `laravel/framework`). If you required it transitively through this package, add it to your own `composer.json`.
 
 ## High impact changes
 
@@ -116,9 +117,9 @@ The `translations` attribute on the `Country` model is now cast to `array` (matc
 
 The `id` field was added to `$fillable` on `Country`, `City`, `State`, `Region`, and `Subregion` so that `fromJsonToDBRecord()` can mass-assign the JSON-sourced IDs during seeding.
 
-### `Currency::$thousands_separator` added to `$fillable`
+### `Currency::$thousands_separator` removed from `$fillable`
 
-The `thousands_separator` field is now included in `Currency::$fillable` to match the migration column. It is not present in the JSON source data, so the migration column default (`,`) applies during seeding.
+The `thousands_separator` field was removed from `Currency::$fillable` because it is not present in the JSON source data and the seeder never populates it — the migration column default (`,`) always applies. If you were mass-assigning `thousands_separator` via `Currency::create()` or `fill()`, add it to `$fillable` in your own subclass.
 
 ### `getOverridedClientProjectResourcesPath()` renamed
 
@@ -144,7 +145,10 @@ The `atlas:update` command only re-seeds entities that are enabled in `config('a
 
 ### Entity dependency validation
 
-Both `atlas:install` and `atlas:update` now emit warnings when an entity is enabled but one of its dependencies is disabled (e.g., countries enabled but currencies disabled). Additionally, `atlas:install` validates the interactive multiselect choice — selecting an entity without its required dependencies (e.g., cities without states) will abort with an error.
+Both `atlas:install` and `atlas:update` now emit warnings when an entity is enabled but one of its dependencies is disabled (e.g., countries enabled but currencies disabled). Additionally, `atlas:install` validates the interactive multiselect choice:
+
+- Selecting an entity without its **required** dependencies (e.g., cities without states) will abort with an error.
+- Deselecting an entity that is **enabled in config** while another selected entity populates its foreign keys (e.g., deselecting regions while countries is selected and `entities.regions` is `true`) will also abort. Either select the dependency or disable it in `config/atlas.php`.
 
 ### Migrations converted to anonymous classes
 
