@@ -97,20 +97,16 @@ abstract class BaseSeeder extends Command
         $bar                            = $this->output->createProgressBar();
         $bar->start();
 
-        try {
-            Schema::disableForeignKeyConstraints();
+        Schema::disableForeignKeyConstraints();
 
-            try {
+        try {
+            DB::transaction(function () use ($bar, $existsWhenRecordInsertedMethod): void {
                 foreach ($this->pivotTables() as $pivotTable) {
-                    DB::table($pivotTable)->truncate();
+                    DB::table($pivotTable)->delete();
                 }
 
-                $this->model::truncate();
-            } finally {
-                Schema::enableForeignKeyConstraints();
-            }
+                $this->model::query()->toBase()->delete();
 
-            DB::transaction(function () use ($bar, $existsWhenRecordInsertedMethod): void {
                 $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
                 $chunk = [];
 
@@ -138,6 +134,8 @@ abstract class BaseSeeder extends Command
             }
 
             return false;
+        } finally {
+            Schema::enableForeignKeyConstraints();
         }
 
         $bar->finish();

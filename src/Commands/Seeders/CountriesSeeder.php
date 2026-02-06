@@ -15,4 +15,9 @@ class CountriesSeeder extends BaseSeeder
     protected string $resourceKey = 'countries';
 
     protected string $model = Country::class;
+
+    protected function pivotTables(): array
+    {
+        return [config()->string('atlas.country_timezone_pivot_tablename')];
+    }
 }

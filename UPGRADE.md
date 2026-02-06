@@ -118,6 +118,18 @@ The `id` field was added to `$fillable` on `Country`, `City`, `State`, `Region`,
 
 The `thousands_separator` field is now included in `Currency::$fillable` to match the migration column. It is not present in the JSON source data, so the migration column default (`,`) applies during seeding.
 
+### `getOverridedClientProjectResourcesPath()` renamed
+
+The method `ResourcesManager::getOverridedClientProjectResourcesPath()` was renamed to `getOverriddenClientProjectResourcesPath()` (fixed English spelling). The internal constant `OVERRIDED_CLIENT_PROJECT_RESOURCES_PATH` was also renamed to `overridden-client-project-resources-path`.
+
+**Action:** If you referenced either the method or the constant, update to the corrected names.
+
+### JSON override path changed
+
+The path for overriding JSON data files changed from `resources/json/` to `resources/vendor/atlas/json/`. The previous path was a bug — overrides placed in `resources/json/` were never loaded because the path collided with the package's own `resources/json/` directory.
+
+**Action:** If you use custom JSON overrides, move your files from `resources/json/*.json` to `resources/vendor/atlas/json/*.json`.
+
 ## Low impact changes
 
 ### New `Subregion::region()` relationship
@@ -144,11 +156,12 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
 
 1. Update your `composer.json` to require `"raiolanetworks/atlas": "^2.0"`.
 2. Run `composer update raiolanetworks/atlas`.
-3. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, fixes `region_id` nullability).
-4. If you published the config, update the `country_timezon_pivot_tablename` key to `country_timezone_pivot_tablename`.
-5. Search for the renamed relationships and update your code:
+3. If you published the Atlas migrations in v1 (`vendor:publish --tag=atlas-migrations`), **delete the copies** from your `database/migrations/` directory. The package now auto-loads its migrations; keeping published copies will cause "table already exists" errors.
+4. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, fixes `region_id` and `currency_code` foreign keys).
+5. If you published the config, update the `country_timezon_pivot_tablename` key to `country_timezone_pivot_tablename`.
+6. Search for the renamed relationships and update your code:
    - `$country->regions` → `$country->region`
    - `$country->subregions` → `$country->subregion`
    - `$currency->country` → `$currency->countries`
-6. Remove any imports of `Raiolanetworks\Atlas\Atlas` or `Raiolanetworks\Atlas\Facades\Atlas` — the facade has been removed.
-7. Update any direct references to `region`/`subregion` columns on countries to `region_name`/`subregion_name`.
+7. Remove any imports of `Raiolanetworks\Atlas\Atlas` or `Raiolanetworks\Atlas\Facades\Atlas` — the facade has been removed.
+8. Update any direct references to `region`/`subregion` columns on countries to `region_name`/`subregion_name`.

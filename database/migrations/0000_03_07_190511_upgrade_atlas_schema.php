@@ -20,6 +20,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->renameCountryStringColumns();
+        $this->fixCurrencyCodeForeignKey();
         $this->fixRegionIdNullability();
         $this->addMissingIndexes();
     }
@@ -29,7 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Not reversible: the original CREATE TABLE migrations handle table drops.
+        // Not reversible: column renames, nullability changes, foreign-key
+        // fixes, and index additions are intentionally kept. The original
+        // CREATE TABLE migrations handle full table drops.
     }
 
     /**
@@ -57,18 +60,54 @@ return new class extends Migration
     }
 
     /**
-     * Make region_id nullable so that nullOnDelete() can work correctly.
+     * Fix currency_code FK: make column nullable, use nullOnDelete instead of cascadeOnDelete.
+     */
+    private function fixCurrencyCodeForeignKey(): void
+    {
+        $countriesTable   = config()->string('atlas.countries_tablename');
+        $currenciesTable  = config()->string('atlas.currencies_tablename');
+
+        if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'currency_code')) {
+            return;
+        }
+
+        Schema::table($countriesTable, function (Blueprint $table) use ($countriesTable): void {
+            $fks = collect(Schema::getForeignKeys($countriesTable));
+
+            if ($fks->contains(fn (array $fk): bool => in_array('currency_code', $fk['columns']))) {
+                $table->dropForeign(['currency_code']);
+            }
+        });
+
+        Schema::table($countriesTable, function (Blueprint $table) use ($currenciesTable): void {
+            $table->string('currency_code', 3)->nullable()->change();
+            $table->foreign('currency_code')->references('code')->on($currenciesTable)->nullOnDelete();
+        });
+    }
+
+    /**
+     * Make region_id nullable and re-create FK with nullOnDelete.
      */
     private function fixRegionIdNullability(): void
     {
         $countriesTable = config()->string('atlas.countries_tablename');
+        $regionsTable   = config()->string('atlas.regions_tablename');
 
         if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'region_id')) {
             return;
         }
 
-        Schema::table($countriesTable, function (Blueprint $table): void {
+        Schema::table($countriesTable, function (Blueprint $table) use ($countriesTable): void {
+            $fks = collect(Schema::getForeignKeys($countriesTable));
+
+            if ($fks->contains(fn (array $fk): bool => in_array('region_id', $fk['columns']))) {
+                $table->dropForeign(['region_id']);
+            }
+        });
+
+        Schema::table($countriesTable, function (Blueprint $table) use ($regionsTable): void {
             $table->unsignedBigInteger('region_id')->nullable()->change();
+            $table->foreign('region_id')->references('id')->on($regionsTable)->nullOnDelete();
         });
     }
 
@@ -92,19 +131,25 @@ return new class extends Migration
                 });
             }
 
-            if (Schema::hasColumn($countriesTable, 'region_id') && ! Schema::hasIndex($countriesTable, "{$countriesTable}_region_id_index")) {
+            if (Schema::hasColumn($countriesTable, 'region_id')
+                && ! Schema::hasIndex($countriesTable, "{$countriesTable}_region_id_index")
+                && ! Schema::hasIndex($countriesTable, "{$countriesTable}_region_id_foreign")) {
                 Schema::table($countriesTable, function (Blueprint $table): void {
                     $table->index('region_id');
                 });
             }
 
-            if (Schema::hasColumn($countriesTable, 'subregion_id') && ! Schema::hasIndex($countriesTable, "{$countriesTable}_subregion_id_index")) {
+            if (Schema::hasColumn($countriesTable, 'subregion_id')
+                && ! Schema::hasIndex($countriesTable, "{$countriesTable}_subregion_id_index")
+                && ! Schema::hasIndex($countriesTable, "{$countriesTable}_subregion_id_foreign")) {
                 Schema::table($countriesTable, function (Blueprint $table): void {
                     $table->index('subregion_id');
                 });
             }
 
-            if (Schema::hasColumn($countriesTable, 'currency_code') && ! Schema::hasIndex($countriesTable, "{$countriesTable}_currency_code_index")) {
+            if (Schema::hasColumn($countriesTable, 'currency_code')
+                && ! Schema::hasIndex($countriesTable, "{$countriesTable}_currency_code_index")
+                && ! Schema::hasIndex($countriesTable, "{$countriesTable}_currency_code_foreign")) {
                 Schema::table($countriesTable, function (Blueprint $table): void {
                     $table->index('currency_code');
                 });
@@ -119,7 +164,10 @@ return new class extends Migration
             });
         }
 
-        if (Schema::hasTable($statesTable) && Schema::hasColumn($statesTable, 'country_id') && ! Schema::hasIndex($statesTable, "{$statesTable}_country_id_index")) {
+        if (Schema::hasTable($statesTable)
+            && Schema::hasColumn($statesTable, 'country_id')
+            && ! Schema::hasIndex($statesTable, "{$statesTable}_country_id_index")
+            && ! Schema::hasIndex($statesTable, "{$statesTable}_country_id_foreign")) {
             Schema::table($statesTable, function (Blueprint $table): void {
                 $table->index('country_id');
             });
@@ -127,7 +175,10 @@ return new class extends Migration
 
         $subregionsTable = config()->string('atlas.subregions_tablename');
 
-        if (Schema::hasTable($subregionsTable) && Schema::hasColumn($subregionsTable, 'region_id') && ! Schema::hasIndex($subregionsTable, "{$subregionsTable}_region_id_index")) {
+        if (Schema::hasTable($subregionsTable)
+            && Schema::hasColumn($subregionsTable, 'region_id')
+            && ! Schema::hasIndex($subregionsTable, "{$subregionsTable}_region_id_index")
+            && ! Schema::hasIndex($subregionsTable, "{$subregionsTable}_region_id_foreign")) {
             Schema::table($subregionsTable, function (Blueprint $table): void {
                 $table->index('region_id');
             });
@@ -167,16 +218,18 @@ return new class extends Migration
             return;
         }
 
-        foreach ($duplicates as $row) {
-            DB::table($pivotTable)
-                ->where('country_id', $row->country_id)
-                ->where('timezone_name', $row->timezone_name)
-                ->delete();
+        DB::transaction(function () use ($pivotTable, $duplicates): void {
+            foreach ($duplicates as $row) {
+                DB::table($pivotTable)
+                    ->where('country_id', $row->country_id)
+                    ->where('timezone_name', $row->timezone_name)
+                    ->delete();
 
-            DB::table($pivotTable)->insert([
-                'country_id'    => $row->country_id,
-                'timezone_name' => $row->timezone_name,
-            ]);
-        }
+                DB::table($pivotTable)->insert([
+                    'country_id'    => $row->country_id,
+                    'timezone_name' => $row->timezone_name,
+                ]);
+            }
+        });
     }
 };
