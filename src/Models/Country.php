@@ -15,14 +15,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string                $iso3
  * @property string                $numeric_code
  * @property string                $phonecode
- * @property string                $capital
- * @property string                $currency_code
- * @property string                $tld
- * @property string                $native
- * @property string                $region_name
- * @property int                   $region_id
- * @property string                $subregion_name
- * @property int                   $subregion_id
+ * @property string|null            $capital
+ * @property string|null            $currency_code
+ * @property string                 $tld
+ * @property string|null            $native
+ * @property string                 $region_name
+ * @property int|null               $region_id
+ * @property string|null            $subregion_name
+ * @property int|null               $subregion_id
  * @property string                $nationality
  * @property array<string, string> $translations
  * @property string                $latitude

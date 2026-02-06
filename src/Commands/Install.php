@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 use function Laravel\Prompts\multiselect;
 
@@ -36,17 +35,31 @@ class Install extends Command
             scroll: 6
         );
 
-        foreach ($choice as $value) {
-            $lower   = Str::lower(strval($value));
-            $command = 'atlas:' . EntitiesEnum::from($lower)->value;
+        // Filter by selection, preserving EntitiesEnum::cases() definition order
+        $selected = array_filter(
+            EntitiesEnum::cases(),
+            fn (EntitiesEnum $entity) => in_array($entity->name, $choice),
+        );
 
+        // Validate that required dependencies are included in the selection
+        foreach ($selected as $entity) {
+            foreach ($entity->requiredDependencies() as $dependency) {
+                if (! in_array($dependency, $selected)) {
+                    $this->error("'{$entity->value}' requires '{$dependency->value}' to be selected.");
+
+                    return self::FAILURE;
+                }
+            }
+        }
+
+        foreach ($selected as $entity) {
             $this->newLine();
-            $this->line('Seeding ' . $lower . '...');
+            $this->line('Seeding ' . $entity->value . '...');
 
-            $exitCode = $this->call($command);
+            $exitCode = $this->call('atlas:' . $entity->value);
 
             if ($exitCode !== self::SUCCESS) {
-                $this->error("Seeder for {$lower} failed.");
+                $this->error("Seeder for {$entity->value} failed.");
 
                 return self::FAILURE;
             }
