@@ -64,8 +64,8 @@ return new class extends Migration
      */
     private function fixCurrencyCodeForeignKey(): void
     {
-        $countriesTable   = config()->string('atlas.countries_tablename');
-        $currenciesTable  = config()->string('atlas.currencies_tablename');
+        $countriesTable  = config()->string('atlas.countries_tablename');
+        $currenciesTable = config()->string('atlas.currencies_tablename');
 
         if (! Schema::hasTable($countriesTable) || ! Schema::hasColumn($countriesTable, 'currency_code') || ! Schema::hasTable($currenciesTable)) {
             return;
