@@ -34,8 +34,8 @@ return new class extends Migration
             $table->string('capital', 80)->nullable();
 
             if (config()->boolean('atlas.entities.currencies')) {
-                $table->string('currency_code', 3);
-                $table->foreign('currency_code')->references('code')->on(config()->string('atlas.currencies_tablename'))->cascadeOnDelete();
+                $table->string('currency_code', 3)->nullable();
+                $table->foreign('currency_code')->references('code')->on(config()->string('atlas.currencies_tablename'))->nullOnDelete();
             }
 
             $table->string('tld', 8);
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('region', 80);
 
             if (config()->boolean('atlas.entities.regions')) {
-                $table->foreignId('region_id')->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
+                $table->foreignId('region_id')->nullable()->constrained(config()->string('atlas.regions_tablename'))->nullOnDelete();
             }
             $table->string('subregion', 80)->nullable();
 
