@@ -39,10 +39,9 @@ class State extends BaseModel
      */
     public function getTable(): string
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.states_tablename');
+        $table = config('atlas.states_tablename');
 
-        return $tableName ?: parent::getTable();
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**

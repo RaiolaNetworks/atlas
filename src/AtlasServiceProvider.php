@@ -23,18 +23,7 @@ class AtlasServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__ . '/../config/atlas.php', 'atlas');
-
-        // Register the main class to use with the facade
-        $this->app->singleton('atlas', fn () => $this);
-
-        // Backwards compatibility: support old config key with typo (country_timezon → country_timezone)
-        $oldPivotName = config('atlas.country_timezon_pivot_tablename');
-
-        if (is_string($oldPivotName)) {
-            config()->set('atlas.country_timezone_pivot_tablename', $oldPivotName);
-        }
     }
 
     /**
@@ -42,8 +31,8 @@ class AtlasServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load translations
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'atlas');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->publishResources();
@@ -52,15 +41,7 @@ class AtlasServiceProvider extends ServiceProvider
     }
 
     /**
-     * Method to load the migrations when php migrate is run in the console.
-     */
-    public function loadMigrations(): void
-    {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-    }
-
-    /**
-     * Method to publish the resource to the app resources folder
+     * Publish package resources to the application.
      */
     private function publishResources(): void
     {
@@ -82,14 +63,10 @@ class AtlasServiceProvider extends ServiceProvider
     }
 
     /**
-     * Method to publish the resource to the app resources folder
+     * Register console commands.
      */
     private function loadCommands(): void
     {
-        if (! $this->app->runningInConsole()) {
-            return;
-        }
-
         $this->commands([
             Install::class,
             RegionsSeeder::class,

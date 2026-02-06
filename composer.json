@@ -85,10 +85,7 @@
         "laravel": {
             "providers": [
                 "Raiolanetworks\\Atlas\\AtlasServiceProvider"
-            ],
-            "aliases": {
-                "Atlas": "Raiolanetworks\\Atlas\\Facades\\Atlas"
-            }
+            ]
         }
     }
 }

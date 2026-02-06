@@ -9,46 +9,21 @@ use Illuminate\Support\Str;
 
 use function Laravel\Prompts\multiselect;
 
+use Raiolanetworks\Atlas\Commands\Concerns\ValidatesDependencies;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 
 class Install extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    use ValidatesDependencies;
+
     public $signature = 'atlas:install';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     public $description = 'Install all the data';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     */
     public function handle(): int
     {
-        // Validate entity dependencies
-        foreach (EntitiesEnum::validateDependencies() as $warning) {
-            $this->warn($warning);
-        }
+        $this->warnAboutDisabledDependencies();
 
-        // Load migrations in migrations queue and run
-        app()->make('atlas')->loadMigrations();
         $this->call('migrate');
 
         // Select the seeders to be executed
@@ -61,7 +36,6 @@ class Install extends Command
             scroll: 6
         );
 
-        // Call necessary seeders
         foreach ($choice as $value) {
             $lower   = Str::lower(strval($value));
             $command = 'atlas:' . EntitiesEnum::from($lower)->value;

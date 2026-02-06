@@ -42,10 +42,9 @@ class City extends BaseModel
      */
     public function getTable(): string
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.cities_tablename');
+        $table = config('atlas.cities_tablename');
 
-        return $tableName ?: parent::getTable();
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**

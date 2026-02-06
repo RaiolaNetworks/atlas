@@ -91,6 +91,24 @@ return new class extends Migration
                     $table->index('iso3');
                 });
             }
+
+            if (Schema::hasColumn($countriesTable, 'region_id') && ! Schema::hasIndex($countriesTable, "{$countriesTable}_region_id_index")) {
+                Schema::table($countriesTable, function (Blueprint $table): void {
+                    $table->index('region_id');
+                });
+            }
+
+            if (Schema::hasColumn($countriesTable, 'subregion_id') && ! Schema::hasIndex($countriesTable, "{$countriesTable}_subregion_id_index")) {
+                Schema::table($countriesTable, function (Blueprint $table): void {
+                    $table->index('subregion_id');
+                });
+            }
+
+            if (Schema::hasColumn($countriesTable, 'currency_code') && ! Schema::hasIndex($countriesTable, "{$countriesTable}_currency_code_index")) {
+                Schema::table($countriesTable, function (Blueprint $table): void {
+                    $table->index('currency_code');
+                });
+            }
         }
 
         $statesTable = config()->string('atlas.states_tablename');
@@ -98,6 +116,20 @@ return new class extends Migration
         if (Schema::hasTable($statesTable) && ! Schema::hasIndex($statesTable, "{$statesTable}_state_code_index")) {
             Schema::table($statesTable, function (Blueprint $table): void {
                 $table->index('state_code');
+            });
+        }
+
+        if (Schema::hasTable($statesTable) && Schema::hasColumn($statesTable, 'country_id') && ! Schema::hasIndex($statesTable, "{$statesTable}_country_id_index")) {
+            Schema::table($statesTable, function (Blueprint $table): void {
+                $table->index('country_id');
+            });
+        }
+
+        $subregionsTable = config()->string('atlas.subregions_tablename');
+
+        if (Schema::hasTable($subregionsTable) && Schema::hasColumn($subregionsTable, 'region_id') && ! Schema::hasIndex($subregionsTable, "{$subregionsTable}_region_id_index")) {
+            Schema::table($subregionsTable, function (Blueprint $table): void {
+                $table->index('region_id');
             });
         }
 

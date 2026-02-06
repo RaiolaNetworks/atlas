@@ -21,21 +21,26 @@ class Region extends BaseModel
         'wiki_data_id',
     ];
 
-    protected $casts = [
-        'translations' => 'array',
-    ];
-
     public $timestamps = false;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'translations' => 'array',
+        ];
+    }
 
     /**
      * Get the table associated with the model.
      */
     public function getTable(): string
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.regions_tablename');
+        $table = config('atlas.regions_tablename');
 
-        return $tableName ?: parent::getTable();
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**

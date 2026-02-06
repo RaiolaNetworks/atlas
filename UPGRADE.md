@@ -56,9 +56,7 @@ The method name and return type (`Currency`) remain the same. This only breaks c
 
 ### Config key typo fixed: `country_timezon_pivot_tablename`
 
-The config key was renamed from `country_timezon_pivot_tablename` to `country_timezone_pivot_tablename`.
-
-A backwards-compatibility shim is included: if the old key is present in your published config, it will be automatically mapped to the new key at runtime. However, you should update your published `config/atlas.php`:
+The config key was renamed from `country_timezon_pivot_tablename` to `country_timezone_pivot_tablename`. No backwards-compatibility shim is provided — you must update your published `config/atlas.php`:
 
 ```php
 // Before
@@ -86,17 +84,9 @@ $country->subregion_name; // string column
 
 ## Medium impact changes
 
-### `Raiolanetworks\Atlas\Atlas` class removed
+### `Atlas` facade removed
 
-The duplicate Facade class at `src/Atlas.php` was removed. Use the canonical Facade instead:
-
-```php
-// Before
-use Raiolanetworks\Atlas\Atlas;
-
-// After
-use Raiolanetworks\Atlas\Facades\Atlas;
-```
+The `Raiolanetworks\Atlas\Facades\Atlas` facade and the `Raiolanetworks\Atlas\Atlas` duplicate class have both been removed. The facade was unused — if you referenced either class, simply remove the import.
 
 ### All models now use `$fillable` instead of `$guarded`
 
@@ -124,9 +114,9 @@ The `translations` attribute on the `Country` model is now cast to `array` (matc
 
 The `id` field was added to `$fillable` on `Country`, `City`, `State`, `Region`, and `Subregion` so that `fromJsonToDBRecord()` can mass-assign the JSON-sourced IDs during seeding.
 
-### `Currency::$thousands_separator` removed from `$fillable`
+### `Currency::$thousands_separator` added to `$fillable`
 
-The `thousands_separator` field was removed from `Currency::$fillable` since it is not present in the JSON source data. The migration column default (`,`) still applies.
+The `thousands_separator` field is now included in `Currency::$fillable` to match the migration column. It is not present in the JSON source data, so the migration column default (`,`) applies during seeding.
 
 ## Low impact changes
 
@@ -160,5 +150,5 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
    - `$country->regions` → `$country->region`
    - `$country->subregions` → `$country->subregion`
    - `$currency->country` → `$currency->countries`
-6. Replace any imports of `Raiolanetworks\Atlas\Atlas` with `Raiolanetworks\Atlas\Facades\Atlas`.
+6. Remove any imports of `Raiolanetworks\Atlas\Atlas` or `Raiolanetworks\Atlas\Facades\Atlas` — the facade has been removed.
 7. Update any direct references to `region`/`subregion` columns on countries to `region_name`/`subregion_name`.

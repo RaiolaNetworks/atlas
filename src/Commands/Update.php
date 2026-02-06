@@ -6,33 +6,20 @@ namespace Raiolanetworks\Atlas\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
+use Raiolanetworks\Atlas\Commands\Concerns\ValidatesDependencies;
 use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 
 class Update extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    use ValidatesDependencies;
+
     public $signature = 'atlas:update';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     public $description = 'Re-seed all enabled entities with the latest data from JSON files';
 
-    /**
-     * Execute the console command.
-     */
     public function handle(): int
     {
-        // Validate entity dependencies
-        foreach (EntitiesEnum::validateDependencies() as $warning) {
-            $this->warn($warning);
-        }
+        $this->warnAboutDisabledDependencies();
 
         $enabledEntities = array_filter(EntitiesEnum::cases(), fn (EntitiesEnum $entity) => $entity->isEnabled());
 

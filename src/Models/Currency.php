@@ -6,6 +6,14 @@ namespace Raiolanetworks\Atlas\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property string $code
+ * @property string $name
+ * @property string $symbol
+ * @property string $symbol_native
+ * @property int    $decimal_digits
+ * @property string $thousands_separator
+ */
 class Currency extends BaseModel
 {
     protected $primaryKey = 'code';
@@ -20,19 +28,29 @@ class Currency extends BaseModel
         'symbol',
         'symbol_native',
         'decimal_digits',
+        'thousands_separator',
     ];
 
     public $timestamps = false;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'decimal_digits' => 'integer',
+        ];
+    }
 
     /**
      * Get the table associated with the model.
      */
     public function getTable(): string
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.currencies_tablename');
+        $table = config('atlas.currencies_tablename');
 
-        return $tableName ?: parent::getTable();
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**

@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Raiolanetworks\Atlas\Models\Country;
-use Raiolanetworks\Atlas\Models\Region;
 use Raiolanetworks\Atlas\Models\Timezone;
 
 describe('FK constraints are restored after seeding', function () {

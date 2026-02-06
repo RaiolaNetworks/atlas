@@ -55,21 +55,26 @@ class Country extends BaseModel
         'emojiU',
     ];
 
-    protected $casts = [
-        'translations' => 'array',
-    ];
-
     public $timestamps = false;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'translations' => 'array',
+        ];
+    }
 
     /**
      * Get the table associated with the model.
      */
     public function getTable(): string
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.countries_tablename');
+        $table = config('atlas.countries_tablename');
 
-        return $tableName ?: parent::getTable();
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**
@@ -134,23 +139,23 @@ class Country extends BaseModel
     public static function fromJsonToDBRecord(array $jsonItem): array
     {
         $parser = [
-            'id'           => $jsonItem['id'],
-            'name'         => $jsonItem['name'],
-            'iso2'         => $jsonItem['iso2'],
-            'iso3'         => $jsonItem['iso3'],
-            'numeric_code' => $jsonItem['numeric_code'],
-            'phonecode'    => $jsonItem['phonecode'],
-            'capital'      => $jsonItem['capital'],
-            'tld'          => $jsonItem['tld'],
-            'native'       => $jsonItem['native'],
-            'region_name'  => $jsonItem['region'],
+            'id'             => $jsonItem['id'],
+            'name'           => $jsonItem['name'],
+            'iso2'           => $jsonItem['iso2'],
+            'iso3'           => $jsonItem['iso3'],
+            'numeric_code'   => $jsonItem['numeric_code'],
+            'phonecode'      => $jsonItem['phonecode'],
+            'capital'        => $jsonItem['capital'],
+            'tld'            => $jsonItem['tld'],
+            'native'         => $jsonItem['native'],
+            'region_name'    => $jsonItem['region'],
             'subregion_name' => $jsonItem['subregion'],
-            'nationality'  => $jsonItem['nationality'],
-            'translations' => json_encode($jsonItem['translations']),
-            'latitude'     => $jsonItem['latitude'],
-            'longitude'    => $jsonItem['longitude'],
-            'emoji'        => $jsonItem['emoji'],
-            'emojiU'       => $jsonItem['emojiU'],
+            'nationality'    => $jsonItem['nationality'],
+            'translations'   => json_encode($jsonItem['translations']),
+            'latitude'       => $jsonItem['latitude'],
+            'longitude'      => $jsonItem['longitude'],
+            'emoji'          => $jsonItem['emoji'],
+            'emojiU'         => $jsonItem['emojiU'],
         ];
 
         if (config()->boolean('atlas.entities.regions')) {

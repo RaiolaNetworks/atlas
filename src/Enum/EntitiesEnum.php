@@ -15,25 +15,6 @@ enum EntitiesEnum: string
     case Cities     = 'cities';
     case Timezones  = 'timezones';
 
-    public function getLabel(): string
-    {
-        return $this->name;
-    }
-
-    public function getSingular(): string
-    {
-        return match ($this) {
-            self::Languages  => 'language',
-            self::Currencies => 'currency',
-            self::Regions    => 'region',
-            self::Subregions => 'subregion',
-            self::Countries  => 'country',
-            self::States     => 'state',
-            self::Cities     => 'city',
-            self::Timezones  => 'timezone',
-        };
-    }
-
     public function isEnabled(): bool
     {
         return match ($this) {
@@ -60,20 +41,6 @@ enum EntitiesEnum: string
             self::Cities    => [self::States, self::Countries],
             self::Timezones => [self::Countries],
             default         => [],
-        };
-    }
-
-    /**
-     * Optional dependencies — FK columns are added only when these are enabled.
-     *
-     * @return list<self>
-     */
-    public function optionalDependencies(): array
-    {
-        return match ($this) {
-            self::Subregions => [self::Regions],
-            self::Countries  => [self::Regions, self::Subregions, self::Currencies],
-            default          => [],
         };
     }
 

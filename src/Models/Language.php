@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Raiolanetworks\Atlas\Models;
 
+/**
+ * @property string $code
+ * @property string $name
+ * @property string $name_native
+ * @property string $dir
+ */
 class Language extends BaseModel
 {
     protected $primaryKey = 'code';
@@ -26,10 +32,9 @@ class Language extends BaseModel
      */
     public function getTable(): string
     {
-        /** @var string $tableName */
-        $tableName = config('atlas.languages_tablename');
+        $table = config('atlas.languages_tablename');
 
-        return $tableName ?: parent::getTable();
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**

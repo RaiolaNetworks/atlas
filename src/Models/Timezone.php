@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property string $zone_name
+ * @property int    $gmt_offset
+ * @property string $gmt_offset_name
+ * @property string $tz_name
  */
 class Timezone extends BaseModel
 {
@@ -27,11 +30,23 @@ class Timezone extends BaseModel
     public $timestamps = false;
 
     /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'gmt_offset' => 'integer',
+        ];
+    }
+
+    /**
      * Get the table associated with the model.
      */
     public function getTable(): string
     {
-        return config()->string('atlas.timezones_tablename') ?: parent::getTable();
+        $table = config('atlas.timezones_tablename');
+
+        return is_string($table) && $table !== '' ? $table : parent::getTable();
     }
 
     /**

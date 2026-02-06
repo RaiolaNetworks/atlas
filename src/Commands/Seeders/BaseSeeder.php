@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Iterator;
 use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
@@ -42,20 +43,6 @@ abstract class BaseSeeder extends Command
     protected string $dataPath;
 
     /**
-     * Data of the data file
-     *
-     * @var array<mixed>
-     */
-    protected array $data = [];
-
-    /**
-     * Name of the entity in plural
-     */
-    protected string $pluralName = '';
-
-    /**
-     * Model name
-     *
      * @var class-string<BaseModel>
      */
     protected string $model;
@@ -93,7 +80,7 @@ abstract class BaseSeeder extends Command
     protected function checkDataFile(): bool
     {
         if (! file_exists($this->dataPath)) {
-            $this->error('The file for seeding the ' . Str::lower($this->pluralName) . ' was not found...');
+            $this->error('The file for seeding the ' . Str::lower($this->resourceKey) . ' was not found...');
 
             return false;
         }
@@ -146,13 +133,17 @@ abstract class BaseSeeder extends Command
             $this->error('Something happened when trying to save the data...');
             $this->error('Error: ' . $th->getMessage());
 
+            if ($this->output->isVerbose()) {
+                $this->error($th->getTraceAsString());
+            }
+
             return false;
         }
 
         $bar->finish();
         $this->newLine();
 
-        $this->info(Str::ucfirst($this->pluralName) . ' seeding in database correctly!');
+        $this->info(Str::ucfirst($this->resourceKey) . ' seeding in database correctly!');
 
         return true;
     }
@@ -160,7 +151,7 @@ abstract class BaseSeeder extends Command
     /**
      * @param array<array<string, mixed>> $chunk
      */
-    private function processChunk(array &$chunk, ProgressBar $progressBar, bool $existsWhenRecordInsertedMethod): void
+    private function processChunk(array $chunk, ProgressBar $progressBar, bool $existsWhenRecordInsertedMethod): void
     {
         switch ($this->insertionMode) {
             case self::BULK_INSERTION_MODE:
@@ -172,13 +163,16 @@ abstract class BaseSeeder extends Command
                 $this->processChunkByIndividualInsertion($chunk, $existsWhenRecordInsertedMethod, $progressBar);
 
                 break;
+
+            default:
+                throw new InvalidArgumentException("Unknown insertion mode: {$this->insertionMode}");
         }
     }
 
     /**
      * @param array<array<string,mixed>> $chunk
      */
-    private function processChunkByBulkInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod, ProgressBar $progressBar): void
+    private function processChunkByBulkInsertion(array $chunk, bool $existsWhenRecordInsertedMethod, ProgressBar $progressBar): void
     {
         $bulk = [];
 
@@ -192,8 +186,8 @@ abstract class BaseSeeder extends Command
         $this->model::query()->insert($bulk);
 
         if ($existsWhenRecordInsertedMethod) {
-            $collect = collect($bulk)
-                ->pluck((new $this->model)->getKeyName());
+            $keyName = (new $this->model)->getKeyName();
+            $collect = collect($bulk)->pluck($keyName);
 
             if ($collect->count() === 0) {
                 throw new Exception('The primary key is not defined in the inserted row. This is mandatory when you define whenRecordInserted method. Its mandatory define the primary key in the row.');
@@ -210,7 +204,7 @@ abstract class BaseSeeder extends Command
     /**
      * @param array<array<string,mixed>> $chunk
      */
-    private function processChunkByIndividualInsertion(array &$chunk, bool $existsWhenRecordInsertedMethod, ProgressBar $progressBar): void
+    private function processChunkByIndividualInsertion(array $chunk, bool $existsWhenRecordInsertedMethod, ProgressBar $progressBar): void
     {
         foreach ($chunk as $value) {
             foreach (static::generateElementsOfBulk($value) as $element) {

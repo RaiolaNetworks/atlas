@@ -7,29 +7,16 @@ namespace Raiolanetworks\Atlas\Commands\Seeders;
 use Iterator;
 use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
-use Raiolanetworks\Atlas\Enum\EntitiesEnum;
 use Raiolanetworks\Atlas\Models\BaseModel;
 use Raiolanetworks\Atlas\Models\Timezone;
 
 class TimezonesSeeder extends BaseSeeder
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     public $signature = 'atlas:timezones';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     public $description = 'Seeding of timezones in the database';
 
     protected string $resourceKey = 'timezones';
-
-    protected string $pluralName = '';
 
     protected string $model = Timezone::class;
 
@@ -40,11 +27,12 @@ class TimezonesSeeder extends BaseSeeder
      */
     private array $timezoneCountries = [];
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->pluralName = EntitiesEnum::Timezones->value;
-    }
+    /**
+     * Zone names already inserted during this seeding run.
+     *
+     * @var array<string, true>
+     */
+    private array $insertedZoneNames = [];
 
     protected function pivotTables(): array
     {
@@ -58,6 +46,7 @@ class TimezonesSeeder extends BaseSeeder
         }
 
         $this->timezoneCountries = [];
+        $this->insertedZoneNames = [];
 
         $items = Items::fromFile($this->dataPath, ['decoder' => new ExtJsonDecoder(true)]);
 
@@ -84,11 +73,13 @@ class TimezonesSeeder extends BaseSeeder
     protected function generateElementsOfBulk(array $jsonItem): Iterator
     {
         foreach ($jsonItem['timezones'] as $timezone) {
-            $exists = Timezone::query()->where('zone_name', $timezone['zoneName'])->exists();
+            $zoneName = $timezone['zoneName'];
 
-            if ($exists) {
+            if (isset($this->insertedZoneNames[$zoneName])) {
                 continue;
             }
+
+            $this->insertedZoneNames[$zoneName] = true;
 
             yield $this->model::fromJsonToDBRecord($timezone);
         }
