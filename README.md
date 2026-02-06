@@ -1,12 +1,9 @@
 # Get the data from the most recondite place with 'Atlas'
 
-<!-- [![Latest Version ont](https://img.shields.io/packagist/v/raiolanetworks/atlas.svg?style=flat-square)](https://packagist.org/packages/raiolanetworks/atlas)
-
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/raiolanetworks/atlas/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/raiolanetworks/atlas/actions?query=workflow%3Arun-tests+branch%3Amain)
-
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/raiolanetworks/atlas/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/raiolanetworks/atlas/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-
-[![Total Downloads](https://img.shields.io/packagist/dt/raiolanetworks/atlas.svg?style=flat-square)](https://packagist.org/packages/raiolanetworks/atlas) -->
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/raiolanetworks/atlas.svg?style=flat-square)](https://packagist.org/packages/raiolanetworks/atlas)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/raiolanetworks/atlas/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/raiolanetworks/atlas/actions?query=workflow%3ATests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/raiolanetworks/atlas/pint.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/raiolanetworks/atlas/actions?query=workflow%3APint+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/raiolanetworks/atlas.svg?style=flat-square)](https://packagist.org/packages/raiolanetworks/atlas)
 
 With 'Atlas' you will be able to create new tables in the database and fill them with information about countries, states, cities, timezones and more.
 
@@ -23,48 +20,36 @@ With 'Atlas' you will be able to create new tables in the database and fill them
 
 ## Installation
 
-You can install the package via composer:
+Install the package via Composer:
 ```bash
 composer require raiolanetworks/atlas
 ```
 
-You can publish the migrations with:
-
-```bash
-php artisan vendor:publish --tag="atlas-migrations"
-```
-
-Also, you can publish the config file with:
-
+Optionally publish the config file to customise table names or toggle entities:
 ```bash
 php artisan vendor:publish --tag="atlas-config"
 ```
 
-You can publish the translations with:
-```bash
-php artisan vendor:publish --tag="atlas-translations"
-```
-
-Finally, you can publish the data jsons file with:
-```bash
-php artisan vendor:publish --tag="atlas-jsons"
-```
-
-For run the migrations and fill the tables you should run:
+Run the migrations and seed the database:
 ```bash
 php artisan atlas:install
 ```
 
-This will migrate the database tables previously allowed in the configuration file in the `entities` section. (By default, all are allowed)
+The command will migrate the tables for every entity enabled in `config('atlas.entities')` (all enabled by default) and let you choose which seeders to run. The process may take a few minutes due to the large number of cities.
 
-When the command is executed, it will give the option to select which seeders to run.
-
-The process may take a few minutes as the number of cities is very large.
-
-To update the data after a package upgrade:
+To re-seed the data after a package upgrade:
 ```bash
 php artisan atlas:update
 ```
+
+### Other publishable resources
+
+```bash
+php artisan vendor:publish --tag="atlas-translations"
+php artisan vendor:publish --tag="atlas-jsons"        # JSON data files (for overriding)
+```
+
+> **Note:** Migrations are auto-loaded by the package. Do **not** publish them with `--tag="atlas-migrations"` unless you have a specific reason — published copies will cause "table already exists" errors.
 
 
 ## Usage
