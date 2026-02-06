@@ -105,6 +105,25 @@ The `region_id` and `currency_code` columns on the `countries` table are now `NU
 
 If you have queries that assume these columns are never `NULL` (e.g., `Country::where('currency_code', '!=', null)`), review them accordingly.
 
+### Child foreign keys changed from `RESTRICT` to `CASCADE`
+
+The upgrade migration re-creates child and pivot foreign keys with `ON DELETE CASCADE` instead of the previous `RESTRICT` default. This affects the following constraints:
+
+| Table | Foreign key | References | On delete |
+|---|---|---|---|
+| `subregions` | `region_id` | `regions.id` | CASCADE |
+| `states` | `country_id` | `countries.id` | CASCADE |
+| `cities` | `state_id` | `states.id` | CASCADE |
+| `cities` | `country_id` | `countries.id` | CASCADE |
+| `country_timezone` | `country_id` | `countries.id` | CASCADE |
+| `country_timezone` | `timezone_name` | `timezones.zone_name` | CASCADE |
+
+Previously, deleting a parent row (e.g., a country) would **fail** if child rows existed (states, cities, pivot entries). Now the child rows are **automatically deleted**.
+
+The `currency_code` and `region_id` FKs on `countries` use `ON DELETE SET NULL` (not cascade) and are unchanged by this.
+
+**Action:** If you relied on `RESTRICT` to prevent accidental deletions, add application-level checks before deleting parent records.
+
 ### `Language` model now declares string primary key
 
 The `Language` model now correctly sets `$primaryKey = 'code'`, `$incrementing = false`, and `$keyType = 'string'`. This allows `Language::find('en')` to work correctly.
@@ -143,6 +162,14 @@ A `BelongsTo` relationship to `Region` was added to the `Subregion` model. This 
 
 The `atlas:update` command only re-seeds entities that are enabled in `config('atlas.entities')` instead of always seeding all six entity types.
 
+### Running individual seeders may clear related pivot data
+
+Each seeder deletes its own table **and** any pivot tables it owns before re-inserting. In particular, `atlas:countries` deletes all `country_timezone` pivot rows because the countries table is referenced by that pivot. Only `atlas:timezones` repopulates the pivot.
+
+If you run `php artisan atlas:countries` without also running `atlas:timezones` afterwards, the country–timezone associations will be lost.
+
+The `atlas:update` command is not affected — it seeds all enabled entities in the correct dependency order.
+
 ### Entity dependency validation
 
 Both `atlas:install` and `atlas:update` now emit warnings when an entity is enabled but one of its dependencies is disabled (e.g., countries enabled but currencies disabled). Additionally, `atlas:install` validates the interactive multiselect choice:
@@ -163,7 +190,7 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
 1. Update your `composer.json` to require `"raiolanetworks/atlas": "^2.0"`.
 2. Run `composer update raiolanetworks/atlas`.
 3. If you published the Atlas migrations in v1 (`vendor:publish --tag=atlas-migrations`), **delete the copies** from your `database/migrations/` directory. The package now auto-loads its migrations; keeping published copies will cause "table already exists" errors.
-4. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, makes `region_id` and `currency_code` nullable, fixes their foreign keys).
+4. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, makes `region_id` and `currency_code` nullable, changes child FKs to cascade on delete).
 5. If you published the config, update the `country_timezon_pivot_tablename` key to `country_timezone_pivot_tablename`.
 6. Search for the renamed relationships and update your code:
    - `$country->regions` → `$country->region`

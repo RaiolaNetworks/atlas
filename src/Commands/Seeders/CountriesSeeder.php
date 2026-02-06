@@ -16,6 +16,17 @@ class CountriesSeeder extends BaseSeeder
 
     protected string $model = Country::class;
 
+    public function handle(): int
+    {
+        // TODO: consider skipping pivot deletion when called from atlas:update,
+        //       or re-seeding only the affected pivot instead of deleting it.
+        if (config()->boolean('atlas.entities.timezones')) {
+            $this->warn('This will delete all country–timezone pivot data. Run atlas:timezones afterwards to restore it.');
+        }
+
+        return parent::handle();
+    }
+
     protected function pivotTables(): array
     {
         if (config()->boolean('atlas.entities.timezones')) {
