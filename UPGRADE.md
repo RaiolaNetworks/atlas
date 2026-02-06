@@ -98,9 +98,11 @@ All models switched from `protected $guarded = []` to explicit `$fillable` array
 
 Both models now correctly set `$incrementing = false` and `$keyType = 'string'` since their primary keys (`code` and `zone_name` respectively) are strings. This was already the intended behavior, but the Eloquent defaults were missing. If you relied on `Currency::find(1)` or `Timezone::find(1)` with integer IDs, this will no longer work.
 
-### `region_id` column is now nullable
+### `region_id` and `currency_code` columns are now nullable
 
-The `region_id` column on the `countries` table is now `NULLABLE` to match the `ON DELETE SET NULL` foreign key constraint. An upgrade migration handles this automatically.
+The `region_id` and `currency_code` columns on the `countries` table are now `NULLABLE` to match their `ON DELETE SET NULL` foreign key constraints. An upgrade migration handles this automatically.
+
+If you have queries that assume these columns are never `NULL` (e.g., `Country::where('currency_code', '!=', null)`), review them accordingly.
 
 ### `Language` model now declares string primary key
 
@@ -142,7 +144,7 @@ The `atlas:update` command only re-seeds entities that are enabled in `config('a
 
 ### Entity dependency validation
 
-Both `atlas:install` and `atlas:update` now emit warnings when an entity is enabled but one of its dependencies is disabled (e.g., countries enabled but currencies disabled).
+Both `atlas:install` and `atlas:update` now emit warnings when an entity is enabled but one of its dependencies is disabled (e.g., countries enabled but currencies disabled). Additionally, `atlas:install` validates the interactive multiselect choice — selecting an entity without its required dependencies (e.g., cities without states) will abort with an error.
 
 ### Migrations converted to anonymous classes
 
@@ -157,7 +159,7 @@ Translation loading and publishing (`atlas-translations`) is now active. Previou
 1. Update your `composer.json` to require `"raiolanetworks/atlas": "^2.0"`.
 2. Run `composer update raiolanetworks/atlas`.
 3. If you published the Atlas migrations in v1 (`vendor:publish --tag=atlas-migrations`), **delete the copies** from your `database/migrations/` directory. The package now auto-loads its migrations; keeping published copies will cause "table already exists" errors.
-4. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, fixes `region_id` and `currency_code` foreign keys).
+4. Run `php artisan migrate` to apply the upgrade migration (renames `region`/`subregion` columns, adds indexes, makes `region_id` and `currency_code` nullable, fixes their foreign keys).
 5. If you published the config, update the `country_timezon_pivot_tablename` key to `country_timezone_pivot_tablename`.
 6. Search for the renamed relationships and update your code:
    - `$country->regions` → `$country->region`
