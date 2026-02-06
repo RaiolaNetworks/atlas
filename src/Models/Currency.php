@@ -22,6 +22,10 @@ class Currency extends BaseModel
 
     protected $keyType = 'string';
 
+    // thousands_separator is intentionally excluded from $fillable: the column
+    // is not present in the JSON source data and the seeder never populates it.
+    // The migration default (',') always applies. Override $fillable in your
+    // own subclass if you need to mass-assign it.
     protected $fillable = [
         'code',
         'name',

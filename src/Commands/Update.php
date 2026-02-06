@@ -19,7 +19,11 @@ class Update extends Command
 
     public function handle(): int
     {
-        $this->warnAboutDisabledDependencies();
+        if ($this->hasBrokenDependencies()) {
+            $this->error('Fix the entity configuration in config/atlas.php before updating.');
+
+            return self::FAILURE;
+        }
 
         $enabledEntities = array_filter(EntitiesEnum::cases(), fn (EntitiesEnum $entity) => $entity->isEnabled());
 

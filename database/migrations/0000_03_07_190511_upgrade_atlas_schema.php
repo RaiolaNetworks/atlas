@@ -22,6 +22,7 @@ return new class extends Migration
         $this->renameCountryStringColumns();
         $this->fixCurrencyCodeForeignKey();
         $this->fixRegionIdNullability();
+        $this->addCascadeToChildForeignKeys();
         $this->addMissingIndexes();
     }
 
@@ -37,6 +38,9 @@ return new class extends Migration
 
     /**
      * Rename region → region_name and subregion → subregion_name on the countries table.
+     *
+     * The original CREATE TABLE migration (pre-v1.0.7) is intentionally left
+     * unchanged, so this rename runs on both fresh installs and upgrades.
      */
     private function renameCountryStringColumns(): void
     {
@@ -108,6 +112,78 @@ return new class extends Migration
         Schema::table($countriesTable, function (Blueprint $table) use ($regionsTable): void {
             $table->unsignedBigInteger('region_id')->nullable()->change();
             $table->foreign('region_id')->references('id')->on($regionsTable)->nullOnDelete();
+        });
+    }
+
+    /**
+     * Re-create child/pivot FK constraints with cascadeOnDelete.
+     *
+     * The original CREATE TABLE migrations (pre-v1.0.7) used the default
+     * RESTRICT behaviour. Child rows (states, cities, subregions) and pivot
+     * rows (country_timezone) should be removed when the parent is deleted.
+     */
+    private function addCascadeToChildForeignKeys(): void
+    {
+        $this->recreateForeignKeyWithCascade(
+            config()->string('atlas.subregions_tablename'),
+            'region_id',
+            config()->string('atlas.regions_tablename'),
+            'id',
+        );
+
+        $this->recreateForeignKeyWithCascade(
+            config()->string('atlas.states_tablename'),
+            'country_id',
+            config()->string('atlas.countries_tablename'),
+            'id',
+        );
+
+        $this->recreateForeignKeyWithCascade(
+            config()->string('atlas.cities_tablename'),
+            'state_id',
+            config()->string('atlas.states_tablename'),
+            'id',
+        );
+
+        $this->recreateForeignKeyWithCascade(
+            config()->string('atlas.cities_tablename'),
+            'country_id',
+            config()->string('atlas.countries_tablename'),
+            'id',
+        );
+
+        $this->recreateForeignKeyWithCascade(
+            config()->string('atlas.country_timezone_pivot_tablename'),
+            'country_id',
+            config()->string('atlas.countries_tablename'),
+            'id',
+        );
+
+        $this->recreateForeignKeyWithCascade(
+            config()->string('atlas.country_timezone_pivot_tablename'),
+            'timezone_name',
+            config()->string('atlas.timezones_tablename'),
+            'zone_name',
+        );
+    }
+
+    /**
+     * Drop an existing FK (if present) and re-create it with cascadeOnDelete.
+     */
+    private function recreateForeignKeyWithCascade(string $table, string $column, string $referencedTable, string $referencedColumn): void
+    {
+        if (! Schema::hasTable($table) || ! Schema::hasColumn($table, $column) || ! Schema::hasTable($referencedTable)) {
+            return;
+        }
+
+        Schema::table($table, function (Blueprint $blueprint) use ($table, $column, $referencedTable, $referencedColumn): void {
+            $fks = collect(Schema::getForeignKeys($table));
+
+            if ($fks->contains(fn (array $fk): bool => in_array($column, $fk['columns']))) {
+                $blueprint->dropForeign([$column]);
+            }
+
+            $blueprint->foreign($column)->references($referencedColumn)->on($referencedTable)->cascadeOnDelete();
         });
     }
 

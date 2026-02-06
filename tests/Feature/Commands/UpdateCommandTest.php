@@ -29,4 +29,13 @@ describe('atlas:update command', function () {
             ->assertSuccessful()
             ->doesntExpectOutputToContain('Seeding languages');
     });
+
+    it('aborts when a required dependency is disabled', function () {
+        config()->set('atlas.entities.countries', false);
+        config()->set('atlas.entities.states', true);
+
+        $this->artisan('atlas:update')
+            ->assertFailed()
+            ->expectsOutputToContain('Fix the entity configuration');
+    });
 });

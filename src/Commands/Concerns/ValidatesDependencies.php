@@ -14,4 +14,18 @@ trait ValidatesDependencies
             $this->warn($warning);
         }
     }
+
+    /**
+     * Return true (and print errors) when required dependencies are broken.
+     */
+    protected function hasBrokenDependencies(): bool
+    {
+        $errors = EntitiesEnum::validateDependencies();
+
+        foreach ($errors as $error) {
+            $this->error($error);
+        }
+
+        return count($errors) > 0;
+    }
 }
