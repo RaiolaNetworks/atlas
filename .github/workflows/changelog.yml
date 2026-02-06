@@ -1,8 +1,11 @@
 name: Changelog
 
 on:
-  release:
-    types: [released]
+  # Disabled: requires branch protection bypass for github-actions[bot].
+  # See https://github.com/orgs/community/discussions/25305
+  # release:
+  #   types: [released]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
