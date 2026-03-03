@@ -21,6 +21,7 @@ describe('Translations cast', function () {
             'numeric_code' => '999',
             'phonecode'    => '99',
             'tld'          => '.ts',
+            'native'       => 'Test',
             'region_name'  => 'Test Region',
             'nationality'  => 'Tester',
             'translations' => json_encode(['en' => 'Test']),
