@@ -73,6 +73,27 @@ class MyClass
 
 ```
 
+### State hierarchy
+
+States support multi-level administrative divisions. Use `admin_level` to distinguish between primary regions (level 1) and subdivisions (level 2+):
+
+```php
+use Raiolanetworks\Atlas\Models\State;
+
+// Get only top-level divisions (e.g., Autonomous Communities in Spain)
+State::where('country_code', 'ES')->topLevel()->get();
+
+// Get subdivisions of a specific state
+$catalonia = State::where('state_code', 'CT')->first();
+$catalonia->children; // Provinces: Barcelona, Girona, Lleida, Tarragona
+
+// Navigate up the hierarchy
+$barcelona = State::where('name', 'Barcelona')->first();
+$barcelona->parent; // Cataluña
+```
+
+> **Note:** Parent-child relationships are currently populated for ES, FR, IT and BE. Other countries have `admin_level` set but `parent_id` is null.
+
 
 ## Upgrading
 
