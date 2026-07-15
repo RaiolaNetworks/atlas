@@ -214,6 +214,8 @@ describe('State::fromJsonToDBRecord', function () {
             'country_name' => 'Afghanistan',
             'state_code'   => 'BDS',
             'type'         => 'province',
+            'admin_level'  => 1,
+            'parent_id'    => null,
             'latitude'     => '36.73477250',
             'longitude'    => '70.81199530',
         ];
@@ -222,7 +224,55 @@ describe('State::fromJsonToDBRecord', function () {
 
         expect($result)
             ->toHaveKey('country_id', 1)
-            ->toHaveKey('name', 'Badakhshan');
+            ->toHaveKey('name', 'Badakhshan')
+            ->toHaveKey('admin_level', 1)
+            ->toHaveKey('parent_id', null);
+    });
+
+    it('maps admin_level and parent_id from JSON', function () {
+        config()->set('atlas.entities.countries', true);
+
+        $json = [
+            'id'           => 5095,
+            'name'         => 'Almeria',
+            'country_id'   => 207,
+            'country_code' => 'ES',
+            'country_name' => 'Spain',
+            'state_code'   => 'AL',
+            'type'         => 'province',
+            'admin_level'  => 2,
+            'parent_id'    => 5325,
+            'latitude'     => '36.84017580',
+            'longitude'    => '-2.46763700',
+        ];
+
+        $result = State::fromJsonToDBRecord($json);
+
+        expect($result)
+            ->toHaveKey('admin_level', 2)
+            ->toHaveKey('parent_id', 5325);
+    });
+
+    it('defaults admin_level to 1 and parent_id to null when missing from JSON', function () {
+        config()->set('atlas.entities.countries', true);
+
+        $json = [
+            'id'           => 1,
+            'name'         => 'Badakhshan',
+            'country_id'   => 1,
+            'country_code' => 'AF',
+            'country_name' => 'Afghanistan',
+            'state_code'   => 'BDS',
+            'type'         => 'province',
+            'latitude'     => '36.73477250',
+            'longitude'    => '70.81199530',
+        ];
+
+        $result = State::fromJsonToDBRecord($json);
+
+        expect($result)
+            ->toHaveKey('admin_level', 1)
+            ->toHaveKey('parent_id', null);
     });
 
     it('excludes country_id when countries disabled', function () {
@@ -236,6 +286,8 @@ describe('State::fromJsonToDBRecord', function () {
             'country_name' => 'Afghanistan',
             'state_code'   => 'BDS',
             'type'         => 'province',
+            'admin_level'  => 1,
+            'parent_id'    => null,
             'latitude'     => '36.73477250',
             'longitude'    => '70.81199530',
         ];
