@@ -92,7 +92,18 @@ $barcelona = State::where('name', 'Barcelona')->first();
 $barcelona->parent; // Cataluña
 ```
 
-> **Note:** Parent-child relationships are currently populated for ES, FR, IT and BE. Other countries have `admin_level` set but `parent_id` is null.
+#### Scope and limitations
+
+The hierarchy support is intentionally uneven — read this before relying on it:
+
+- **`admin_level`, `topLevel()` and `adminLevel()` work for every country.** They classify each division as primary (level 1) or subdivision (level 2), which is enough to keep dropdowns to first-level divisions.
+- **`parent()` / `children()` only return data for Spain, France, Italy and Belgium** — the countries where `parent_id` is populated (247 divisions). For any other country `parent_id` is `null`, so `parent()` returns `null` and `children()` returns an empty collection.
+- **`topLevel()` does not guarantee unique names within a country.** A few countries have two *co-equal* first-level divisions that share a name — e.g. Minsk oblast + Minsk city (BY), Almaty region + Almaty city (KZ), Moscow oblast + Moscow city (RU), Zagreb county + Zagreb city (HR), cities vs counties in Taiwan, state cities vs municipalities in Latvia. These are genuinely different places (not parent/child), so both correctly stay at level 1. Disambiguate them by `type` or `state_code`:
+
+```php
+State::where('country_code', 'BY')->topLevel()->get()
+    ->map(fn (State $s) => "{$s->name} ({$s->type})"); // "Minsk (oblast)", "Minsk (city)"
+```
 
 
 ## Upgrading

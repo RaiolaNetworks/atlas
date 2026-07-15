@@ -20,6 +20,15 @@ All notable changes to `atlas` will be documented in this file.
 - `parent_id` populated for Spain (ES), France (FR), Italy (IT) and Belgium (BE).
 - Ceuta and Melilla (Spain) reclassified from `admin_level: 1` to `admin_level: 2` to appear alongside provinces in address forms.
 
+### Fixed
+
+- Corrected the `type` of Belgium's "Flanders" from `province` to `region` (it is a region, alongside Wallonia and Brussels-Capital). Its `admin_level` was already correct.
+
+### Known limitations
+
+- **Parent/child navigation is only populated for Spain, France, Italy and Belgium** (247 divisions). Elsewhere `parent_id` is `null`, so `State::parent()` returns `null` and `State::children()` returns an empty collection. `admin_level` / `topLevel()` / `adminLevel()` still work for every country.
+- **`topLevel()` does not guarantee unique names within a country.** A few countries have two co-equal first-level divisions sharing a name (e.g. Minsk oblast + Minsk city, Almaty region + Almaty city, Moscow oblast + Moscow city, Zagreb county + Zagreb city). Both correctly remain at `admin_level: 1`; disambiguate by `type` or `state_code` in the UI.
+
 ### Upgrade steps
 
 1. Run `php artisan migrate` to add the new columns (defaults ensure existing data remains valid).

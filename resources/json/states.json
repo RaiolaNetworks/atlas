@@ -5323,7 +5323,7 @@
         "country_code": "BE",
         "country_name": "Belgium",
         "state_code": "VLG",
-        "type": "province",
+        "type": "region",
         "admin_level": 1,
         "parent_id": null,
         "latitude": "51.01087060",
