@@ -10,7 +10,7 @@ With 'Atlas' you will be able to create new tables in the database and fill them
 ## Requirements
 
 - PHP 8.3+
-- Laravel 11+
+- Laravel 12+
 
 
 ## Get to know us
