@@ -1,3 +1,51 @@
+# Upgrading to 3.x from 2.x
+
+## Requirements
+
+- **Laravel 12.60+ or 13.10+.** **Laravel 11 is no longer supported** — it reached end of security life on 2026-03-12 and every 11.x release now carries unpatched security advisories, so Composer will not install it. If your app is still on Laravel 11, upgrade the framework first.
+- **PHP 8.3+** (unchanged).
+- The framework floor closes the CRLF injection advisory [GHSA-5vg9-5847-vvmq](https://github.com/advisories/GHSA-5vg9-5847-vvmq).
+
+## High impact changes
+
+### Run the new migrations
+
+`php artisan migrate` applies two changes:
+
+- Adds `admin_level` (unsigned tiny int, default `1`) and `parent_id` (nullable self-referential foreign key) to the `states` table.
+- Makes `countries.native` **non-nullable**. Existing `NULL` values are backfilled from the country `name` before the constraint is enforced, so no data is lost and the migration is safe on already-seeded databases.
+
+### Re-seed to pick up the new and cleaned data (destructive)
+
+The new/updated data only lands after re-seeding: the state hierarchy (`admin_level`/`parent_id`), the Ceuta & Melilla city entries, the whitespace-cleaned names and the Côte d'Ivoire `native` fix.
+
+```bash
+php artisan atlas:states
+php artisan atlas:cities
+php artisan atlas:countries
+```
+
+> ⚠️ These are **destructive re-seeds**: each empties the table and re-inserts every row inside a transaction, with foreign-key checks disabled during the run. **Primary keys are preserved** (they come from the JSON `id`), so foreign keys that reference states/cities/countries stay valid — but **any local edits to those tables are overwritten**. Run it in a maintenance window.
+
+## Medium and low impact changes
+
+### `Country::native` is now non-null
+
+The `native` property changed from `string|null` to `string`. Existing null values are backfilled from `name`. Any code that guarded against a null `native` is now dead but harmless.
+
+### Some names were normalized (whitespace)
+
+874 name fields were trimmed and collapsed (leading/trailing spaces, stray tabs, double spaces) across countries, states and cities — including the denormalized `country_name` / `state_name` copies. If you match or store names by exact string, re-check them after re-seeding. Examples: `"The Gambia "` → `"The Gambia"`, `"Barisal "` → `"Barisal"`.
+
+### New (additive) `State` API for the hierarchy
+
+`State::parent()`, `State::children()`, and the `State::topLevel()` / `State::adminLevel(int $level)` scopes are available. Notes:
+
+- `parent_id` is populated only for 10 countries (ES, FR, IT, BE, IE, LK, FJ, BA, GQ, KN). For any other country it is `null`, so `parent()` returns `null` and `children()` returns an empty collection. `admin_level` / `topLevel()` / `adminLevel()` work everywhere.
+- `topLevel()` does not guarantee unique names within a country: a few countries have two co-equal first-level divisions that share a name (e.g. Minsk oblast + Minsk city). Disambiguate by `type` or `state_code` in the UI.
+
+---
+
 # Upgrading to 2.x from 1.x
 
 ## Requirements
