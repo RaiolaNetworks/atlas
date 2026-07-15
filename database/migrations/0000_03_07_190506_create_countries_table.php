@@ -39,7 +39,7 @@ return new class extends Migration
             }
 
             $table->string('tld', 8);
-            $table->string('native', 80)->nullable();
+            $table->string('native', 80);
             $table->string('region', 80);
 
             if (config()->boolean('atlas.entities.regions')) {

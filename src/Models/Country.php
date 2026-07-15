@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null           $capital
  * @property string|null           $currency_code
  * @property string                $tld
- * @property string|null           $native
+ * @property string                $native
  * @property string                $region_name
  * @property int|null              $region_id
  * @property string|null           $subregion_name
@@ -147,7 +147,7 @@ class Country extends BaseModel
             'phonecode'      => $jsonItem['phonecode'],
             'capital'        => $jsonItem['capital'],
             'tld'            => $jsonItem['tld'],
-            'native'         => $jsonItem['native'],
+            'native'         => $jsonItem['native'] ?? $jsonItem['name'],
             'region_name'    => $jsonItem['region'],
             'subregion_name' => $jsonItem['subregion'],
             'nationality'    => $jsonItem['nationality'],
