@@ -116,7 +116,7 @@
         "region_id": 4,
         "subregion": "Southern Europe",
         "subregion_id": 16,
-        "nationality": "Albanian ",
+        "nationality": "Albanian",
         "timezones": [
             {
                 "zoneName": "Europe\/Tirane",
@@ -3146,7 +3146,7 @@
         "currency_name": "West African CFA franc",
         "currency_symbol": "CFA",
         "tld": ".ci",
-        "native": null,
+        "native": "Côte d'Ivoire",
         "region": "Africa",
         "region_id": 1,
         "subregion": "Western Africa",
@@ -11995,7 +11995,7 @@
     },
     {
         "id": 80,
-        "name": "The Gambia ",
+        "name": "The Gambia",
         "iso3": "GMB",
         "iso2": "GM",
         "numeric_code": "270",

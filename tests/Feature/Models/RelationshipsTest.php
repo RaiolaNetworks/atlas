@@ -169,6 +169,18 @@ describe('State relationships', function () {
         expect($state->country())->toBeInstanceOf(BelongsTo::class);
     });
 
+    it('has belongsTo relationship with parent State', function () {
+        $state = new State;
+
+        expect($state->parent())->toBeInstanceOf(BelongsTo::class);
+    });
+
+    it('has hasMany relationship with children States', function () {
+        $state = new State;
+
+        expect($state->children())->toBeInstanceOf(HasMany::class);
+    });
+
     it('has hasMany relationship with Cities', function () {
         $state = new State;
 
@@ -179,6 +191,18 @@ describe('State relationships', function () {
         $relation = (new State)->country();
 
         expect($relation->getForeignKeyName())->toBe('country_id');
+    });
+
+    it('uses correct FK config for parent()', function () {
+        $relation = (new State)->parent();
+
+        expect($relation->getForeignKeyName())->toBe('parent_id');
+    });
+
+    it('uses correct FK config for children()', function () {
+        $relation = (new State)->children();
+
+        expect($relation->getForeignKeyName())->toBe('parent_id');
     });
 });
 

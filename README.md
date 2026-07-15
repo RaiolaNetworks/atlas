@@ -10,7 +10,7 @@ With 'Atlas' you will be able to create new tables in the database and fill them
 ## Requirements
 
 - PHP 8.3+
-- Laravel 11+
+- Laravel 12+
 
 
 ## Get to know us
@@ -71,6 +71,38 @@ class MyClass
 	}
 }
 
+```
+
+### State hierarchy
+
+States support multi-level administrative divisions. Use `admin_level` to distinguish between primary regions (level 1) and subdivisions (level 2+):
+
+```php
+use Raiolanetworks\Atlas\Models\State;
+
+// Get only top-level divisions (e.g., Autonomous Communities in Spain)
+State::where('country_code', 'ES')->topLevel()->get();
+
+// Get subdivisions of a specific state
+$catalonia = State::where('state_code', 'CT')->first();
+$catalonia->children; // Provinces: Barcelona, Girona, Lleida, Tarragona
+
+// Navigate up the hierarchy
+$barcelona = State::where('name', 'Barcelona')->first();
+$barcelona->parent; // Cataluña
+```
+
+#### Scope and limitations
+
+The hierarchy support is intentionally uneven — read this before relying on it:
+
+- **`admin_level`, `topLevel()` and `adminLevel()` work for every country.** They classify each division as primary (level 1) or subdivision (level 2), which is enough to keep dropdowns to first-level divisions.
+- **`parent()` / `children()` only return data for the countries where `parent_id` is populated** (340 divisions): Spain, France, Italy, Belgium, Ireland, Sri Lanka, Fiji, Bosnia & Herzegovina, Equatorial Guinea and Saint Kitts & Nevis. For any other country `parent_id` is `null`, so `parent()` returns `null` and `children()` returns an empty collection.
+- **`topLevel()` does not guarantee unique names within a country.** A few countries have two *co-equal* first-level divisions that share a name — e.g. Minsk oblast + Minsk city (BY), Almaty region + Almaty city (KZ), Moscow oblast + Moscow city (RU), Zagreb county + Zagreb city (HR), cities vs counties in Taiwan, state cities vs municipalities in Latvia. These are genuinely different places (not parent/child), so both correctly stay at level 1. Disambiguate them by `type` or `state_code`:
+
+```php
+State::where('country_code', 'BY')->topLevel()->get()
+    ->map(fn (State $s) => "{$s->name} ({$s->type})"); // "Minsk (oblast)", "Minsk (city)"
 ```
 
 

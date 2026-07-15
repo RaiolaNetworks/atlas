@@ -29,6 +29,14 @@ describe('Countries table schema', function () {
         expect($currencyCode['nullable'])->toBeTrue();
     });
 
+    it('has native as a non-nullable column', function () {
+        $columns = Schema::getColumns('countries');
+        $native  = collect($columns)->firstWhere('name', 'native');
+
+        expect($native)->not->toBeNull();
+        expect($native['nullable'])->toBeFalse();
+    });
+
     it('has region_name column instead of region', function () {
         $columns = Schema::getColumns('countries');
 
