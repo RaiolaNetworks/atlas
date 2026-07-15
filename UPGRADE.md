@@ -8,16 +8,25 @@
 
 ## High impact changes
 
-### Run the new migrations
+There are **two upgrade paths**. Pick based on whether you need the new data.
 
-`php artisan migrate` applies two changes:
+### Path A — framework/security only (no data change, zero risk to your foreign keys)
+
+```bash
+composer update
+php artisan migrate
+```
+
+`php artisan migrate` only:
 
 - Adds `admin_level` (unsigned tiny int, default `1`) and `parent_id` (nullable self-referential foreign key) to the `states` table.
-- Makes `countries.native` **non-nullable**. Existing `NULL` values are backfilled from the country `name` before the constraint is enforced, so no data is lost and the migration is safe on already-seeded databases.
+- Makes `countries.native` **non-nullable** — existing `NULL` values are backfilled from the country `name` first (an `UPDATE`, no rows deleted).
 
-### Re-seed to pick up the new and cleaned data (destructive)
+It does **not** delete or re-insert any rows, so your data and any foreign keys pointing at Atlas tables are untouched. You simply won't have the new hierarchy data, the Ceuta/Melilla cities or the whitespace fixes until you re-seed.
 
-The new/updated data only lands after re-seeding: the state hierarchy (`admin_level`/`parent_id`), the Ceuta & Melilla city entries, the whitespace-cleaned names and the Côte d'Ivoire `native` fix.
+### Path B — also pull the new/cleaned data (destructive re-seed)
+
+The state hierarchy (`admin_level`/`parent_id`), the Ceuta & Melilla city entries, the whitespace-cleaned names and the Côte d'Ivoire `native` fix only land after re-seeding:
 
 ```bash
 php artisan atlas:states
@@ -25,7 +34,20 @@ php artisan atlas:cities
 php artisan atlas:countries
 ```
 
-> ⚠️ These are **destructive re-seeds**: each empties the table and re-inserts every row inside a transaction, with foreign-key checks disabled during the run. **Primary keys are preserved** (they come from the JSON `id`), so foreign keys that reference states/cities/countries stay valid — but **any local edits to those tables are overwritten**. Run it in a maintenance window.
+> ⚠️ These are **destructive re-seeds**: each empties the table and re-inserts every row inside a transaction, with foreign-key checks disabled during the run. **Always back up first and run in a maintenance window.**
+
+### Foreign keys from your own tables into Atlas
+
+If your project has foreign keys referencing Atlas tables (e.g. `addresses.state_id → states.id`), the destructive re-seed (Path B) is **safe for `countries`, `states`, `cities`, `regions` and `subregions`**, because:
+
+- their primary keys are seeded from the JSON `id`, so re-inserting keeps the **same ids**; and
+- the 2.x → 3.x upgrade **removes no existing ids** (countries 250→250, states 5038→5038, cities only adds Ceuta & Melilla).
+
+So every id your foreign keys point at still exists with the same value after the re-seed. Still keep in mind:
+
+- **`ON DELETE CASCADE`**: the re-seed issues a full `DELETE` with foreign-key checks disabled. On MySQL (`FOREIGN_KEY_CHECKS=0`) cascades do not fire; on other engines verify before relying on it. Back up first.
+- **PostgreSQL**: disabling foreign-key constraints needs elevated privileges. On a managed Postgres without them, deleting a table referenced by a `RESTRICT` foreign key can fail — test on staging.
+- **`currencies`, `languages`, `timezones` do NOT preserve their `id`** (auto-increment) — a re-seed reassigns them. Reference these by their natural key (`currencies.code`, `languages.code`), not by `id`. Atlas itself links currencies via `countries.currency_code`, not the id.
 
 ## Medium and low impact changes
 
