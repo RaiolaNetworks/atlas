@@ -2,27 +2,36 @@
 
 All notable changes to `atlas` will be documented in this file.
 
-## 2.1.0
+## 3.0.0
+
+Major release. **Drops Laravel 11** and requires CRLF-patched framework
+versions, adds Laravel 13 support, ships the state hierarchy feature and
+cleans up the shipped data.
+
+### Removed
+
+- **Dropped support for Laravel 11.** Its security support ended on 2026-03-12 and every 11.x release now carries unpatched security advisories, so it can no longer be installed via `composer update`. Requires `laravel/framework ^12.60 || ^13.10`.
 
 ### Added
 
-- `admin_level` column on `states` table — integer indicating hierarchical depth (1 = top-level, 2 = subdivision). Allows filtering states by administrative level for cleaner dropdowns.
-- `parent_id` column on `states` table — nullable self-referential foreign key enabling tree navigation between administrative levels (e.g. autonomous community → province).
-- `State::parent()` and `State::children()` Eloquent relationships for hierarchical traversal.
-- `State::topLevel()` and `State::adminLevel(int $level)` query scopes for convenient filtering.
+- **Laravel 13 support** (`orchestra/testbench ^11`, Pest 4). CI now covers Laravel 12 and 13 on PHP 8.3 and 8.4.
+- **State hierarchy**: `admin_level` and `parent_id` columns on the `states` table, `State::parent()` / `State::children()` relationships and `State::topLevel()` / `State::adminLevel(int $level)` query scopes.
 - Ceuta and Melilla added to `cities.json` as city entries.
 
 ### Changed
 
-- `states.json` enriched with `admin_level` and `parent_id` fields for all 5038 entries. Run `php artisan atlas:states` to populate the new data.
-- States are now sorted by country, then by `admin_level`, then by name.
-- `admin_level` assigned for all 95 countries with multiple administrative division types.
+- `states.json` enriched with `admin_level` and `parent_id` for all 5038 entries, sorted by country, then `admin_level`, then name. Run `php artisan atlas:states` to populate.
+- `admin_level` assigned for the 95 countries with multiple administrative division types.
 - `parent_id` populated for 10 countries (340 divisions): Spain (ES), France (FR), Italy (IT), Belgium (BE), Ireland (IE), Sri Lanka (LK), Fiji (FJ), Bosnia & Herzegovina (BA), Equatorial Guinea (GQ) and Saint Kitts & Nevis (KN).
 - Ceuta and Melilla (Spain) reclassified from `admin_level: 1` to `admin_level: 2` to appear alongside provinces in address forms.
+- Country `native` is now **required** (non-null). Existing null natives are backfilled from `name` via a dedicated migration; the seeder applies the same `native ?? name` fallback.
 
 ### Fixed
 
-- Corrected the `type` of Belgium's "Flanders" from `province` to `region` (it is a region, alongside Wallonia and Brussels-Capital). Its `admin_level` was already correct.
+- **Security (GHSA-5vg9-5847-vvmq):** raised the framework floor so the package can no longer resolve a Laravel version affected by the CRLF injection advisory.
+- Whitespace normalized in 874 name fields across countries/states/cities (leading/trailing spaces, stray tabs, double spaces), including denormalized `country_name` / `state_name` copies.
+- Côte d'Ivoire `native` (was `null`) set to `"Côte d'Ivoire"` in `countries.json`.
+- Corrected the `type` of Belgium's "Flanders" from `province` to `region`.
 
 ### Known limitations
 
@@ -31,9 +40,10 @@ All notable changes to `atlas` will be documented in this file.
 
 ### Upgrade steps
 
-1. Run `php artisan migrate` to add the new columns (defaults ensure existing data remains valid).
-2. Run `php artisan atlas:states` to re-seed with hierarchical data.
-3. Optionally run `php artisan atlas:cities` to seed the new Ceuta/Melilla city entries.
-4. Use `State::where('country_id', $id)->topLevel()->get()` in dropdowns where you only want first-level divisions.
+1. Ensure your app runs on Laravel 12.60+ or 13.10+ (Laravel 11 is no longer supported).
+2. Run `php artisan migrate` to add the new columns and enforce the non-null `native` (existing null natives are backfilled from `name`).
+3. Run `php artisan atlas:states` to re-seed with hierarchical data.
+4. Optionally run `php artisan atlas:cities` to seed the new Ceuta/Melilla city entries.
+5. Use `State::where('country_id', $id)->topLevel()->get()` in dropdowns where you only want first-level divisions.
 
 > ⚠️ **Heads-up for production:** `atlas:states` / `atlas:cities` are **destructive re-seeds** — they empty the table and re-insert every row inside a transaction, with foreign-key checks disabled during the run. Primary keys are preserved (they come from the JSON `id`), so existing foreign keys that reference states/cities stay valid, but **any local edits to those tables are overwritten**. Run it in a maintenance window.

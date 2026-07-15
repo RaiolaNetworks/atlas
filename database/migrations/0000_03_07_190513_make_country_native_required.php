@@ -33,9 +33,10 @@ return new class extends Migration
 
         // Backfill existing NULLs with the country name so the NOT NULL
         // change cannot fail on already-seeded production databases.
+        // `name` is a non-reserved identifier across MySQL/PostgreSQL/SQLite.
         DB::table($countriesTable)
             ->whereNull('native')
-            ->update(['native' => DB::raw(DB::getQueryGrammar()->wrap('name'))]);
+            ->update(['native' => DB::raw('name')]);
 
         Schema::table($countriesTable, function (Blueprint $table): void {
             $table->string('native', 80)->nullable(false)->change();
