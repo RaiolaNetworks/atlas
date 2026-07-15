@@ -3741,7 +3741,7 @@
     },
     {
         "id": 807,
-        "name": "Barisal ",
+        "name": "Barisal",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3752,7 +3752,7 @@
     },
     {
         "id": 803,
-        "name": "Chittagong ",
+        "name": "Chittagong",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3763,7 +3763,7 @@
     },
     {
         "id": 760,
-        "name": "Dhaka ",
+        "name": "Dhaka",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3774,7 +3774,7 @@
     },
     {
         "id": 775,
-        "name": "Khulna ",
+        "name": "Khulna",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3785,7 +3785,7 @@
     },
     {
         "id": 758,
-        "name": "Mymensingh ",
+        "name": "Mymensingh",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3796,7 +3796,7 @@
     },
     {
         "id": 753,
-        "name": "Rajshahi ",
+        "name": "Rajshahi",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3807,7 +3807,7 @@
     },
     {
         "id": 750,
-        "name": "Rangpur ",
+        "name": "Rangpur",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -3818,7 +3818,7 @@
     },
     {
         "id": 765,
-        "name": "Sylhet ",
+        "name": "Sylhet",
         "country_id": 19,
         "country_code": "BD",
         "country_name": "Bangladesh",
@@ -4038,7 +4038,7 @@
     },
     {
         "id": 1376,
-        "name": "Brussels-Capital ",
+        "name": "Brussels-Capital",
         "country_id": 22,
         "country_code": "BE",
         "country_name": "Belgium",
@@ -4467,7 +4467,7 @@
     },
     {
         "id": 240,
-        "name": "Bumthang ",
+        "name": "Bumthang",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4478,7 +4478,7 @@
     },
     {
         "id": 239,
-        "name": "Chukha ",
+        "name": "Chukha",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4489,7 +4489,7 @@
     },
     {
         "id": 238,
-        "name": "Dagana ",
+        "name": "Dagana",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4500,7 +4500,7 @@
     },
     {
         "id": 229,
-        "name": "Gasa ",
+        "name": "Gasa",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4511,7 +4511,7 @@
     },
     {
         "id": 232,
-        "name": "Haa ",
+        "name": "Haa",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4522,7 +4522,7 @@
     },
     {
         "id": 234,
-        "name": "Lhuntse ",
+        "name": "Lhuntse",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4533,7 +4533,7 @@
     },
     {
         "id": 242,
-        "name": "Mongar ",
+        "name": "Mongar",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4544,7 +4544,7 @@
     },
     {
         "id": 237,
-        "name": "Paro ",
+        "name": "Paro",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4555,7 +4555,7 @@
     },
     {
         "id": 244,
-        "name": "Pemagatshel ",
+        "name": "Pemagatshel",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4566,7 +4566,7 @@
     },
     {
         "id": 235,
-        "name": "Punakha ",
+        "name": "Punakha",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4577,7 +4577,7 @@
     },
     {
         "id": 243,
-        "name": "Samdrup Jongkhar ",
+        "name": "Samdrup Jongkhar",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4588,7 +4588,7 @@
     },
     {
         "id": 246,
-        "name": "Samtse ",
+        "name": "Samtse",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4599,7 +4599,7 @@
     },
     {
         "id": 247,
-        "name": "Sarpang ",
+        "name": "Sarpang",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4610,7 +4610,7 @@
     },
     {
         "id": 241,
-        "name": "Thimphu ",
+        "name": "Thimphu",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4621,7 +4621,7 @@
     },
     {
         "id": 5242,
-        "name": "Trashi Yangtse\t",
+        "name": "Trashi Yangtse",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4632,7 +4632,7 @@
     },
     {
         "id": 236,
-        "name": "Trashigang ",
+        "name": "Trashigang",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4643,7 +4643,7 @@
     },
     {
         "id": 245,
-        "name": "Trongsa ",
+        "name": "Trongsa",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4654,7 +4654,7 @@
     },
     {
         "id": 230,
-        "name": "Tsirang ",
+        "name": "Tsirang",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4665,7 +4665,7 @@
     },
     {
         "id": 231,
-        "name": "Wangdue Phodrang ",
+        "name": "Wangdue Phodrang",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -4676,7 +4676,7 @@
     },
     {
         "id": 233,
-        "name": "Zhemgang ",
+        "name": "Zhemgang",
         "country_id": 26,
         "country_code": "BT",
         "country_name": "Bhutan",
@@ -12233,7 +12233,7 @@
     },
     {
         "id": 4138,
-        "name": "La Unión ",
+        "name": "La Unión",
         "country_id": 66,
         "country_code": "SV",
         "country_name": "El Salvador",
@@ -15456,7 +15456,7 @@
     },
     {
         "id": 2099,
-        "name": "Imathia ",
+        "name": "Imathia",
         "country_id": 85,
         "country_code": "GR",
         "country_name": "Greece",
@@ -15962,7 +15962,7 @@
     },
     {
         "id": 3671,
-        "name": "Alta Verapaz ",
+        "name": "Alta Verapaz",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -15973,7 +15973,7 @@
     },
     {
         "id": 3674,
-        "name": "Baja Verapaz ",
+        "name": "Baja Verapaz",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -15984,7 +15984,7 @@
     },
     {
         "id": 3675,
-        "name": "Chimaltenango ",
+        "name": "Chimaltenango",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -15995,7 +15995,7 @@
     },
     {
         "id": 3666,
-        "name": "Chiquimula ",
+        "name": "Chiquimula",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16006,7 +16006,7 @@
     },
     {
         "id": 3662,
-        "name": "El Progreso ",
+        "name": "El Progreso",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16017,7 +16017,7 @@
     },
     {
         "id": 3677,
-        "name": "Escuintla ",
+        "name": "Escuintla",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16028,7 +16028,7 @@
     },
     {
         "id": 3672,
-        "name": "Guatemala ",
+        "name": "Guatemala",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16039,7 +16039,7 @@
     },
     {
         "id": 3670,
-        "name": "Huehuetenango ",
+        "name": "Huehuetenango",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16050,7 +16050,7 @@
     },
     {
         "id": 3659,
-        "name": "Izabal ",
+        "name": "Izabal",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16061,7 +16061,7 @@
     },
     {
         "id": 3658,
-        "name": "Jalapa ",
+        "name": "Jalapa",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16072,7 +16072,7 @@
     },
     {
         "id": 3673,
-        "name": "Jutiapa ",
+        "name": "Jutiapa",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16083,7 +16083,7 @@
     },
     {
         "id": 3669,
-        "name": "Petén ",
+        "name": "Petén",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16094,7 +16094,7 @@
     },
     {
         "id": 3668,
-        "name": "Quetzaltenango ",
+        "name": "Quetzaltenango",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16105,7 +16105,7 @@
     },
     {
         "id": 3657,
-        "name": "Quiché ",
+        "name": "Quiché",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16116,7 +16116,7 @@
     },
     {
         "id": 3664,
-        "name": "Retalhuleu ",
+        "name": "Retalhuleu",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16127,7 +16127,7 @@
     },
     {
         "id": 3676,
-        "name": "Sacatepéquez ",
+        "name": "Sacatepéquez",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16138,7 +16138,7 @@
     },
     {
         "id": 3667,
-        "name": "San Marcos ",
+        "name": "San Marcos",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16149,7 +16149,7 @@
     },
     {
         "id": 3665,
-        "name": "Santa Rosa ",
+        "name": "Santa Rosa",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16160,7 +16160,7 @@
     },
     {
         "id": 3661,
-        "name": "Sololá ",
+        "name": "Sololá",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16171,7 +16171,7 @@
     },
     {
         "id": 3660,
-        "name": "Suchitepéquez ",
+        "name": "Suchitepéquez",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -16182,7 +16182,7 @@
     },
     {
         "id": 3663,
-        "name": "Totonicapán ",
+        "name": "Totonicapán",
         "country_id": 90,
         "country_code": "GT",
         "country_name": "Guatemala",
@@ -24740,7 +24740,7 @@
     },
     {
         "id": 1613,
-        "name": "Šilalė ",
+        "name": "Šilalė",
         "country_id": 126,
         "country_code": "LT",
         "country_name": "Lithuania",
@@ -25026,7 +25026,7 @@
     },
     {
         "id": 1514,
-        "name": "Luxembourg ",
+        "name": "Luxembourg",
         "country_id": 127,
         "country_code": "LU",
         "country_name": "Luxembourg",
@@ -31857,7 +31857,7 @@
     },
     {
         "id": 682,
-        "name": "Oslomej ",
+        "name": "Oslomej",
         "country_id": 129,
         "country_code": "MK",
         "country_name": "North Macedonia",
@@ -32814,7 +32814,7 @@
     },
     {
         "id": 5123,
-        "name": "Jericho ",
+        "name": "Jericho",
         "country_id": 169,
         "country_code": "PS",
         "country_name": "Palestinian Territory Occupied",
@@ -44771,7 +44771,7 @@
     },
     {
         "id": 3397,
-        "name": "Nohiyahoi Tobei Jumhurí ",
+        "name": "Nohiyahoi Tobei Jumhurí",
         "country_id": 217,
         "country_code": "TJ",
         "country_name": "Tajikistan",
@@ -44782,7 +44782,7 @@
     },
     {
         "id": 3400,
-        "name": "Sughd ",
+        "name": "Sughd",
         "country_id": 217,
         "country_code": "TJ",
         "country_name": "Tajikistan",
@@ -46457,7 +46457,7 @@
         "name": "Banjul",
         "country_id": 80,
         "country_code": "GM",
-        "country_name": "The Gambia ",
+        "country_name": "The Gambia",
         "state_code": "B",
         "type": "city",
         "latitude": "13.45487610",
@@ -46468,7 +46468,7 @@
         "name": "Central River",
         "country_id": 80,
         "country_code": "GM",
-        "country_name": "The Gambia ",
+        "country_name": "The Gambia",
         "state_code": "M",
         "type": "division",
         "latitude": "13.59944690",
@@ -46479,7 +46479,7 @@
         "name": "Lower River",
         "country_id": 80,
         "country_code": "GM",
-        "country_name": "The Gambia ",
+        "country_name": "The Gambia",
         "state_code": "L",
         "type": "division",
         "latitude": "13.35533060",
@@ -46490,7 +46490,7 @@
         "name": "North Bank",
         "country_id": 80,
         "country_code": "GM",
-        "country_name": "The Gambia ",
+        "country_name": "The Gambia",
         "state_code": "N",
         "type": "division",
         "latitude": "13.52854360",
@@ -46501,7 +46501,7 @@
         "name": "Upper River",
         "country_id": 80,
         "country_code": "GM",
-        "country_name": "The Gambia ",
+        "country_name": "The Gambia",
         "state_code": "U",
         "type": "division",
         "latitude": "13.42573660",
@@ -46512,7 +46512,7 @@
         "name": "West Coast",
         "country_id": 80,
         "country_code": "GM",
-        "country_name": "The Gambia ",
+        "country_name": "The Gambia",
         "state_code": "W",
         "type": "division",
         "latitude": "5.97727980",
