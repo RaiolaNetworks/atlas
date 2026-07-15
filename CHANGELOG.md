@@ -35,3 +35,5 @@ All notable changes to `atlas` will be documented in this file.
 2. Run `php artisan atlas:states` to re-seed with hierarchical data.
 3. Optionally run `php artisan atlas:cities` to seed the new Ceuta/Melilla city entries.
 4. Use `State::where('country_id', $id)->topLevel()->get()` in dropdowns where you only want first-level divisions.
+
+> ⚠️ **Heads-up for production:** `atlas:states` / `atlas:cities` are **destructive re-seeds** — they empty the table and re-insert every row inside a transaction, with foreign-key checks disabled during the run. Primary keys are preserved (they come from the JSON `id`), so existing foreign keys that reference states/cities stay valid, but **any local edits to those tables are overwritten**. Run it in a maintenance window.
