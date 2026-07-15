@@ -17,7 +17,7 @@ All notable changes to `atlas` will be documented in this file.
 - `states.json` enriched with `admin_level` and `parent_id` fields for all 5038 entries. Run `php artisan atlas:states` to populate the new data.
 - States are now sorted by country, then by `admin_level`, then by name.
 - `admin_level` assigned for all 95 countries with multiple administrative division types.
-- `parent_id` populated for Spain (ES), France (FR), Italy (IT) and Belgium (BE).
+- `parent_id` populated for 10 countries (340 divisions): Spain (ES), France (FR), Italy (IT), Belgium (BE), Ireland (IE), Sri Lanka (LK), Fiji (FJ), Bosnia & Herzegovina (BA), Equatorial Guinea (GQ) and Saint Kitts & Nevis (KN).
 - Ceuta and Melilla (Spain) reclassified from `admin_level: 1` to `admin_level: 2` to appear alongside provinces in address forms.
 
 ### Fixed
@@ -26,7 +26,7 @@ All notable changes to `atlas` will be documented in this file.
 
 ### Known limitations
 
-- **Parent/child navigation is only populated for Spain, France, Italy and Belgium** (247 divisions). Elsewhere `parent_id` is `null`, so `State::parent()` returns `null` and `State::children()` returns an empty collection. `admin_level` / `topLevel()` / `adminLevel()` still work for every country.
+- **Parent/child navigation is only populated for 10 countries** (340 divisions: ES, FR, IT, BE, IE, LK, FJ, BA, GQ, KN). Elsewhere `parent_id` is `null`, so `State::parent()` returns `null` and `State::children()` returns an empty collection. `admin_level` / `topLevel()` / `adminLevel()` still work for every country.
 - **`topLevel()` does not guarantee unique names within a country.** A few countries have two co-equal first-level divisions sharing a name (e.g. Minsk oblast + Minsk city, Almaty region + Almaty city, Moscow oblast + Moscow city, Zagreb county + Zagreb city). Both correctly remain at `admin_level: 1`; disambiguate by `type` or `state_code` in the UI.
 
 ### Upgrade steps
