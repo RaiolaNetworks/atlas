@@ -108,7 +108,7 @@ State::where('country_code', 'BY')->topLevel()->get()
 
 ## Upgrading
 
-If you are upgrading from 1.x, please see [UPGRADE.md](./UPGRADE.md) for a list of breaking changes and migration steps.
+If you are upgrading between major versions, please see [UPGRADE.md](./UPGRADE.md) for the list of breaking changes and migration steps.
 
 ## Changelog
 

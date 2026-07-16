@@ -1,3 +1,73 @@
+# Upgrading to 3.x from 2.x
+
+## Requirements
+
+- **Laravel 12.60+ or 13.10+.** **Laravel 11 is no longer supported** — it reached end of security life on 2026-03-12 and every 11.x release now carries unpatched security advisories, so Composer will not install it. If your app is still on Laravel 11, upgrade the framework first.
+- **PHP 8.3+** (unchanged).
+- The framework floor closes the CRLF injection advisory [GHSA-5vg9-5847-vvmq](https://github.com/advisories/GHSA-5vg9-5847-vvmq).
+
+## High impact changes
+
+There are **two upgrade paths**. Pick based on whether you need the new data.
+
+### Path A — framework/security only (no data change, zero risk to your foreign keys)
+
+```bash
+composer update
+php artisan migrate
+```
+
+`php artisan migrate` only:
+
+- Adds `admin_level` (unsigned tiny int, default `1`) and `parent_id` (nullable self-referential foreign key) to the `states` table.
+- Makes `countries.native` **non-nullable** — existing `NULL` values are backfilled from the country `name` first (an `UPDATE`, no rows deleted).
+
+It does **not** delete or re-insert any rows, so your data and any foreign keys pointing at Atlas tables are untouched. You simply won't have the new hierarchy data, the Ceuta/Melilla cities or the whitespace fixes until you re-seed.
+
+### Path B — also pull the new/cleaned data (destructive re-seed)
+
+The state hierarchy (`admin_level`/`parent_id`), the Ceuta & Melilla city entries, the whitespace-cleaned names and the Côte d'Ivoire `native` fix only land after re-seeding:
+
+```bash
+php artisan atlas:states
+php artisan atlas:cities
+php artisan atlas:countries
+```
+
+> ⚠️ These are **destructive re-seeds**: each empties the table and re-inserts every row inside a transaction, with foreign-key checks disabled during the run. **Always back up first and run in a maintenance window.**
+
+### Foreign keys from your own tables into Atlas
+
+If your project has foreign keys referencing Atlas tables (e.g. `addresses.state_id → states.id`), the destructive re-seed (Path B) is **safe for `countries`, `states`, `cities`, `regions` and `subregions`**, because:
+
+- their primary keys are seeded from the JSON `id`, so re-inserting keeps the **same ids**; and
+- the 2.x → 3.x upgrade **removes no existing ids** (countries 250→250, states 5038→5038, cities only adds Ceuta & Melilla).
+
+So every id your foreign keys point at still exists with the same value after the re-seed. Still keep in mind:
+
+- **`ON DELETE CASCADE`**: the re-seed issues a full `DELETE` with foreign-key checks disabled. On MySQL (`FOREIGN_KEY_CHECKS=0`) cascades do not fire; on other engines verify before relying on it. Back up first.
+- **PostgreSQL**: disabling foreign-key constraints needs elevated privileges. On a managed Postgres without them, deleting a table referenced by a `RESTRICT` foreign key can fail — test on staging.
+- **`currencies`, `languages`, `timezones` do NOT preserve their `id`** (auto-increment) — a re-seed reassigns them. Reference these by their natural key (`currencies.code`, `languages.code`), not by `id`. Atlas itself links currencies via `countries.currency_code`, not the id.
+
+## Medium and low impact changes
+
+### `Country::native` is now non-null
+
+The `native` property changed from `string|null` to `string`. Existing null values are backfilled from `name`. Any code that guarded against a null `native` is now dead but harmless.
+
+### Some names were normalized (whitespace)
+
+874 name fields were trimmed and collapsed (leading/trailing spaces, stray tabs, double spaces) across countries, states and cities — including the denormalized `country_name` / `state_name` copies. If you match or store names by exact string, re-check them after re-seeding. Examples: `"The Gambia "` → `"The Gambia"`, `"Barisal "` → `"Barisal"`.
+
+### New (additive) `State` API for the hierarchy
+
+`State::parent()`, `State::children()`, and the `State::topLevel()` / `State::adminLevel(int $level)` scopes are available. Notes:
+
+- `parent_id` is populated only for 10 countries (ES, FR, IT, BE, IE, LK, FJ, BA, GQ, KN). For any other country it is `null`, so `parent()` returns `null` and `children()` returns an empty collection. `admin_level` / `topLevel()` / `adminLevel()` work everywhere.
+- `topLevel()` does not guarantee unique names within a country: a few countries have two co-equal first-level divisions that share a name (e.g. Minsk oblast + Minsk city). Disambiguate by `type` or `state_code` in the UI.
+
+---
+
 # Upgrading to 2.x from 1.x
 
 ## Requirements
