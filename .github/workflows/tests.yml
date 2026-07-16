@@ -2,21 +2,7 @@ name: Tests
 
 on:
   push:
-    paths:
-      - '**.php'
-      - 'phpunit.xml.dist'
-      - 'composer.json'
-      - 'composer.lock'
-      - '.github/workflows/tests.yml'
-
   pull_request:
-    paths:
-      - '**.php'
-      - 'phpunit.xml.dist'
-      - 'composer.json'
-      - 'composer.lock'
-      - '.github/workflows/tests.yml'
-
   workflow_dispatch:
 
 concurrency:
